@@ -110,6 +110,9 @@ define('PATH_CURRENT_SITE', '/');
 define('SITE_ID_CURRENT_SITE', 1);
 define('BLOG_ID_CURRENT_SITE', 1);
 
+/** Enable Domain Mapping */
+define( 'SUNRISE', 'on' );
+
 /* That's all, stop editing! Happy blogging. */
 
 //Relative URLs for swapping across app service deployment slots 
