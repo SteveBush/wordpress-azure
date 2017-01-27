@@ -102,7 +102,8 @@ define('WP_DEBUG', false);
  * Allow MultiSite Support
  *
  */
- define( 'WP_ALLOW_MULTISITE', true );
+define( 'WP_ALLOW_MULTISITE', true );
+define('MULTISITE', true);
 
 /* That's all, stop editing! Happy blogging. */
 
