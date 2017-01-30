@@ -1,0 +1,2624 @@
+/*****************************************************************************
+ * 
+ *  THEME COMMENT
+ * 
+ * 	Theme Name: Imagely Sidewinder
+ * 	Theme URI: https://www.imagely.com/wordpress-photography-themes/sidewinder
+ * 	Description: Minimalist side-header style Genesis child theme for phographers.
+ * 	Text Domain: imagely-sidewinder
+ * 	Author: Imagely
+ * 	Author URI: https://www.imagely.com
+ * 	Version: 1.0.7
+ * 	Template: genesis
+ * 	Template Version: 2.0+
+ * 	License: GPL-2.0+
+ * 	License URI: http://www.opensource.org/licenses/gpl-license.php 
+ *
+ *  TABLE OF CONTENTS
+ * 
+ *		1: RESET
+ *			1.1 Baseline Normalize
+ *			1.2 Box Sizing
+ *			1.3 Float ClearinG
+ *		2: TYPOGRAPHY
+ *			2.1 Typographical Elements
+ *			2.2 Headings
+ *		3: LAYOUT
+ *			3.1 Site Containers
+ *			3.2 Column Classes
+ *		4: HEADER
+ *			4.1 Site Header
+ *			4.2 Title Area and Description
+ *			4.3 Header Widget Area
+ *		5: NAVIGATION
+ *			5.1 Main Navigation
+ *			5.2 Responsive Navigation
+ *		6: CONTENT
+ *			6.1 Entries
+ *			6.2 Pagination
+ *			6.3 Comments
+ *		7: SIDEBAR
+ *		8: FOOTER
+ *			8.1 Site Footer
+ *			8.2 Footer Widgets
+ *		9: WIDGETS
+ *			9.1 Widgets
+ *			9.2 After Post Widget
+ *			9.3 Featured Page and Post Widgets
+ *		10: ELEMENTS
+ *			10.1 Objects
+ *			10.2 Forms
+ *			10.3 Tables
+ *		11: OTHER
+ *			11.1 Common Classes
+ *			11.2 Third Party Plugins
+ *		12: FRONT PAGE
+ *		13: PAGE SPECIFIC CSS
+ *			13.1 Page Template: Blog Masonry and Blog Masonry 2
+ *			13.2 Page Template: Blog Grid
+ *			13.3 Page/Post Template: Featured Image
+ *			13.4 Page Template: No Content
+ *		14: THEME SPECIFIC CSS **	
+ *		15: MEDIA QUERIES
+ *			15.1 Max Width 1120px
+ *			15.2 Max Width 800px
+ *			15.3 Max Width 640px
+ *			15.4 Theme Specific Media Queries **
+ *
+ *		** 'Theme specific' CSS: Imagely themes are managed from common 
+ *		SASS files, using variables and gulp tasks to adjust which CSS 
+ *		gets compiled for each theme. Variables are useful for css rules 
+ *		that consistently vary from theme to theme. But periodically a 
+ *		theme just needs a few special rules. Rather than adjust our SASS 
+ *		framework, we just add those rules to the theme specific css 
+ *		sections. 
+ *
+ * 
+ *****************************************************************************/
+/*****************************************************************************
+ * 
+ * 1: RESET
+ * 			
+ *****************************************************************************/
+/* --------------- 1.1 Baseline Normalize (git.io/normalize) --------------- */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+   display: block;
+}
+
+audio,
+canvas,
+video {
+   display: inline-block;
+}
+
+audio:not([controls]) {
+   display: none;
+   height: 0;
+}
+
+[hidden] {
+   display: none;
+}
+
+html {
+   font-family: sans-serif;
+   -webkit-text-size-adjust: 100%;
+       -ms-text-size-adjust: 100%;
+}
+
+body {
+   margin: 0;
+}
+
+a:focus {
+   outline: thin dotted;
+}
+
+a:active,
+a:hover {
+   outline: 0;
+}
+
+h1 {
+   font-size: 2em;
+   margin: .67em 0;
+}
+
+abbr[title] {
+   border-bottom: 1px dotted;
+}
+
+b,
+strong {
+   font-weight: bold;
+}
+
+dfn {
+   font-style: italic;
+}
+
+hr {
+   box-sizing: content-box;
+   height: 0;
+}
+
+mark {
+   background: #ff0;
+   color: #000;
+}
+
+code,
+kbd,
+pre,
+samp {
+   font-family: monospace,serif;
+   font-size: 1em;
+}
+
+pre {
+   white-space: pre-wrap;
+}
+
+q {
+   quotes: '\201C' '\201D' '\2018' '\2019';
+}
+
+small {
+   font-size: 80%;
+}
+
+sub,
+sup {
+   font-size: 75%;
+   line-height: 0;
+   position: relative;
+   vertical-align: baseline;
+}
+
+sup {
+   top: -.5em;
+}
+
+sub {
+   bottom: -.25em;
+}
+
+img {
+   border: 0;
+}
+
+svg:not(:root) {
+   overflow: hidden;
+}
+
+figure {
+   margin: 0;
+}
+
+fieldset {
+   border: 1px solid silver;
+   margin: 0 2px;
+   padding: .35em .625em .75em;
+}
+
+legend {
+   border: 0;
+   padding: 0;
+}
+
+button,
+input,
+select,
+textarea {
+   font-family: inherit;
+   font-size: 100%;
+   margin: 0;
+}
+
+button,
+input {
+   line-height: normal;
+}
+
+button,
+select {
+   text-transform: none;
+}
+
+button,
+html input[type='button'],
+input[type='reset'],
+input[type='submit'] {
+   -webkit-appearance: button;
+   cursor: pointer;
+}
+
+button[disabled],
+html input[disabled] {
+   cursor: default;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+   box-sizing: border-box;
+   padding: 0;
+}
+
+input[type='search'] {
+   -webkit-appearance: textfield;
+   box-sizing: content-box;
+}
+
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-decoration {
+   -webkit-appearance: none;
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+   border: 0;
+   padding: 0;
+}
+
+textarea {
+   overflow: auto;
+   vertical-align: top;
+}
+
+table {
+   border-collapse: collapse;
+   border-spacing: 0;
+}
+
+/* -------------------- 1.2 Box Sizing -------------------- */
+*,
+input[type='search'] {
+   box-sizing: border-box;
+}
+
+/* -------------------- 1.3 Float Clearing -------------------- */
+.author-box:before,
+.clearfix:before,
+.entry-comments:before,
+.entry:before,
+.footer-widgets:before,
+.nav-primary:before,
+.nav-secondary:before,
+.pagination:before,
+.site-container:before,
+.site-footer:before,
+.site-header:before,
+.site-inner:before,
+.widget:before,
+.wrap:before {
+   content: ' ';
+   display: table;
+}
+
+.author-box:after,
+.clearfix:after,
+.entry-comments:after,
+.entry:after,
+.footer-widgets:after,
+.nav-primary:after,
+.nav-secondary:after,
+.pagination:after,
+.site-container:after,
+.site-footer:after,
+.site-header:after,
+.site-inner:after,
+.widget:after,
+.wrap:after {
+   clear: both;
+   content: ' ';
+   display: table;
+}
+
+/*****************************************************************************
+ * 
+ * 2: TYPOGRAPHY
+ * 			
+ *****************************************************************************/
+/* -------------------- 1.1 Typographical Elements -------------------- */
+html {
+   font-size: 62.5%;
+}
+
+body {
+   background-color: #fff;
+   background-size: cover;
+   color: #666;
+   font-family: 'Open Sans', sans-serif;
+   font-size: 16px;
+   font-size: 1.6rem;
+   font-weight: 300;
+   line-height: 1.6;
+   word-wrap: break-word;
+}
+
+a,
+button,
+input:focus,
+input[type='button'],
+input[type='reset'],
+input[type='submit'],
+textarea,
+.button {
+   -webkit-transition: all .1s ease-in-out;
+           transition: all .1s ease-in-out;
+}
+
+::-moz-selection {
+   background-color: #666;
+   color: transparent;
+}
+
+::selection {
+   background-color: #666;
+   color: transparent;
+}
+
+a {
+   color: #aaa;
+   text-decoration: none;
+}
+
+a:hover {
+   color: #222;
+}
+
+p {
+   margin: 0 0 24px;
+   padding: 0;
+}
+
+strong {
+   font-weight: 700;
+}
+
+ol,
+ul {
+   margin: 0;
+   padding: 0;
+}
+
+blockquote {
+   color: #999;
+   margin: 40px 40px 24px;
+}
+
+blockquote::before {
+   color: #999;
+   content: '\201C';
+   display: block;
+   font-size: 30px;
+   height: 0;
+   left: -20px;
+   position: relative;
+   top: -10px;
+}
+
+.entry-content code {
+   background-color: #333;
+   color: #ddd;
+}
+
+cite {
+   font-style: normal;
+}
+
+hr {
+   border: 0;
+   border-bottom: 1px solid rgba(150, 150, 150, .2);
+   border-collapse: collapse;
+   clear: left;
+   margin: 0 0 40px;
+   padding-top: 40px;
+}
+
+/* -------------------- 1.2 Headings -------------------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+   color: #222;
+   font-family: 'Open Sans', sans-serif;
+   font-weight: 400;
+   letter-spacing: 0;
+   line-height: 1.2;
+   margin-bottom: 16px;
+   padding: 0;
+   text-transform: uppercase;
+}
+
+.entry-content h1,
+.entry-content
+h2,
+.entry-content
+h3,
+.entry-content
+h4,
+.entry-content
+h5,
+.entry-content
+h6 {
+   margin: 32px 0 16px;
+}
+
+h1 {
+   font-size: 30px;
+   font-size: 3rem;
+}
+
+h2 {
+   font-size: 26px;
+   font-size: 2.6rem;
+}
+
+h3 {
+   font-size: 24px;
+   font-size: 2.4rem;
+}
+
+h4 {
+   color: #666;
+   font-size: 20px;
+   font-size: 2rem;
+}
+
+h5 {
+   color: #666;
+   font-size: 18px;
+   font-size: 1.8rem;
+}
+
+h6 {
+   color: #666;
+   font-size: 16px;
+   font-size: 1.6rem;
+}
+
+/*****************************************************************************
+ * 
+ * 3: LAYOUT
+ * 			
+ *****************************************************************************/
+/* -------------------- 3.1 Site Containers -------------------- */
+.site-container {
+   background-color: transparent;
+   box-shadow: none;
+   margin: 0;
+   max-width: 100%;
+   width: 100%;
+}
+
+.site-inner {
+   background-color: #fff;
+   border-color: none;
+   border-style: solid;
+   border-width: 0;
+   box-shadow: none;
+   float: left;
+   margin: 0 0 0 24%;
+   max-width: 76%;
+   padding: 20px;
+   width: 76%;
+}
+
+.full-width-content .site-inner {
+   max-width: 76%;
+   width: 76%;
+}
+
+.content-sidebar-wrap {
+   background-color: transparent;
+   clear: both;
+   width: 100%;
+}
+
+.content {
+   background-color: transparent;
+   float: left;
+   padding: 60px 40px 60px;
+   width: 65%;
+}
+
+.full-width-content .content {
+   padding: 60px 40px 60px;
+   width: 100%;
+}
+
+.sidebar-primary {
+   float: right;
+   width: 240px;
+   word-wrap: break-word;
+}
+
+/* -------------------- 3.2 Column Classes (Bootstrap) -------------------- */
+.five-sixths,
+.four-sixths,
+.one-fourth,
+.one-half,
+.one-sixth,
+.one-third,
+.three-fourths,
+.three-sixths,
+.two-fourths,
+.two-sixths,
+.two-thirds {
+   float: left;
+   margin-left: 2.564102564102564%;
+}
+
+.one-half,
+.three-sixths,
+.two-fourths {
+   width: 48.717948717948715%;
+}
+
+.one-third,
+.two-sixths {
+   width: 31.623931623931625%;
+}
+
+.four-sixths,
+.two-thirds {
+   width: 65.81196581196582%;
+}
+
+.one-fourth {
+   width: 23.076923076923077%;
+}
+
+.three-fourths {
+   width: 74.35897435897436%;
+}
+
+.one-sixth {
+   width: 14.52991452991453%;
+}
+
+.five-sixths {
+   width: 82.90598290598291%;
+}
+
+.first {
+   clear: both;
+   margin-left: 0;
+}
+
+/*****************************************************************************
+ * 
+ * 4: HEADER
+ * 			
+ *****************************************************************************/
+/* -------------------- 4.1 Site Header -------------------- */
+.site-header {
+   background-color: #fff;
+   border-color: #eee;
+   border-style: solid;
+   border-width: 0;
+   box-shadow: none;
+   color: #999;
+   float: left;
+   height: 100%;
+   margin: 0;
+   padding-top: 0;
+   position: fixed;
+   text-align: center;
+   width: 24%;
+   z-index: 999;
+}
+
+.site-header a {
+   color: #000;
+   text-decoration: none;
+}
+
+.site-header a:hover {
+   color: #000;
+}
+
+.site-header .simple-social-icons ul li {
+   margin-bottom: 0 !important;
+}
+
+/* -------------------- 4.2 Title Area and Description -------------------- */
+.title-area {
+   margin: 25px 0 0;
+   padding: 40px 5%;
+   text-align: right;
+   word-wrap: break-word;
+}
+
+.header-image .title-area {
+   margin: 0;
+   padding: 20px 5%;
+   text-align: left !important;
+}
+
+.site-title {
+   font-family: 'Open Sans', sans-serif;
+   font-size: 35px;
+   font-size: 3.5rem;
+   font-weight: 400;
+   letter-spacing: 0;
+   line-height: 1;
+   margin-bottom: 10px;
+   text-transform: uppercase;
+}
+
+.site-title a,
+.site-title a:hover {
+   color: #222;
+   text-decoration: none;
+}
+
+.header-image .site-title {
+   padding-top: 0;
+   text-indent: -9999px;
+}
+
+.header-image .site-title > a {
+   background-position: center center !important;
+   background-size: contain !important;
+   display: block;
+   float: none;
+   height: 150px;
+   margin: 0 auto;
+   max-width: 100%;
+   padding: 0;
+   width: 400px;
+}
+
+.site-description {
+   color: #aaa;
+   font-family: 'Open Sans', sans-serif;
+   font-size: 13px;
+   font-size: 1.3rem;
+   font-style: normal;
+   font-weight: 300;
+   margin-bottom: 0;
+   text-transform: uppercase;
+}
+
+.header-image .site-description {
+   height: 0;
+   text-indent: -9999px;
+}
+
+.no-header-text .title-area {
+   padding: 0;
+}
+
+.no-header-text .site-title a,
+.no-header-text .site-description {
+   display: block;
+   height: 0;
+   margin: 0;
+   text-indent: -9999px;
+}
+
+/* -------------------- 4.3 Header Widget Area -------------------- */
+.header-widget-area {
+   margin-top: 30px;
+   padding: 20px 0;
+}
+
+.header-widget-area .widgettitle {
+   color: #222;
+}
+
+.header-widget-area .widget {
+   font-size: 14px;
+   padding: 15px 15px;
+}
+
+.header-widget-area .widget_nav_menu {
+   padding: 0;
+}
+
+/*****************************************************************************
+ * 
+ * 5: NAVIGATION
+ * 			
+ *****************************************************************************/
+/* -------------------- 5.1 Main Navigation -------------------- */
+nav {
+   clear: both;
+}
+
+.genesis-nav-menu {
+   border-top: none;
+   clear: both;
+   font-size: 15px;
+   font-size: 1.5rem;
+   font-weight: 400;
+   letter-spacing: 1px;
+   overflow: hidden;
+   padding: 15px 0;
+   width: 100%;
+}
+
+.genesis-nav-menu li {
+   border-bottom: none;
+   float: left;
+   list-style-type: none;
+   width: 100%;
+}
+
+.genesis-nav-menu a {
+   border-bottom: none;
+   color: #000;
+   display: block;
+   font-family: 'Open Sans', sans-serif;
+   margin: 0;
+   padding: 1px 15px;
+   text-align: center;
+   text-transform: uppercase;
+}
+
+.genesis-nav-menu a:hover,
+.genesis-nav-menu .current-menu-item > a {
+   color: #000;
+}
+
+.genesis-nav-menu li:last-of-type a {
+   border-bottom: none;
+}
+
+.genesis-nav-menu .sub-menu {
+   -webkit-backface-visibility: hidden;
+   background: #fcfcfc;
+   border-left: 1px solid #f0f0f0;
+   left: -9999px;
+   margin: -31px 0 0 100%;
+   opacity: 0;
+   padding: 5px 0;
+   position: absolute;
+   -webkit-transition: opacity .4s ease-in-out;
+           transition: opacity .4s ease-in-out;
+   width: 250px;
+   z-index: 99;
+}
+
+.genesis-nav-menu .sub-menu a {
+   background: transparent;
+   color: #666;
+   letter-spacing: 0;
+   position: relative;
+}
+
+.genesis-nav-menu .sub-menu a:hover,
+.genesis-nav-menu .sub-menu a:active {
+   color: #000;
+}
+
+.genesis-nav-menu .menu-item:hover {
+   position: static;
+}
+
+.genesis-nav-menu .menu-item:hover > .sub-menu {
+   left: auto;
+   opacity: 1;
+}
+
+/* -------------------- 5.2 Responsive Navigation -------------------- */
+.responsive-menu-icon {
+   cursor: pointer;
+   display: none;
+}
+
+.responsive-menu-icon::before {
+   color: #222;
+   content: '\f0c9';
+   display: block;
+   font: normal 20px/1 'FontAwesome';
+   margin: 0 auto;
+   text-align: center;
+}
+
+/*****************************************************************************
+ * 
+ * 6: CONTENT
+ * 			
+ *****************************************************************************/
+/* -------------------- 6.1 Entries -------------------- */
+.entry {
+   border-bottom: 1px solid rgba(150, 150, 150, .2);
+   margin-bottom: 80px;
+}
+
+.error404 .entry,
+.page .entry,
+.single .entry {
+   border: none;
+}
+
+.error404 .entry,
+.page .entry {
+   margin: 0;
+}
+
+.entry-title,
+.entry-title a,
+.entry-title a:hover {
+   color: #222;
+   font-size: 30px;
+   font-size: 3rem;
+   font-weight: 400;
+   line-height: 1.2;
+   text-align: left;
+   text-decoration: none;
+   text-transform: uppercase;
+}
+
+.archive-title {
+   font-size: 20px;
+}
+
+.search .archive-title {
+   margin: -48px -60px 40px;
+   padding: 20px 60px;
+}
+
+.entry-content ol {
+   margin-bottom: 26px;
+   margin-left: 40px;
+}
+
+.entry-content ol > li {
+   list-style-type: decimal;
+}
+
+.entry-content ol ol {
+   margin-bottom: 0;
+}
+
+.entry-content ul {
+   margin-bottom: 26px;
+   margin-left: 40px;
+}
+
+.entry-content ul > li {
+   list-style-type: disc;
+}
+
+.entry-content ul ul {
+   margin-bottom: 0;
+}
+
+.entry-content p {
+   margin-bottom: 26px;
+}
+
+.entry-content .wp-caption p {
+   margin-bottom: 0;
+}
+
+.entry-meta {
+   clear: both;
+   font-size: 10px;
+   font-size: 1rem;
+   letter-spacing: 0;
+   margin-bottom: 40px;
+   margin-top: -15px;
+   text-transform: uppercase;
+}
+
+.entry-meta a {
+   color: #aaa;
+   text-decoration: none;
+}
+
+.entry-meta a:hover {
+   color: #222;
+   text-decoration: none;
+}
+
+.entry-header .entry-meta {
+   text-align: left;
+}
+
+.single .entry-footer .entry-meta {
+   margin-bottom: 0;
+}
+
+.entry-image {
+   border: 1px solid rgba(255, 255, 255, .1);
+   margin-bottom: 30px;
+}
+
+.entry-comments-link::before {
+   content: '\2014';
+   margin: 0 6px 0 2px;
+}
+
+.entry-categories,
+.entry-tags {
+   display: block;
+}
+
+/* -------------------- 6.2 Pagination -------------------- */
+.entry-pagination {
+   clear: both;
+}
+
+.archive-pagination {
+   clear: both;
+   text-align: center;
+}
+
+.archive-pagination li {
+   display: inline;
+}
+
+.archive-pagination li a {
+   background-color: #222;
+   color: #fff;
+   cursor: pointer;
+   display: inline-block;
+   font-weight: 400;
+   padding: 8px 12px;
+   text-decoration: none;
+}
+
+.archive-pagination li a:hover,
+.archive-pagination li.active a {
+   background-color: #555;
+}
+
+/* -------------------- 6.3 Comments -------------------- */
+.entry-comments,
+.ping-list {
+   margin-bottom: 60px;
+}
+
+.entry-comments .comment-author {
+   margin-bottom: 0;
+}
+
+.comment-respond input[type='email'],
+.comment-respond input[type='text'],
+.comment-respond input[type='url'] {
+   width: 50%;
+}
+
+.comment-respond label {
+   display: block;
+   margin-right: 12px;
+}
+
+.comment-list li.comment,
+.ping-list li {
+   list-style-type: none;
+   margin-top: 24px;
+   padding: 32px;
+}
+
+.comment-list li li {
+   margin-right: -32px;
+}
+
+li.comment {
+   border-left: 1px solid rgba(150, 150, 150, .2);
+   border-right: none;
+}
+
+.form-allowed-tags {
+   background-color: #f5f5f5;
+   font-size: 14px;
+   padding: 24px;
+}
+
+/*****************************************************************************
+ * 
+ * 7: SIDEBAR
+ * 			
+ *****************************************************************************/
+.sidebar {
+   border-left: 1px solid #ddd;
+   color: #666;
+   display: inline;
+   padding-top: 45px;
+   width: 35%;
+}
+
+.sidebar a {
+   color: #aaa;
+   text-decoration: none;
+}
+
+.sidebar a:hover {
+   color: #222;
+}
+
+.sidebar .widget {
+   margin: 20px auto;
+   width: 85%;
+   word-wrap: break-word;
+}
+
+.sidebar li {
+   margin-bottom: 0;
+   padding-bottom: 0;
+   text-align: left;
+}
+
+.sidebar ol > li {
+   list-style-position: inside;
+   list-style-type: decimal;
+   padding-left: 20px;
+   text-indent: -20px;
+}
+
+.sidebar ul > li {
+   list-style-type: none;
+   text-indent: 0;
+}
+
+.sidebar li li {
+   border: none;
+   margin: 0 0 0 30px;
+   padding: 0;
+}
+
+.sidebar ul > li:last-child,
+.sidebar p:last-child {
+   margin-bottom: 0;
+}
+
+/*****************************************************************************
+ * 
+ * 8: FOOTER
+ * 			
+ *****************************************************************************/
+/* -------------------- 8.1 Site Footer -------------------- */
+.site-footer {
+   background-color: #fff;
+   border-top: none;
+   clear: both;
+   color: #666;
+   font-size: 14px;
+   font-weight: 300;
+   letter-spacing: 0;
+   padding: 20px 16px;
+   text-align: center;
+   text-transform: none;
+}
+
+.site-footer a {
+   color: #aaa;
+   text-decoration: none;
+}
+
+.site-footer a:hover {
+   color: #222;
+}
+
+.site-footer p {
+   margin-bottom: 0;
+}
+
+.site-footer .widget-title {
+   color: #222;
+   font-family: 'Open Sans', sans-serif;
+   font-size: 22px;
+   font-weight: 400px;
+   letter-spacing: 0;
+}
+
+/* -------------------- 8.2 Footer Widgets -------------------- */
+.footer-widgets {
+   background-color: #fff;
+   border-top: none;
+   box-shadow: none;
+   clear: both;
+   color: #666;
+   font-size: 16px;
+   font-size: 1.6rem;
+   line-height: 1.5;
+   margin: 60px 0 0 0;
+   padding: 80px 10px 50px;
+}
+
+.footer-widgets a {
+   color: #aaa;
+}
+
+.footer-widgets a:hover {
+   color: #222;
+}
+
+.footer-widgets p {
+   color: #666;
+   margin-bottom: 16px;
+}
+
+.footer-widgets .widget {
+   margin-bottom: 50px;
+}
+
+.footer-widgets .widget-area ul li {
+   list-style-type: none;
+   margin-bottom: 6px;
+   word-wrap: break-word;
+}
+
+.footer-widgets .widget-title {
+   color: #222;
+   font-size: 20px;
+   font-size: 2rem;
+   letter-spacing: 3px;
+}
+
+.footer-widgets-1,
+.footer-widgets-2,
+.footer-widgets-3 {
+   box-sizing: border-box;
+   float: left;
+   padding-left: 2.5%;
+   padding-right: 2.5%;
+   width: 33%;
+}
+
+/*****************************************************************************
+ * 
+ * 9: WIDGETS
+ * 			
+ *****************************************************************************/
+/* -------------------- 9.1 Widgets -------------------- */
+.widgettitle {
+   color: #222;
+   font-size: 20px;
+   font-size: 2rem;
+   font-weight: 400;
+   text-transform: uppercase;
+}
+
+.widget_calendar th {
+   text-align: center;
+}
+
+.widget_calendar td#prev {
+   text-align: left;
+}
+
+.widget_calendar td#next {
+   text-align: right;
+}
+
+/* -------------------- 9.2 After Post Widget -------------------- */
+.after-post {
+   background-color: #fcfcfc;
+   border-bottom: 1px solid rgba(150, 150, 150, .2);
+   border-top: 1px solid rgba(150, 150, 150, .2);
+   margin: 120px 0;
+   padding: 60px 60px 50px;
+   text-align: center;
+}
+
+.after-post .widgettitle {
+   font-size: 20px;
+}
+
+.after-post .featured-content .entry-meta,
+.after-post .featured-content .entry-title {
+   text-align: center;
+}
+
+.after-post .widget {
+   margin-bottom: 30px;
+}
+
+.after-post a,
+.after-post li a {
+   color: #aaa;
+}
+
+.after-post a:hover,
+.after-post li a:hover {
+   color: #222;
+}
+
+.after-post ul > li {
+   list-style-type: none;
+}
+
+/* -------------------- 9.3 Featured Page and Post Widgets -------------------- */
+.featured-content .entry {
+   margin-bottom: 12px;
+   padding: 0;
+}
+
+.featured-content .entry-title {
+   font-size: 24px;
+   font-size: 2.4rem;
+   letter-spacing: 0;
+   text-align: left;
+   text-transform: uppercase;
+}
+
+.featured-content .entry-header .entry-meta {
+   color: #aaa;
+   margin-bottom: 20px;
+   text-align: left;
+}
+
+.featured-content .entry-header .entry-meta a,
+.featured-content .entry-header .entry-meta a:hover {
+   color: #222;
+}
+
+.featured-content .entry-content p {
+   font-size: 18px;
+   font-size: 1.8rem;
+}
+
+/*****************************************************************************
+ * 
+ * 10: ELEMENTS
+ * 			
+ *****************************************************************************/
+/* -------------------- 10.1 Objects -------------------- */
+embed,
+iframe,
+img,
+object,
+video,
+figure,
+.wp-caption {
+   max-width: 100%;
+}
+
+img {
+   height: auto;
+}
+
+.featured-content img,
+.gallery img {
+   width: auto;
+}
+
+.format-gallery #gallery-1 img {
+   border: none;
+}
+
+/* -------------------- 10.2 Forms -------------------- */
+input,
+select,
+textarea {
+   background-color: #fcfcfc;
+   border: 1px solid rgba(150, 150, 150, .2);
+   box-shadow: inset 0 0 3px 1px rgba(0, 0, 0, .1);
+   color: #aaa;
+   font-weight: 300;
+   margin: 5px 0;
+   padding: 16px;
+   width: 100%;
+}
+
+::-webkit-input-placeholder,
+::-moz-placeholder {
+   color: #888;
+   -webkit-font-smoothing: antialiased;
+   font-weight: 300;
+}
+
+button,
+input[type='button'],
+input[type='reset'],
+input[type='submit'],
+.button {
+   background-color: #222;
+   border: none;
+   box-shadow: none;
+   color: #fff;
+   cursor: pointer;
+   font-weight: 400;
+   letter-spacing: 1px;
+   margin: 10px 0;
+   padding: 16px 24px;
+   text-transform: uppercase;
+   width: auto;
+}
+
+button:hover,
+input[type='button']:hover,
+input[type='reset']:hover,
+input[type='submit']:hover,
+.button:hover {
+   background-color: #555;
+   border: none;
+}
+
+.button {
+   display: inline-block;
+   text-decoration: none;
+}
+
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-results-button {
+   display: none;
+}
+
+input[type='checkbox'],
+input[type='image'],
+input[type='radio'] {
+   width: auto;
+}
+
+/* -------------------- 10.3 Tables -------------------- */
+table {
+   border-collapse: collapse;
+   border-spacing: 0;
+   line-height: 2;
+   margin-bottom: 40px;
+   width: 100%;
+}
+
+tbody {
+   border-bottom: 1px solid rgba(150, 150, 150, .2);
+}
+
+th,
+td {
+   text-align: left;
+}
+
+th {
+   font-weight: bold;
+   text-transform: uppercase;
+}
+
+td {
+   border-top: 1px solid rgba(150, 150, 150, .2);
+   padding: 6px 0;
+}
+
+/*****************************************************************************
+ * 
+ * 11: OTHER
+ * 			
+ *****************************************************************************/
+/* -------------------- 11.1 Common Classes -------------------- */
+/* -- WordPress -- */
+.avatar {
+   float: left;
+}
+
+.site-header .avatar {
+   border-radius: 50%;
+   display: block;
+   float: none;
+   height: 112px;
+   margin: 0 auto 24px;
+   width: 112px;
+}
+
+.author-box .avatar {
+   height: 70px;
+   margin-right: 24px;
+   width: 70px;
+}
+
+.entry-comments .avatar {
+   height: 48px;
+   margin: 0 16px 24px 0;
+   width: 48px;
+}
+
+.alignleft .avatar {
+   margin-right: 24px;
+}
+
+.alignright .avatar {
+   margin-left: 24px;
+}
+
+.site-header .site-avatar img {
+   border-radius: 50%;
+   display: block;
+   float: none;
+   height: 112px;
+   margin: 0 auto 24px;
+   width: 112px;
+}
+
+.search-form {
+   width: 100%;
+}
+
+.search-form input[type='submit'] {
+   border: 0;
+   clip: rect(0, 0, 0, 0);
+   height: 1px;
+   margin: -1px;
+   padding: 0;
+   position: absolute;
+   width: 1px;
+}
+
+.alignleft {
+   float: left;
+   text-align: left;
+}
+
+.alignright {
+   float: right;
+   text-align: right;
+}
+
+img.centered,
+img.aligncenter {
+   display: block;
+   margin: 0 auto 24px;
+}
+
+img.alignnone {
+   margin-bottom: 12px;
+}
+
+img.alignleft {
+   margin: 0 24px 24px 0;
+}
+
+img.alignright {
+   margin: 0 0 24px 24px;
+}
+
+a.alignleft,
+a.alignnone,
+a.alignright {
+   max-width: 100%;
+}
+
+a.alignnone {
+   display: inline-block;
+}
+
+a.alignleft {
+   margin: 0 24px 24px 0;
+}
+
+a.alignright {
+   margin: 0 0 24px 24px;
+}
+
+.wp-caption.alignleft {
+   margin: 0 24px 24px 0;
+}
+
+.wp-caption.alignright {
+   margin: 0 0 24px 24px;
+}
+
+.wp-caption-text {
+   font-size: 14px;
+   font-weight: 700;
+   margin: 0;
+   text-align: center;
+}
+
+.widget_calendar table {
+   width: 100%;
+}
+
+.widget_calendar td {
+   text-align: center;
+}
+
+/* -- Genesis -- */
+.archive-description {
+   border-bottom: 1px solid rgba(150, 150, 150, .2);
+   margin: 0 -60px 60px;
+   padding: 40px 60px 16px;
+}
+
+.archive .archive-description {
+   margin-top: -48px;
+}
+
+.author-box {
+   border-bottom: 1px solid rgba(150, 150, 150, .2);
+   margin: 0 -60px 60px;
+   padding: 40px 60px;
+}
+
+.author-box p {
+   margin-bottom: 0;
+}
+
+.author .author-box {
+   margin-top: -48px;
+}
+
+.author-box-title {
+   color: #000;
+   font-size: 16px;
+   margin-bottom: 4px;
+}
+
+.breadcrumb {
+   margin: 0 -60px 60px;
+   margin-top: -48px;
+   padding: 40px 60px;
+}
+
+/* -------------------- 11.2 Third Party Plugins -------------------- */
+/* -- Genesis eNews Extended -- */
+.enews-widget input {
+   border: none;
+   margin-right: -4px;
+   padding: 16px 24px 15px;
+   width: 60%;
+}
+
+.enews-widget input[type='submit'] {
+   background-color: #222;
+   color: #fff;
+   margin: 0;
+   padding: 16px 24px 15px;
+   width: auto;
+}
+
+.enews-widget input:hover[type='submit'] {
+   background-color: #555;
+}
+
+.content .enews-widget input input:focus {
+   border: none;
+}
+
+.enews form + p {
+   margin-top: 24px;
+}
+
+/* -- Genesis Latest Tweets -- */
+.latest-tweets ul li {
+   margin-bottom: 16px;
+}
+
+/* -- Jetpack -- */
+img#wpstats {
+   display: none;
+}
+
+/* -- Gravity Forms -- */
+div.gform_wrapper input[type='text'],
+div.gform_wrapper textarea,
+div.gform_wrapper .ginput_complex label {
+   font-size: 16px;
+   padding: 16px;
+}
+
+div.gform_wrapper .ginput_complex label {
+   padding: 0;
+}
+
+div.gform_wrapper li,
+div.gform_wrapper form li {
+   margin: 16px 0 0;
+}
+
+/* Genesis Responsive Slider */
+.genesis_responsive_slider {
+   position: relative;
+}
+
+.genesis_responsive_slider li {
+   list-style: none;
+}
+
+.genesis_responsive_slider #genesis-responsive-slider {
+   background-position: top center;
+   background-repeat: no-repeat;
+   border-bottom: 1px solid #ecebea;
+   border-left: none;
+   border-right: none;
+   border-top: none;
+   min-height: 300px;
+   padding: 0;
+   position: relative;
+}
+
+.genesis_responsive_slider .flex-direction-nav li .prev {
+   left: 0;
+}
+
+.genesis_responsive_slider .flex-direction-nav li .next {
+   right: 0;
+}
+
+.genesis_responsive_slider .flex-direction-nav li a {
+   opacity: .5;
+}
+
+.genesis_responsive_slider .slide-excerpt-border {
+   background: none;
+   border: none;
+   display: inline;
+   float: left;
+   margin: 10px;
+   padding: 14px;
+   position: relative;
+   z-index: 8;
+}
+
+.genesis_responsive_slider .flexslider {
+   background: none;
+}
+
+.genesis_responsive_slider .slide-excerpt {
+   background: none;
+   display: block;
+   filter: alpha(opacity=80);
+   margin: 10px;
+   opacity: .8;
+   padding: 0;
+   position: absolute;
+   z-index: 8;
+}
+
+.genesis_responsive_slider h2 a {
+   color: #41c9fe;
+   font-family: 'Cabin', 'CabinSemiBold', serif;
+}
+
+.genesis_responsive_slider-left {
+   background-image: url(images/shadow-top.png);
+   background-position: top center;
+   background-repeat: no-repeat;
+   height: 42px;
+   position: absolute;
+   top: 0;
+   width: 100%;
+   z-index: 100;
+}
+
+/* -- Other -- */
+#supersized img {
+   max-width: none;
+}
+
+/*****************************************************************************
+ * 
+ * 12: FRONT PAGE
+ * 			
+ *****************************************************************************/
+/*****************************************************************************
+ * 
+ * 13: PAGE SPECIFIC CSS
+ * 			
+ *****************************************************************************/
+/* ---------- 13.1 Page Template: Blog Masonry and Blog Masonry 2 ---------- */
+/* Note: .entry on blog masonry pages is placed via masonry.js using aboslute 
+positioning. Absolutely positioned elements, when set to 100%, are 100% of the parent 
+container - including padding. So it will ignore padding and break out of the 
+padded content area. To get around this, padding on this page is being shifted
+from .content (the parent) to .content-sidebar-wrap (the grandparent). Because
+the grandparent is outside the positioning sequence of masonry, the masonry 
+entries obey that padding and it provides the impression of content padding.*/
+.imagely-masonry .content-sidebar-wrap {
+   padding: 60px 40px 60px;
+}
+
+.imagely-masonry .content,
+.imagely-masonry.full-width .content {
+   margin-bottom: 75px;
+   padding: 0 !important;
+}
+
+.imagely-masonry .content .entry {
+   background-color: #fcfcfc;
+   border: none;
+   box-shadow: 0 0 1px .5px rgba(34, 25, 25, .1);
+   margin: 0 0 30px;
+   max-width: 100%;
+   overflow: hidden;
+   padding: 15px 15px 20px;
+   width: 31.5%;
+}
+
+.imagely-masonry .content .entry-header {
+   margin-bottom: 10px;
+}
+
+.imagely-masonry .content .entry-header img {
+   margin-bottom: 15px;
+   width: 100%;
+}
+
+.imagely-masonry .content .entry-title {
+   font-size: 22px;
+   font-size: 2.2rem;
+   font-size: 22px;
+   letter-spacing: 1px;
+   margin-bottom: 15px;
+   text-align: left;
+   word-wrap: break-word;
+}
+
+.imagely-masonry .content .entry-meta {
+   text-align: left;
+   word-wrap: break-word;
+}
+
+.imagely-masonry .content .entry-content {
+   word-wrap: break-word;
+}
+
+.imagely-masonry .content .entry-pagination {
+   display: none;
+}
+
+.imagely-masonry .content .pagination {
+   text-align: center;
+}
+
+/* Both .imagely-masonry and .imagely-masonry-2 styles apply when Blog Masonry 2 
+Template is selected. .imagely-masonry-2 styles simply override some .imagely-masonry styles */
+.imagely-masonry-2 .content .entry {
+   padding: 0 0 20px;
+}
+
+.imagely-masonry-2 .content .entry-title {
+   padding: 15px 15px 0;
+}
+
+.imagely-masonry-2 .content .entry-meta,
+.imagely-masonry-2 .content .entry-content {
+   padding-left: 15px;
+   padding-right: 15px;
+}
+
+/* --------------- 13.2 Page Template: Blog Grid --------------- */
+.imagely-grid .content .entry {
+   background-color: rgba(0, 0, 0, .1);
+   background-image: -webkit-radial-gradient(rgba(0, 0, 0, .1), rgba(0, 0, 0, .6));
+   background-image:         radial-gradient(rgba(0, 0, 0, .1), rgba(0, 0, 0, .6));
+   border: none;
+   box-shadow: none;
+   float: left;
+   height: 300px;
+   margin: 0 2% 2% 0;
+   overflow: hidden;
+   position: relative;
+   text-align: center;
+   width: 49%;
+}
+
+.imagely-grid .content .entry:nth-of-type(2n) {
+   margin: 0 0 2% 0;
+}
+
+.imagely-grid .content .entry:nth-of-type(2n+1) {
+   margin: 0 2% 2% 0;
+}
+
+.imagely-grid .content .entry img {
+   left: 50%;
+   position: absolute;
+   top: 50%;
+   -webkit-transform: translate(-50%, -50%);
+           transform: translate(-50%, -50%);
+   width: 100%;
+}
+
+.imagely-grid .content .entry .aligncenter {
+   margin: 0 auto;
+}
+
+.imagely-grid .content .entry-header {
+   background-color: rgba(0, 0, 0, .3);
+   padding: 200px 0;
+   position: absolute;
+   top: 50%;
+   -webkit-transform: translateY(-50%);
+           transform: translateY(-50%);
+   -webkit-transition: all .2s ease-in-out;
+           transition: all .2s ease-in-out;
+   width: 100%;
+}
+
+.imagely-grid .content .entry-header:hover {
+   background-color: rgba(0, 0, 0, .1);
+}
+
+.imagely-grid .content .entry-title {
+   font-size: 24px;
+   font-size: 2.4rem;
+   font-size: 24px;
+   margin: 0;
+   padding: 0 15px;
+   text-align: center;
+   word-wrap: break-word;
+}
+
+.imagely-grid .content .entry-title a,
+.imagely-grid .content .entry-title a:hover {
+   color: #fff;
+   display: block;
+   text-align: center;
+}
+
+.imagely-grid .content .entry-meta,
+.imagely-grid .content .entry-mea a {
+   color: #fff;
+   font-size: 14px;
+   font-size: 1.4rem;
+   font-size: 14px;
+   margin-bottom: 0;
+   text-align: center;
+}
+
+.imagely-grid .content .entry-time::before {
+   display: none;
+}
+
+.imagely-grid .content .pagination {
+   padding-top: 50px;
+   text-align: center;
+}
+
+.imagely-grid.content-sidebar .content .entry {
+   width: 99%;
+}
+
+.imagely-grid .featured-content .entry-header {
+   position: static;
+}
+
+.imagely-grid .featuredpage .entry {
+   margin-right: 0;
+   width: 100%;
+}
+
+/* --------------- 13.3 Page/Post Template: Featured Image --------------- */
+.imagely-featured-image .content {
+   padding: 0 0 60px;
+   width: 65%;
+}
+
+.imagely-featured-image .content > .entry .entry-content,
+.imagely-featured-image .content > .entry .entry-footer {
+   margin-left: auto;
+   margin-right: auto;
+   max-width: 960px;
+   padding-left: 30px;
+   padding-right: 30px;
+}
+
+.imagely-featured-image .content > .entry .entry-header {
+   background-color: rgba(0, 0, 0, .1);
+   background-image: -webkit-radial-gradient(rgba(0, 0, 0, .1), rgba(0, 0, 0, .6));
+   background-image:         radial-gradient(rgba(0, 0, 0, .1), rgba(0, 0, 0, .6));
+   border: none;
+   height: 400px;
+   margin-bottom: 100px;
+   margin-top: 0;
+   overflow: hidden;
+   text-align: center;
+   -webkit-transform-style: preserve-3d;
+           transform-style: preserve-3d;
+   width: 100%;
+}
+
+.imagely-featured-image .content > .entry .entry-header .wrap {
+   background-color: rgba(0, 0, 0, .4);
+   height: 100%;
+   padding: 0 20px;
+   width: 100%;
+}
+
+.imagely-featured-image .content > .entry .entry-header h1 {
+   margin-bottom: 0;
+}
+
+.imagely-featured-image .content > .entry .entry-title {
+   color: #fff;
+   position: relative;
+   text-align: center;
+   text-transform: uppercase;
+   top: 40%;
+   -webkit-transform: translateY(-50%);
+           transform: translateY(-50%);
+}
+
+.imagely-featured-image .content > .entry .entry-title a {
+   color: #fff;
+}
+
+.imagely-featured-image .content > .entry .entry-title a:hover,
+.imagely-featured-image .content > .entry .entry-title a:focus {
+   color: #fff;
+}
+
+.imagely-featured-image .content > .entry .entry-meta {
+   color: #fff;
+   position: relative;
+   text-align: center;
+   top: 42%;
+   -webkit-transform: translateY(-50%);
+           transform: translateY(-50%);
+}
+
+.imagely-featured-image .content > .entry .entry-meta a,
+.imagely-featured-image .content > .entry .entry-meta a:hover {
+   color: #fff;
+}
+
+.imagely-featured-image #respond,
+.imagely-featured-image .entry-comments,
+.imagely-featured-image .after-entry {
+   margin-left: auto;
+   margin-right: auto;
+   max-width: 960px;
+   padding-left: 30px;
+   padding-right: 30px;
+}
+
+.imagely-featured-image.full-width-content .content {
+   padding: 0 0 60px;
+   width: 100%;
+}
+
+.imagely-featured-image.content-sidebar .content .entry-header {
+   height: 400px;
+}
+
+/* --------------- 13.4 Page Template: No Content --------------- */
+.imagely-no-content .site-inner {
+   display: none;
+}
+
+/*****************************************************************************
+ * 
+ * 14: THEME SPECIFIC CSS
+ * 			
+ *****************************************************************************/
+.site-inner {
+   padding: 0 20px 20px 0;
+}
+
+.site-header {
+   border-right: 1px solid rgba(150, 150, 150, .2);
+}
+
+.title-area {
+   padding: 40px 30px;
+}
+
+.site-title {
+   letter-spacing: -.5px;
+   margin: 0;
+}
+
+.genesis-nav-menu {
+   letter-spacing: 0;
+}
+
+.genesis-nav-menu a {
+   padding-right: 30px;
+   text-align: right;
+}
+
+.genesis-nav-menu a:hover {
+   background-color: #f7f7f7;
+}
+
+.genesis-nav-menu .sub-menu {
+   box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, .1);
+}
+
+.genesis-nav-menu .sub-menu a {
+   font-size: 15px;
+   font-size: 1.5rem;
+}
+
+.genesis-nav-menu .current-menu-item > a {
+   color: #000;
+}
+
+.header-widget-area {
+   margin-top: -20px;
+   padding: 0 0 20px;
+}
+
+.header-widget-area .widget {
+   font-size: 14px;
+   padding: 15px 30px 15px 15px;
+}
+
+.header-widget-area .widget.widget_nav_menu {
+   padding: 0;
+}
+
+.header-widget-area .simple-social-icons ul li {
+   margin: 0 0 12px 6px !important;
+}
+
+.content {
+   border-left: none;
+   border-right: 1px solid rgba(150, 150, 150, .2);
+   padding: 40px 40px 60px;
+}
+
+.full-width-content .content,
+.imagely-masonry .content {
+   border-left: none;
+   border-right: none;
+}
+
+.full-width-content .content {
+   padding: 43px;
+}
+
+.content-sidebar .content {
+   border-right: 1px solid rgba(150, 150, 150, .2);
+}
+
+.entry-title,
+.entry-title a,
+.entry-title a:hover {
+   margin: .67em 0 16px;
+}
+
+.entry-meta {
+   text-transform: none;
+}
+
+.after-post {
+   border: 1px solid rgba(150, 150, 150, .2);
+}
+
+.imagely-featured-image .after-post {
+   border-left: none;
+   border-right: none;
+}
+
+.sidebar {
+   border: none;
+   padding-top: 20px;
+}
+
+.footer-widgets,
+.site-footer {
+   border-top: 1px solid rgba(150, 150, 150, .2);
+}
+
+.page-template-page_blog .content .entry-meta {
+   margin-bottom: 20px;
+}
+
+.imagely-grid .site-inner {
+   padding-bottom: 0;
+   padding-right: 0;
+}
+
+.imagely-grid .content {
+   padding: 0;
+}
+
+.imagely-grid .content .entry {
+   width: 33.33333333%;
+}
+
+.imagely-grid .content .entry:nth-of-type(2n+1) {
+   margin: 0;
+}
+
+.imagely-grid .content .entry:nth-of-type(2n) {
+   margin: 0;
+}
+
+.imagely-grid .content .entry img {
+   max-width: 101%;
+   width: 101%;
+}
+
+.imagely-grid .content .entry-header {
+   padding: 200px 20px;
+}
+
+.imagely-grid .entry-title,
+.imagely-grid .entry-title a,
+.imagely-grid .entry-title a:hover {
+   font-size: 25px;
+   font-size: 2.5rem;
+}
+
+.imagely-grid .site-footer {
+   display: none;
+}
+
+.imagely-grid .footer-widgets {
+   display: none;
+}
+
+.imagely-grid .pagination {
+   display: none;
+}
+
+.imagely-featured-image .content {
+   padding: 0 20px 20px;
+}
+
+.imagely-featured-image .content > .entry .entry-header {
+   margin-bottom: 50px;
+}
+
+.imagely-featured-image .content > .entry .entry-content,
+.imagely-featured-image .content > .entry .entry-footer {
+   max-width: 100%;
+}
+
+.imagely-featured-image .content .entry-content,
+.imagely-featured-image .content .entry-footer,
+.imagely-featured-image .content #respond,
+.imagely-featured-image .content .entry-comments,
+.imagely-featured-image .content .after-entry {
+   padding: 10px 40px;
+}
+
+.imagely-featured-image.content-sidebar .content {
+   padding: 0;
+   width: 70%;
+}
+
+.imagely-featured-image.content-sidebar .sidebar {
+   border-left: none;
+   width: 30%;
+}
+
+.imagely-featured-image.content-sidebar .entry-header {
+   border-bottom: 5px solid #333;
+}
+
+.imagely-featured-image.full-width-content .site-inner {
+   padding: 0 0 20px 0;
+}
+
+.imagely-featured-image.full-width-content .content {
+   padding: 0 0 100px;
+}
+
+.imagely-featured-image.full-width-content .entry-header {
+   border-bottom: 5px solid #333;
+   border-top: 5px solid #333;
+   margin-top: 50px;
+}
+
+/*****************************************************************************
+ * 
+ * 15: MEDIA QUERIES
+ * 			
+ *****************************************************************************/
+/* -------------------- 15.1 Max Width 1120 -------------------- */
+@media only screen and (max-width: 1120px) {
+   .site-container {
+      margin: 0 auto 20px;
+      max-width: 95%;
+      width: 95%;
+   }
+   .site-inner,
+   .full-width-content .site-inner {
+      border-color: rgba(50, 50, 50, .7);
+      border-style: solid;
+      border-width: 0;
+      float: none;
+      margin-left: 0;
+      margin-right: 0;
+      max-width: 100%;
+      width: 100%;
+   }
+   .content,
+   .full-width .content,
+   .sidebar-primary {
+      padding: 45px 35px;
+      width: 100%;
+   }
+   .sidebar .widget {
+      width: 100%;
+   }
+   .sidebar {
+      border-left: none;
+   }
+   .site-header {
+      border-color: rgba(50, 50, 50, .7);
+      border-style: solid;
+      border-width: 0;
+      float: none;
+      height: auto;
+      margin: 20px 0 30px;
+      max-width: 100%;
+      padding-top: 0;
+      position: static;
+      width: 100%;
+   }
+   .title-area {
+      margin-bottom: 0;
+      margin-top: 0;
+      padding: 20px 5%;
+   }
+   .site-title {
+      color: #222;
+   }
+   .header-image .site-title > a {
+      height: 112.5px;
+      width: 300px;
+   }
+   .site-description {
+      color: #aaa;
+   }
+   .header-widget-area {
+      margin-bottom: 0;
+      margin-top: 0;
+      padding: 0;
+   }
+   .header-widget-area .widget {
+      font-size: 14px;
+      padding: 0 15px 25px;
+   }
+   .header-widget-area .widget_nav_menu {
+      padding: 0 15px 0;
+   }
+   .archive-description,
+   .author-box,
+   .breadcrumb {
+      margin: 0 0 60px;
+   }
+   .search-form {
+      float: none;
+      margin: 0 auto;
+      width: 100%;
+   }
+   /* Responsive Navigation on Mobile */
+   .responsive-menu-icon {
+      display: block;
+      margin-bottom: 25px;
+      text-align: left;
+   }
+   .genesis-nav-menu {
+      border-bottom: none;
+      margin: 0;
+      text-align: center;
+   }
+   .genesis-nav-menu li {
+      border: none;
+      float: none;
+      width: auto;
+   }
+   .genesis-nav-menu.responsive-menu {
+      border: none;
+      color: #222;
+      display: none;
+      margin: 0;
+   }
+   .genesis-nav-menu.responsive-menu .menu-item {
+      display: block;
+      text-align: left;
+   }
+   .genesis-nav-menu.responsive-menu .menu-item:hover {
+      position: static;
+   }
+   .genesis-nav-menu.responsive-menu > .menu-item > .sub-menu {
+      display: none;
+   }
+   .genesis-nav-menu.responsive-menu .menu-item-has-children {
+      cursor: pointer;
+   }
+   .genesis-nav-menu.responsive-menu .menu-item-has-children > a {
+      margin-right: 60px;
+   }
+   .genesis-nav-menu.responsive-menu .menu-item-has-children:before {
+      content: '\f107';
+      float: right;
+      font: normal 16px/1 'FontAwesome';
+      height: 16px;
+      margin-top: 10px;
+      padding-right: 5px;
+      right: 0;
+      text-align: right;
+      z-index: 9999;
+   }
+   .genesis-nav-menu.responsive-menu a {
+      background: none;
+      border: none;
+      color: #222;
+      display: block;
+      font-weight: 400;
+      letter-spacing: 2px;
+      line-height: 1;
+      margin: 0;
+      padding: 16px 20px 16px 8px;
+      text-align: left;
+   }
+   .genesis-nav-menu.responsive-menu a:hover,
+   .current-menu-item > .genesis-nav-menu.responsive-menu a {
+      background: none;
+      border: none;
+      color: #999;
+      display: block;
+      letter-spacing: 2px;
+      line-height: 1;
+      text-align: left;
+   }
+   .genesis-nav-menu.responsive-menu .sub-menu {
+      background: transparent;
+      border: none;
+      left: auto;
+      margin: 0;
+      opacity: 1;
+      padding: 0 0 0 5px;
+      position: relative;
+      -webkit-transition: opacity .4s ease-in-out;
+              transition: opacity .4s ease-in-out;
+      width: 100%;
+      z-index: 99;
+   }
+   .genesis-nav-menu.responsive-menu .sub-menu li a {
+      color: #666;
+      font-weight: 300;
+      letter-spacing: 1.5px;
+      padding: 10px 20px;
+      position: relative;
+      text-align: left;
+      text-transform: none;
+      width: 100%;
+   }
+   .genesis-nav-menu.responsive-menu .sub-menu li a:hover,
+   .genesis-nav-menu.responsive-menu .sub-menu li a:active {
+      color: #999;
+   }
+   .genesis-nav-menu.responsive-menu .sub-menu .sub-menu ul {
+      padding-bottom: 0;
+      padding-top: 0;
+   }
+   .genesis-nav-menu.responsive-menu .menu-open.menu-item-has-children:before {
+      content: '\f106';
+   }
+   .imagely-masonry .content-sidebar-wrap {
+      padding: 20px 15px;
+   }
+   .imagely-masonry .content .entry {
+      width: 48%;
+   }
+   .imagely-masonry .site-inner {
+      margin: 40px auto 20px;
+   }
+   .imagely-grid .site-inner {
+      margin: 40px auto 20px;
+   }
+   .imagely-featured-image .content {
+      width: 100%;
+   }
+   .imagely-featured-image .entry-header {
+      height: 400px;
+   }
+}
+
+/* -------------------- 15.2 Max Width 800 -------------------- */
+@media only screen and (max-width: 800px) {
+   .entry-title,
+   h1 {
+      font-size: 2.625rem;
+   }
+   h2 {
+      font-size: 2.275rem;
+   }
+   h3 {
+      font-size: 2.1rem;
+   }
+   h4 {
+      font-size: 1.75rem;
+   }
+   h5 {
+      font-size: 1.575rem;
+   }
+   h6 {
+      font-size: 1.4rem;
+   }
+   .site-header .widget-area {
+      text-align: center;
+   }
+   .content,
+   .full-width-content .content,
+   .sidebar {
+      padding: 30px 25px;
+   }
+   .sidebar {
+      border-top: 1px solid #333;
+   }
+   .sidebar .widget {
+      width: 100%;
+   }
+   .entry-title {
+      font-size: 32px;
+   }
+   .enews-widget input,
+   .enews-widget input[type='submit'],
+   .five-sixths,
+   .four-sixths,
+   .one-fourth,
+   .one-half,
+   .one-sixth,
+   .one-third,
+   .search-form,
+   .three-fourths,
+   .three-sixths,
+   .two-fourths,
+   .two-sixths,
+   .two-thirds {
+      margin: 0;
+      width: 100%;
+   }
+   .footer-widgets-1,
+   .footer-widgets-2,
+   .footer-widgets-3 {
+      width: 100%;
+   }
+   .footer-widgets-1,
+   .footer-widgets-2 {
+      margin-right: 0;
+   }
+   .imagely-grid .content,
+   .imagely-grid .full-width-content .content {
+      padding: 25px 20px;
+      text-align: center;
+   }
+   .imagely-grid .entry {
+      width: 99%;
+   }
+   .imagely-grid .content,
+   .imagely-grid .full-width-content .content {
+      padding: 20px 15px;
+      text-align: center;
+   }
+   .imagely-grid .content .entry {
+      margin: 2% 0;
+      width: 100%;
+   }
+   .imagely-grid .entry-title {
+      font-size: 2.2rem;
+      font-size: 22px;
+   }
+   .imagely-featured-image .entry-header {
+      border: none;
+      height: 400px;
+   }
+}
+
+/* ---------- 15.3 Max Width 640 ---------- */
+@media only screen and (max-width: 640px) {
+   .site-tite,
+   .site-title a {
+      font-size: 3rem;
+   }
+   .site-description {
+      font-size: 1.3rem;
+   }
+   .imagely-post-thumbnail .entry-meta {
+      display: none;
+   }
+   .comment-respond input[type='email'],
+   .comment-respond input[type='text'],
+   .comment-respond input[type='url'] {
+      width: 100%;
+   }
+   .imagely-masonry .content .entry {
+      width: 100%;
+   }
+   .imagely-grid .content,
+   .imagely-grid .full-width .content {
+      text-align: center;
+   }
+   .imagely-grid .content .entry {
+      margin: 2% 0;
+      width: 100%;
+   }
+   .imagely-grid .entry-title {
+      font-size: 2.2rem;
+      font-size: 22px;
+   }
+}
+
+/* ---------- 15.4 Theme Specific Media Queries ---------- */
+@media only screen and (max-width: 1220px) {
+   .imagely-grid .content .entry {
+      width: 50%;
+   }
+}
+
+@media only screen and (max-width: 1120px) {
+   .site-container {
+      max-width: 100%;
+      width: 100%;
+   }
+   .site-inner {
+      padding: 20px;
+   }
+   .title-area {
+      text-align: center;
+   }
+   .header-widget-area {
+      border-bottom: none;
+      border-top: none;
+   }
+   .header-widget-area .widget.widget_nav_menu {
+      padding: 0 15px 0;
+   }
+   .header-widget-area .simple-social-icons .alignright,
+   .header-widget-area .simple-social-icons .alignleft {
+      display: inline-block;
+      float: none;
+      text-align: center;
+   }
+   .header-widget-area .simple-social-icons ul li {
+      margin-left: 0 !important;
+      padding: 0 3px !important;
+   }
+   .genesis-nav-menu .sub-menu {
+      box-shadow: none;
+   }
+   .genesis-nav-menu.responsive-menu a {
+      font-size: 1.5rem;
+      padding: 10px 5px;
+   }
+   .genesis-nav-menu.responsive-menu .sub-menu {
+      padding: 0 0 0 15px;
+   }
+   .genesis-nav-menu.responsive-menu .sub-menu li a {
+      padding: 10px;
+   }
+   .content,
+   .content-sidebar .content {
+      border: none;
+   }
+   .imagely-featured-image .site-inner,
+   .imagely-featured-image .content,
+   .imagely-featured-image.content-sidebar .site-inner,
+   .imagely-featured-image.content-sidebar .content {
+      padding: 0;
+   }
+   .imagely-featured-image .entry-header {
+      border-bottom: 5px solid #333;
+      border-top: 5px solid #333;
+   }
+   .imagely-featured-image.content-sidebar .content,
+   .imagely-featured-image.content-sidebar .sidebar {
+      width: 100%;
+   }
+   .imagely-grid .content,
+   .imagely-grid .full-width-content .content {
+      padding: 0;
+   }
+   .imagely-grid .site-inner {
+      padding: 0;
+   }
+}
+
+@media only screen and (max-width: 800px) {
+   .sidebar {
+      border-top: 1px solid rgba(150, 150, 150, .2);
+   }
+}
+
+@media only screen and (max-width: 768px) {
+   .imagely-grid .content .entry {
+      width: 100%;
+   }
+}
