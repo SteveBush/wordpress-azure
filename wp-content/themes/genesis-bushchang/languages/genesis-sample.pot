@@ -51,18 +51,18 @@ msgid "Accent Color"
 msgstr ""
 
 #. Theme Name of the plugin/theme
-msgid "Genesis Sample"
+msgid "Genesis BushChang"
 msgstr ""
 
 #. Theme URI of the plugin/theme
 #. Author URI of the plugin/theme
-msgid "http://www.studiopress.com/"
+msgid "http://www.bushchang.com/"
 msgstr ""
 
 #. Description of the plugin/theme
-msgid "This is the sample theme created for the Genesis Framework."
+msgid "BushChang Theme created from Genesis Framework"
 msgstr ""
 
 #. Author of the plugin/theme
-msgid "StudioPress"
+msgid "Steve Bush"
 msgstr ""
