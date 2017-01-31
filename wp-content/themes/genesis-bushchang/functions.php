@@ -114,3 +114,12 @@ function genesis_sample_comments_gravatar( $args ) {
 	return $args;
 
 }
+
+//* Remove Protected: and Private: from blog titles
+ add_filter('private_title_format', 'bc_title_format'); 
+ add_filter('protected_title_format', 'bc_title_format');
+ function bc_title_format( $content ) { 
+	return '%s'; 
+} 
+ 
+
