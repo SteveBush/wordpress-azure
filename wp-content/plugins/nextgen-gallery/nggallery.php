@@ -4,7 +4,7 @@ if(preg_match('#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'])) { die('You 
 /**
  * Plugin Name: NextGEN Gallery
  * Description: The most popular gallery plugin for WordPress and one of the most popular plugins of all time with over 16 million downloads.
- * Version: 2.1.69
+ * Version: 2.1.77
  * Author: Imagely
  * Plugin URI: https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/
  * Author URI: https://www.imagely.com
@@ -206,28 +206,35 @@ class C_NextGEN_Bootstrap
 
 	function fix_loading_order()
 	{
+        // If a plugin wasn't activated/deactivated siliently, we can listen for these things
+	    if (did_action('activate_plugin') || did_action('deactivate_plugin')) return;
+	    else if (strpos($_SERVER['REQUEST_URI'], 'plugins') !== FALSE) return;
+
 		$plugins = get_option('active_plugins');
 
-		// Remove NGG from list of plugins to load
-		$order = array();
-		$new_position = 0;
-		$ngg = basename(dirname(__FILE__)).'/'.basename(__FILE__);
-		for ($i=0; $i<count($plugins); $i++) {
-			if (isset($plugins[$i])) {
-				$plugin = $plugins[$i];
-				if (strpos($plugin, basename(__FILE__)) === FALSE) {
-					if (strpos($plugin, 'nggallery-pro') !== FALSE && $i > $new_position) $new_position = $i;
-					if (strpos($plugin, 'ngg-plus') !== FALSE && $i > $new_position) $new_position = $i;
-					if ($plugin) $order[] = $plugin;
-				}
-			}
-		}
-		array_splice($order, $new_position+1, 0, $ngg);
-		if (!in_array($ngg, $order)) $order[] = $ngg;
+		// Remove NGG from the list
+        $ngg = basename(dirname(__FILE__)).'/'.basename(__FILE__);
+        $order = array();
+        foreach ($plugins as $plugin) {
+            if ($plugin != $ngg) $order[] = $plugin;
+        }
 
-		$order = array_values($order);
+
+        // Get the position of either NGG Pro or NGG Plus
+        $insert_at = FALSE;
+        for($i=0; $i<count($order); $i++) {
+            $plugin = $order[$i];
+            if (strpos($plugin, 'nggallery-pro') !== FALSE) $insert_at = $i+1;
+            else if (strpos($plugin, 'ngg-plus') !== FALSE) $insert_at = $i+1;
+        }
+
+        // Re-insert NGG after Pro or Plus
+        if ($insert_at === FALSE || $insert_at === count($order)) $order[] = $ngg;
+        elseif ($insert_at === 0) array_unshift($order, $ngg);
+        else array_splice($order, $insert_at, 0, array($ngg));
 		
 		if ($order != $plugins) {
+		    $order = array_filter($order);
 			update_option('active_plugins', $order);
 		}
 	}
@@ -237,8 +244,6 @@ class C_NextGEN_Bootstrap
 	 */
 	function _load_pope()
 	{
-		$this->fix_loading_order();
-		
 		// No need to initialize pope again
 		if ($this->_pope_loaded) return;
 
@@ -391,6 +396,9 @@ class C_NextGEN_Bootstrap
 
 		// Flush pope cache
 		add_action('init', array(&$this, 'flush_pope_cache'));
+
+		// NGG extension plugins should be loaded in a specific order
+        add_action('shutdown', array(&$this, 'fix_loading_order'));
 
 		// Display a warning if an compatible version of NextGEN Pro is installed alongside this
 		// version of NextGEN Gallery
@@ -623,7 +631,7 @@ class C_NextGEN_Bootstrap
 		define('NGG_PRODUCT_URL', path_join(str_replace("\\", '/', NGG_PLUGIN_URL), 'products'));
 		define('NGG_MODULE_URL', path_join(str_replace("\\", '/', NGG_PRODUCT_URL), 'photocrati_nextgen/modules'));
 		define('NGG_PLUGIN_STARTED_AT', microtime());
-		define('NGG_PLUGIN_VERSION', '2.1.69');
+		define('NGG_PLUGIN_VERSION', '2.1.77');
 
 		if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG)
 			define('NGG_SCRIPT_VERSION', (string)mt_rand(0, mt_getrandmax()));
