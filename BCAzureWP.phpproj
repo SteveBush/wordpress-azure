@@ -673,6 +673,9 @@
     <Compile Include="wp-content\plugins\avatar-manager\LICENSE" />
     <Compile Include="wp-content\plugins\avatar-manager\readme.txt" />
     <Compile Include="wp-content\plugins\avatar-manager\uninstall.php" />
+    <Compile Include="wp-content\plugins\bushchang-membership\bushchang-membership.php" />
+    <Compile Include="wp-content\plugins\bushchang-membership\index.php" />
+    <Compile Include="wp-content\plugins\bushchang-membership\uninstall.php" />
     <Compile Include="wp-content\plugins\configure-smtp\c2c-plugin.php" />
     <Compile Include="wp-content\plugins\configure-smtp\c2c_minilogo.png" />
     <Compile Include="wp-content\plugins\configure-smtp\configure-smtp.php" />
@@ -7348,6 +7351,10 @@
     <Folder Include="wp-content\plugins\avatar-manager\assets" />
     <Folder Include="wp-content\plugins\avatar-manager\languages" />
     <Folder Include="wp-content\plugins\avatar-manager" />
+    <Folder Include="wp-content\plugins\bushchang-membership\assets\" />
+    <Folder Include="wp-content\plugins\bushchang-membership\assets\css" />
+    <Folder Include="wp-content\plugins\bushchang-membership\assets\js" />
+    <Folder Include="wp-content\plugins\bushchang-membership\languages\" />
     <Folder Include="wp-content\plugins\configure-smtp\lang" />
     <Folder Include="wp-content\plugins\configure-smtp" />
     <Folder Include="wp-content\plugins\indeed-membership-pro\admin\assets\css" />
@@ -7620,6 +7627,7 @@
     <Folder Include="wp-content\plugins\jetpack\_inc\social-logos" />
     <Folder Include="wp-content\plugins\jetpack\_inc" />
     <Folder Include="wp-content\plugins\jetpack" />
+    <Folder Include="wp-content\plugins\bushchang-membership\" />
     <Folder Include="wp-content\plugins\nextgen-gallery\freemius\assets\css\admin" />
     <Folder Include="wp-content\plugins\nextgen-gallery\freemius\assets\css" />
     <Folder Include="wp-content\plugins\nextgen-gallery\freemius\assets\img" />
@@ -8341,5 +8349,13 @@
     <Folder Include="_config\staging" />
     <Folder Include="_config" />
     <Folder Include="_project" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="wp-content\plugins\bushchang-membership\assets\css\bushchang-membership.css" />
+    <Content Include="wp-content\plugins\bushchang-membership\assets\css\bushchang-membership.min.css" />
+    <Content Include="wp-content\plugins\bushchang-membership\assets\js\bushchang-membership.js" />
+    <Content Include="wp-content\plugins\bushchang-membership\assets\js\bushchang-membership.min.js" />
+    <Content Include="wp-content\plugins\bushchang-membership\LICENSE" />
+    <Content Include="wp-content\plugins\bushchang-membership\readme.txt" />
   </ItemGroup>
 </Project>
