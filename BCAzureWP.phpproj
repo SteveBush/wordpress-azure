@@ -8351,6 +8351,7 @@
     <Folder Include="_project" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="bundleconfig.json" />
     <Content Include="wp-content\plugins\bushchang-membership\assets\css\bushchang-membership.css" />
     <Content Include="wp-content\plugins\bushchang-membership\assets\css\bushchang-membership.min.css" />
     <Content Include="wp-content\plugins\bushchang-membership\assets\js\bushchang-membership.js" />
