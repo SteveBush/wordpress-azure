@@ -10,6 +10,7 @@
  */
 class BushChang_Membership
 {
+	private static $initiated = false;
 
 	public static function init() {
 		if ( ! self::$initiated ) {
@@ -25,18 +26,18 @@ class BushChang_Membership
 
 	}
 
-    /**
-     * Attached to activate_{ plugin_basename( __FILES__ ) } by register_activation_hook()
-     * @static
-     */
+	/**
+	 * Attached to activate_{ plugin_basename( __FILES__ ) } by register_activation_hook()
+	 * @static
+	 */
 	public static function plugin_activation() {
-	
+
 	}
 
 	/**
-     * Removes plugin
-     * @static
-     */
+	 * Removes plugin
+	 * @static
+	 */
 	public static function plugin_deactivation( ) {
 		return 'deactivated';
 	}

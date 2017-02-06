@@ -674,6 +674,9 @@
     <Compile Include="wp-content\plugins\avatar-manager\readme.txt" />
     <Compile Include="wp-content\plugins\avatar-manager\uninstall.php" />
     <Compile Include="wp-content\plugins\bushchang-membership\bushchang-membership.php" />
+    <Compile Include="wp-content\plugins\bushchang-membership\class.bushchang-membership-admin.php" />
+    <Compile Include="wp-content\plugins\bushchang-membership\class.bushchang-membership-widget.php" />
+    <Compile Include="wp-content\plugins\bushchang-membership\class.bushchang-membership.php" />
     <Compile Include="wp-content\plugins\bushchang-membership\index.php" />
     <Compile Include="wp-content\plugins\bushchang-membership\uninstall.php" />
     <Compile Include="wp-content\plugins\configure-smtp\c2c-plugin.php" />
