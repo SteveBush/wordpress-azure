@@ -1,0 +1,14 @@
+[
+  {
+    "outputFileName": "wp-content/plugins/bushchang-membership/assets/js/bushchang-membership.min.js",
+    "inputFiles": [
+      "wp-content/plugins/bushchang-membership/assets/js/bushchang-membership.js"
+    ]
+  },
+  {
+    "outputFileName": "wp-content/plugins/bushchang-membership/assets/css/bushchang-membership.min.css",
+    "inputFiles": [
+      "wp-content/plugins/bushchang-membership/assets/css/bushchang-membership.css"
+    ]
+  }
+]

@@ -31,6 +31,11 @@ if (strtoupper($_SERVER["HTTP_HOST"]) == "DEV.BUSHCHANG.COM") {
     $connectstr_dbname = 'localdb';
     $connectstr_dbusername = 'azure';
     $connectstr_dbpassword = '6#vWHD_$';
+
+
+    // Set up Debug Environment
+    define('WP_DEBUG', true);
+
 }
 else {
     foreach ($_SERVER as $key => $value) {
@@ -43,6 +48,9 @@ else {
         $connectstr_dbusername = preg_replace("/^.*User Id=(.+?);.*$/", "\\1", $value);
         $connectstr_dbpassword = preg_replace("/^.*Password=(.+?)$/", "\\1", $value);
     }
+
+    // Turn off Debugging in production
+    define('WP_DEBUG', false);
 }
 
 
@@ -106,7 +114,7 @@ $table_prefix  = 'wp_';
  *
  * @link https://codex.wordpress.org/Debugging_in_WordPress
  */
-define('WP_DEBUG', false);
+// define('WP_DEBUG', false);
 
 /**
  *
