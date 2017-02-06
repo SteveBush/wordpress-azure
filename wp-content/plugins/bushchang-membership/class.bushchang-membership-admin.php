@@ -49,7 +49,7 @@ class BushChang_Membership_Admin
 	}
 
 	public static function load_menu() {
-		$hook = add_options_page( __('BushChang Membership', 'bushchang-membership'), __('BushChang Membership', 'bushchang-membership'), 'manage_options', 'akismet-key-config', array( 'BushChang_Membership_Admin', 'display_page' ) );
+		$hook = add_options_page( __('BushChang Membership', 'bushchang-membership'), __('BushChang Membership', 'bushchang-membership'), 'manage_options', 'bushchang-membership-config', array( 'BushChang_Membership_Admin', 'display_page' ) );
 
 		if ( version_compare( $GLOBALS['wp_version'], '3.3', '>=' ) ) {
 			add_action( "load-$hook", array( 'BushChang_Membership_Admin', 'admin_help' ) );
@@ -66,7 +66,9 @@ class BushChang_Membership_Admin
     }
 
     public static function display_page() {
-
+    ?>
+    <h2>BushChang Membership configuration options</h2>
+<?php
 	}
 
     public static function display_notice() {
