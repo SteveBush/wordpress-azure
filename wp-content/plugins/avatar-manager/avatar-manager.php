@@ -1088,7 +1088,7 @@ function avatar_manager_get_avatar( $avatar = '', $id_or_email, $size = '', $def
 		}
 	}
 
-	if ( isset( $user ) )
+	if ( isset( $user ) && isset($user->avatar_manager_avatar_type))
 		$avatar_type = $user->avatar_manager_avatar_type;
 	else
 		return $avatar;
