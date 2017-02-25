@@ -1,6 +1,9 @@
 NextGEN Gallery
 by Imagely
 
+= V2.1.79 - 02.23.2017 =
+* Changed:  Tag display adjustment
+
 = V2.1.77 - 01.31.2017 =
 * Changed:  Corrected Facebook link
 * Changed:  Tags in readme.txt

@@ -1203,6 +1203,7 @@ class Mixin_Displayed_Gallery_Queries extends Mixin
         $container_ids = array();
         if (is_array($tags) && !in_array('all', array_map('strtolower', $tags))) {
             foreach ($tags as $ndx => $container) {
+                $container = esc_sql(str_replace('%', '%%', $container));
                 $container_ids[] = "'{$container}'";
             }
             $container_ids = implode(',', $container_ids);
