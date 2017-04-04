@@ -1,6 +1,12 @@
 NextGEN Gallery
 by Imagely
 
+= V2.2.2 -  04.04.2017 =
+* Fixed:    Hyperlinks in image descriptions
+* Fixed:    WordPress SEO sitemap image count
+* Fixed:    Removed id parameter in shortcodes
+* Fixed:    Fatal error in Freemius code
+
 = V2.2.1 - 03.13.2017 =
 * NEW:      Template mechanism for all display types
 * NEW:      Review notices
