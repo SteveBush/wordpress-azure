@@ -17,7 +17,7 @@ jQuery(function($) {
                 // Ensure that the screen real estate allocated for an image
                 // is equal to the maximum width of a thumbnail
                 var max_width = display_settings.thumbnail_width;
-                $this.find('.gallery_link').each(function(){
+                $this.find('.gallery_link a').each(function(){
                     var $link = $(this);
                     var margin = max_width - $link.width();
                     // The width of the image is smaller than the allocated real estate. We'll increase
@@ -61,7 +61,7 @@ jQuery(function($) {
 
                 // without this the following .dotdotdot() will cause some themes
                 // to display no caption text at all
-                $(this).find('a.gallery_link').each(function() {
+                $(this).find('.gallery_link a').each(function() {
                     $(this).css({
                     	'height': $(this).find('img').attr('height')
                     });
@@ -72,14 +72,14 @@ jQuery(function($) {
             });
 
             // Prevent the title from being too big
-            $('.nextgen_pro_grid_album .caption_link').each(function() {
+            $('.nextgen_pro_grid_album .caption_link a').each(function() {
                 $(this).css('display', 'block');
                 $(this).dotdotdot();
             });
 
             // Find the longest captions
             var longest_caption = 0;
-            $this.find('.caption_link').each(function() {
+            $this.find('.caption_link a').each(function() {
                 if ($(this).outerHeight() > longest_caption) {
                     longest_caption = $(this).outerHeight();
                 }

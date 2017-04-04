@@ -3,20 +3,27 @@
 /* { Module: photocrati-nextgen_pro_mosaic } */
 
 define('NGG_PRO_MOSAIC', 'photocrati-nextgen_pro_mosaic');
-define('NGG_PRO_MOSAIC_VERSION', '0.16');
+define('NGG_PRO_MOSAIC_VERSION', '0.20');
 
 class M_NextGen_Pro_Mosaic extends C_Base_Module
 {
-    function define($context = FALSE)
+    function define($id = 'pope-module',
+                    $name = 'Pope Module',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri = '',
+                    $context = FALSE)
     {
         parent::define(
             NGG_PRO_MOSAIC,
             'Mosaic Display Type',
             'Provides the Pro Mosaic display type',
             NGG_PRO_MOSAIC_VERSION,
-            'http://www.nextgen-gallery.com',
-            'Photocrati Media',
-            'http://www.photocrati.com',
+            'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
+            'Imagely',
+            'https://www.imagely.com',
             $context
         );
     }
@@ -43,10 +50,6 @@ class M_NextGen_Pro_Mosaic extends C_Base_Module
                  ->add_adapter('I_Form',
                                'A_Mosaic_Form',
                                $this->module_id);
-
-            $this->get_registry()
-                 ->add_adapter('I_Form_Manager',
-                               'A_Mosaic_Forms');
         }
     }
 
@@ -55,15 +58,19 @@ class M_NextGen_Pro_Mosaic extends C_Base_Module
         return array(
             'A_Mosaic_Controller'              => 'adapter.mosaic_controller.php',
             'A_Mosaic_Display_Type_Mapper'     => 'adapter.mosaic_display_type_mapper.php',
-            'A_Mosaic_Form'                    => 'adapter.mosaic_forms.php',
-            'A_Mosaic_Forms'                   => 'adapter.mosaic_forms.php'
+            'A_Mosaic_Form'                    => 'adapter.mosaic_form.php',
         );
+    }
+
+    function initialize() {
+        parent::initialize();
+        C_Form_Manager::get_instance()->add_form(NGG_DISPLAY_SETTINGS_SLUG, NGG_PRO_MOSAIC);
     }
 }
 
 class C_NextGen_Pro_Mosaic_Installer extends C_Gallery_Display_Installer
 {
-    function install()
+    function install($reset = FALSE)
     {
         $this->install_display_type(
             NGG_PRO_MOSAIC, array(
@@ -82,19 +89,13 @@ class C_NextGen_Pro_Mosaic_Installer extends C_Gallery_Display_Installer
         );
     }
 
-    function uninstall($hard)
+    function uninstall()
     {
         $mapper = C_Display_Type_Mapper::get_instance();
         if (($entity = $mapper->find_by_name(NGG_PRO_MOSAIC)))
         {
-            if ($hard)
-            {
-                $mapper->destroy($entity);
-            }
-            else {
-                $entity->hidden_from_ui = TRUE;
-                $mapper->save($entity);
-            }
+            $entity->hidden_from_ui = TRUE;
+            $mapper->save($entity);
         }
     }
 }

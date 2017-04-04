@@ -10,16 +10,23 @@ class M_AutoUpdate extends C_Base_Module
 {
   var $_api_url = null;
 
-	function define()
+    function define($id = 'pope-module',
+                    $name = 'Pope Module',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri = '',
+                    $context = FALSE)
 	{
 		parent::define(
 			'photocrati-auto_update',
 			'Photocrati Auto Update',
 			"Provides automatic updates",
-			'0.15',
-			'http://www.photocrati.com',
-			'Photocrati Media',
-			'http://www.photocrati.com'
+			'0.17',
+            'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
+            'Imagely',
+            'https://www.imagely.com'
 		);
 	}
 

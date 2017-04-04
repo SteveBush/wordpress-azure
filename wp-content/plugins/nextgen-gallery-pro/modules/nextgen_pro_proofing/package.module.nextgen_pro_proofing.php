@@ -44,7 +44,7 @@ class A_NextGen_Pro_Proofing_Ajax extends Mixin
                     if (!empty($settings->proofing_page_confirmation)) {
                         $confirmation_url = M_NextGen_Pro_Proofing::get_page_url($settings->proofing_page_confirmation, $confirmation_params);
                     } else {
-                        $confirmation_url = M_NextGen_Pro_Proofing::add_to_querystring(site_url('/?ngg_pro_proofing_page=1'), $confirmation_params);
+                        $confirmation_url = M_NextGen_Pro_Proofing::_add_to_querystring(home_url('/?ngg_pro_proofing_page=1'), $confirmation_params);
                     }
                     // send e-mail to the site admin (get_option(admin_email))
                     $mailman = $this->object->get_registry()->get_utility('I_Nextgen_Mail_Manager');
@@ -372,7 +372,7 @@ class C_NextGen_Pro_Proofing_Mapper extends C_CustomPost_DataMapper_Driver
         }
         return self::$_instances[$context];
     }
-    function define($context = FALSE)
+    function define($object_name = FALSE, $context = FALSE)
     {
         $object_name = 'nextgen_proof';
         if (!is_array($context)) {
@@ -396,7 +396,8 @@ class C_NextGen_Pro_Proofing_Mapper extends C_CustomPost_DataMapper_Driver
     }
     function find_by_hash($hash, $model = FALSE)
     {
-        return array_pop($this->select()->where(array("hash = %s", $hash))->run_query(NULL, $model));
+        $results = $this->select()->where(array("hash = %s", $hash))->run_query(NULL, $model);
+        return array_pop($results);
     }
 }
 class Mixin_Proofing_Mapper extends Mixin

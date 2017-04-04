@@ -13,7 +13,7 @@
     var add_nggpl_theme = function() {
         Galleria.addTheme({
             name: 'nextgen_pro_lightbox',
-            author: 'Photocrati Media',
+            author: 'Imagely',
             version: 2.0,
             defaults: {
                 debug: false,
@@ -489,6 +489,7 @@
                         events: {
                             bind: function() {
                                 self.bind('loadfinish', methods.thumbnails.adjust_container);
+                                self.bind('loadfinish', this.loadfinish);
                                 self.bind('rescale', methods.thumbnails.adjust_container);
                                 self.bind('npl.sidebar.opened', methods.thumbnails.adjust_container);
                                 self.bind('npl.sidebar.closed', methods.thumbnails.adjust_container);
@@ -579,14 +580,21 @@
                                 self.prependChild('thumbnails-container', 'nextgen-buttons');
                                 self.appendChild('container', 'dock-toggle-container');
 
+                                if (!$.nplModal('mobile.browser.any')) {
+                                    self.addIdleState(self.get('dock-toggle-button'), {opacity: 0});
+                                }
+                            },
+                            // Galleria.js does NOT alawys play nicely if we hide the carousel before the first
+                            // time the loadfinished event has been triggered.
+                            _loadfinish_ran_once: false,
+                            loadfinish: function() {
+                                if (methods.thumbnails.events._loadfinish_ran_once)
+                                    return;
                                 // wait until init.complete to hide these so users can still know they exist
                                 if (!$.nplModal('get_setting', 'display_carousel', true) || Galleria.IPHONE || Galleria.IPAD || navigator.userAgent.match('CriOS')) {
                                     methods.thumbnails.toggle();
                                 }
-
-                                if (!$.nplModal('mobile.browser.any')) {
-                                    self.addIdleState(self.get('dock-toggle-button'), {opacity: 0});
-                                }
+                                methods.thumbnails.events._loadfinish_ran_once = true;
                             }
                         }
                     },

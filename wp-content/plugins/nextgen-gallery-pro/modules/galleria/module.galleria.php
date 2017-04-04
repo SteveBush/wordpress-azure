@@ -7,16 +7,23 @@ class M_Galleria extends C_Base_Module
 {
 	static $localized_galleries = array();
 
-	function define($context = FALSE)
+    function define($id = 'pope-module',
+                    $name = 'Pope Module',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri = '',
+                    $context = FALSE)
 	{
 		parent::define(
             NGG_PRO_GALLERIA,
 			'Galleria',
 			'Provides support for displaying galleries using Galleria Themes',
-            '0.22',
-			'http://www.nextgen-gallery.com',
-			'Photocrati Media',
-			'http://www.photocrati.com',
+            '0.25',
+            'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
+            'Imagely',
+            'https://www.imagely.com',
 			$context
 		);
 	}
@@ -30,9 +37,9 @@ class M_Galleria extends C_Base_Module
 	{
 		wp_register_script(
 			'ngg_galleria',
-			C_Router::get_instance()->get_static_url(NGG_PRO_GALLERIA . '#galleria-1.4.2.js'),
+			C_Router::get_instance()->get_static_url(NGG_PRO_GALLERIA . '#galleria-1.5.5.js'),
 			array('jquery'),
-			'1.4.2'
+			'1.5.5'
 		);
 	}
 

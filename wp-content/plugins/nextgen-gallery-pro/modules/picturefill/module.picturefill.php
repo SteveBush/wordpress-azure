@@ -8,15 +8,22 @@ Module: photocrati-nextgen_picturefull
 
 class M_NextGen_PictureFill extends C_Base_Module
 {
-	function define($context=FALSE)
+    function define($id = 'pope-module',
+                    $name = 'Pope Module',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri = '',
+                    $context = FALSE)
 	{
 		parent::define(
 			'photocrati-nextgen_picturefill',
 			'Picturefill',
 			'Provides support for the picture element using the PictureFill polyfill library',
-			'0.11',
-			'Photocrati Media',
-			'http://www.photocrati.com',
+			'0.13',
+			'Imagely',
+			'https://www.imagely.com',
 			$context
 		);
 	}

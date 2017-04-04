@@ -9,23 +9,30 @@
 define('NGG_PRO_LIGHTBOX', 'photocrati-nextgen_pro_lightbox');
 define('NGG_PRO_LIGHTBOX_TRIGGER', NGG_PRO_LIGHTBOX);
 define('NGG_PRO_LIGHTBOX_COMMENT_TRIGGER', 'photocrati-nextgen_pro_lightbox_comments');
-define('NGG_PRO_LIGHTBOX_VERSION', '0.55');
+define('NGG_PRO_LIGHTBOX_VERSION', '0.60');
 
 class M_NextGen_Pro_Lightbox extends C_Base_Module
 {
     // See self::add_component() below to extend the pro-lightbox
     static $_components = array();
 
-    function define($context=FALSE)
+    function define($id = 'pope-module',
+                    $name = 'Pope Module',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri = '',
+                    $context = FALSE)
     {
         parent::define(
             'photocrati-nextgen_pro_lightbox',
             'NextGEN Pro Lightbox',
             'Provides a lightbox with integrated commenting, social sharing, and e-commerce functionality',
             NGG_PRO_LIGHTBOX_VERSION,
-            'http://www.nextgen-gallery.com',
-            'Photocrati Media',
-            'http://www.photocrati.com',
+            'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
+            'Imagely',
+            'https://www.imagely.com',
             $context
         );
 

@@ -8,16 +8,23 @@
 define('NGG_PRO_HORIZONTAL_FILMSTRIP', 'photocrati-nextgen_pro_horizontal_filmstrip');
 class M_NextGen_Pro_Horizontal_Filmstrip extends C_Base_Module
 {
-	function define($context=FALSE)
+    function define($id = 'pope-module',
+                    $name = 'Pope Module',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri = '',
+                    $context = FALSE)
 	{
 		parent::define(
 			NGG_PRO_HORIZONTAL_FILMSTRIP,
 			'NextGEN Pro Horizontal Filmstrip',
 			"Provides Photocrati's Horizontal Filmstrip for NextGEN Gallery",
-            '0.23',
-			'http://www.nextgen-gallery.com',
-			'Photocrati Media',
-			'http://www.photocrati.com',
+            '0.25',
+            'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
+            'Imagely',
+            'https://www.imagely.com',
 			$context
 		);
 
@@ -29,7 +36,6 @@ class M_NextGen_Pro_Horizontal_Filmstrip extends C_Base_Module
 		return array(
 			'A_Nextgen_Pro_Horizontal_Filmstrip_Controller' => 'adapter.nextgen_pro_horizontal_filmstrip_controller.php',
 			'A_Nextgen_Pro_Horizontal_Filmstrip_Form' => 'adapter.nextgen_pro_horizontal_filmstrip_form.php',
-			'A_Nextgen_Pro_Horizontal_Filmstrip_Forms' => 'adapter.nextgen_pro_horizontal_filmstrip_forms.php',
 			'A_Nextgen_Pro_Horizontal_Filmstrip_Mapper' => 'adapter.nextgen_pro_horizontal_filmstrip_mapper.php'
 		);
 	}
@@ -45,14 +51,21 @@ class M_NextGen_Pro_Horizontal_Filmstrip extends C_Base_Module
         if (M_Attach_To_Post::is_atp_url() || is_admin())
         {
             $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Horizontal_Filmstrip_Form', $this->module_id);
-            $this->get_registry()->add_adapter('I_Form_Manager', 'A_NextGen_Pro_Horizontal_Filmstrip_Forms');
         }
 	}
+
+    function initialize()
+    {
+        parent::initialize();
+        if (M_Attach_To_Post::is_atp_url() || is_admin()) {
+            C_Form_Manager::get_instance()->add_form(NGG_DISPLAY_SETTINGS_SLUG, NGG_PRO_HORIZONTAL_FILMSTRIP);
+        }
+    }
 }
 
 class C_NextGen_Pro_Horizontal_Filmstrip_Installer extends C_Gallery_Display_Installer
 {
-    function install()
+    function install($reset = FALSE)
     {
         $this->install_display_types();
     }
@@ -76,18 +89,13 @@ class C_NextGen_Pro_Horizontal_Filmstrip_Installer extends C_Gallery_Display_Ins
         );
     }
 
-    function uninstall($hard)
+    function uninstall()
     {
         $mapper = C_Display_Type_Mapper::get_instance();
-        if (($entity = $mapper->find_by_name(NGG_PRO_HORIZONTAL_FILMSTRIP))) {
-            if ($hard)
-            {
-                $mapper->destroy($entity);
-            }
-            else {
-                $entity->hidden_from_ui = TRUE;
-                $mapper->save($entity);
-            }
+        if (($entity = $mapper->find_by_name(NGG_PRO_HORIZONTAL_FILMSTRIP)))
+        {
+            $entity->hidden_from_ui = TRUE;
+            $mapper->save($entity);
         }
     }
 }

@@ -1,4 +1,109 @@
 <?php
+/**
+ * Because enqueueing an albums child entities (for use in lightboxes) is slow to do inside of cache_action() and
+ * we can't guarantee index_action() will run on every hit (thanks to page caching) we inline those entities into
+ * our Pro Albums templates under a window.load listener.
+ *
+ * @mixin C_MVC_View
+ * @adapts I_MVC_View
+ */
+class A_NextGen_Pro_Album_Child_Entities extends Mixin
+{
+    protected static $_runonce = FALSE;
+    public static $_entities = array();
+    /**
+     * The pro album controller will invoke this filter when its _render_album() method is called
+     */
+    function __construct()
+    {
+        if (!self::$_runonce) {
+            add_filter('ngg_pro_album_prepared_child_entity', array($this, 'register_child_gallery'), 10, 2);
+        } else {
+            self::$_runonce = TRUE;
+        }
+    }
+    /**
+     * Register each gallery belonging to the album that has just been rendered, so that when the MVC controller
+     * system 'catches up' and runs $this->render_object() that method knows what galleries to inline as JS.
+     *
+     * @param array $gallery
+     * @param $displayed_gallery
+     * @return array mixed
+     */
+    function register_child_gallery($galleries, $displayed_gallery)
+    {
+        if (!$this->is_pro_album($displayed_gallery)) {
+            return $galleries;
+        }
+        $id = $displayed_gallery->ID();
+        foreach ($galleries as $gallery) {
+            if ($gallery->is_album) {
+                continue;
+            }
+            self::$_entities[$id][] = $gallery;
+        }
+        return $galleries;
+    }
+    function is_pro_album($displayed_gallery)
+    {
+        return in_array($displayed_gallery->display_type, array(NGG_PRO_GRID_ALBUM, NGG_PRO_LIST_ALBUM));
+    }
+    /**
+     * Determine if we need to append the JS to the current template
+     *
+     * @param $display_settings
+     * @return bool
+     */
+    function are_child_entities_enabled($display_settings)
+    {
+        $retval = FALSE;
+        if (empty($display_settings['open_gallery_in_lightbox'])) {
+            $display_settings['open_gallery_in_lightbox'] = 0;
+        }
+        if ($display_settings['open_gallery_in_lightbox'] == 1) {
+            $retval = TRUE;
+        }
+        return $retval;
+    }
+    /**
+     * Search inside the template for the inside of the container and append our inline JS
+     */
+    function render_object()
+    {
+        $root_element = $this->call_parent('render_object');
+        if ($displayed_gallery = $this->object->get_param('displayed_gallery')) {
+            if (!$this->is_pro_album($displayed_gallery)) {
+                return $root_element;
+            }
+            $ds = $displayed_gallery->display_settings;
+            if ($this->are_child_entities_enabled($ds)) {
+                $id = $displayed_gallery->ID();
+                foreach ($root_element->find('nextgen_gallery.gallery_container', TRUE) as $container) {
+                    $container->append($this->object->generate_script(self::$_entities[$id]));
+                }
+            }
+        }
+        return $root_element;
+    }
+    /**
+     * Generate the JS that will be inserted into the template
+     *
+     * @param array $galleries
+     * @return string
+     */
+    function generate_script($galleries)
+    {
+        $retval = '<script type="text/javascript">window.addEventListener("load", function() {';
+        foreach ($galleries as $gallery) {
+            $dg = $gallery->displayed_gallery;
+            $id = $dg->id();
+            $retval .= 'galleries.gallery_' . $id . ' = ' . json_encode($dg->get_entity()) . ';';
+            $retval .= 'galleries.gallery_' . $id . '.wordpress_page_root = "' . get_permalink() . '";';
+        }
+        $retval .= '}, false);</script>';
+        return $retval;
+    }
+}
 /*
  * This form is meant to be extended by each album type, it provides defaults for common settings
  * @class
@@ -26,7 +131,7 @@ class A_NextGen_Pro_Album_Form extends Mixin_Display_Type_Form
      */
     function _get_field_names()
     {
-        return array('thumbnail_override_settings', 'nextgen_pro_albums_display_type', 'nextgen_pro_albums_enable_breadcrumbs', 'nextgen_pro_albums_caption_color', 'nextgen_pro_albums_caption_size', 'nextgen_pro_albums_border_color', 'nextgen_pro_albums_border_size', 'nextgen_pro_albums_background_color', 'nextgen_pro_albums_padding', 'nextgen_pro_albums_spacing', 'nextgen_pro_albums_child_descriptions');
+        return array('thumbnail_override_settings', 'nextgen_pro_albums_display_type', 'nextgen_pro_albums_enable_breadcrumbs', 'nextgen_pro_albums_caption_color', 'nextgen_pro_albums_caption_size', 'nextgen_pro_albums_border_color', 'nextgen_pro_albums_border_size', 'nextgen_pro_albums_background_color', 'nextgen_pro_albums_padding', 'nextgen_pro_albums_spacing', 'nextgen_pro_albums_child_descriptions', 'display_type_view');
     }
     function _render_nextgen_pro_albums_child_descriptions_field($display_type)
     {
@@ -81,20 +186,6 @@ class A_NextGen_Pro_Album_Form extends Mixin_Display_Type_Form
     }
 }
 /**
- * Class A_NextGen_Pro_Album_Forms
- * @mixin C_Form_Manager
- * @adapts I_Form_Manager
- */
-class A_NextGen_Pro_Album_Forms extends Mixin
-{
-    function get_forms($type, $instantiate = FALSE)
-    {
-        $this->add_form(NGG_DISPLAY_SETTINGS_SLUG, NGG_PRO_LIST_ALBUM);
-        $this->add_form(NGG_DISPLAY_SETTINGS_SLUG, NGG_PRO_GRID_ALBUM);
-        return $this->call_parent('get_forms', $type, $instantiate);
-    }
-}
-/**
  * Class A_NextGen_Pro_Album_Mapper
  * @mixin C_DataMapper_Driver_Base
  * @adapts I_DataMapper
@@ -119,6 +210,7 @@ class A_NextGen_Pro_Album_Mapper extends Mixin
             $this->_set_default_value($entity, 'settings', 'background_color', '#FFFFFF');
             $this->_set_default_value($entity, 'settings', 'padding', 20);
             $this->_set_default_value($entity, 'settings', 'spacing', 10);
+            $this->_set_default_value($entity, 'settings', 'display_type_view', 'default');
             // Thumbnail dimensions
             $this->_set_default_value($entity, 'settings', 'override_thumbnail_settings', 0);
             $this->_set_default_value($entity, 'settings', 'thumbnail_width', $settings->thumbwidth);
@@ -211,10 +303,8 @@ class Mixin_NextGen_Pro_Album_Controller extends Mixin
         remove_filter('ngg_displayed_gallery_rendering', array($this, 'add_breadcrumbs_to_legacy_templates'));
         return $output;
     }
-    function _render_album($displayed_gallery, $original_entities, $return)
+    function _get_displayed_gallery_thumbnail_size_name($displayed_gallery)
     {
-        // The HTML id of the gallery
-        $id = 'displayed_gallery_' . $displayed_gallery->id();
         // Generate the named thumbnail size
         $thumbnail_size_name = 'thumb';
         if (isset($displayed_gallery->display_settings['override_thumbnail_settings']) && $displayed_gallery->display_settings['override_thumbnail_settings']) {
@@ -231,10 +321,17 @@ class Mixin_NextGen_Pro_Album_Controller extends Mixin
             }
             $thumbnail_size_name = $dynthumbs->get_size_name($dyn_params);
         }
+        return $thumbnail_size_name;
+    }
+    function _render_album($displayed_gallery, $original_entities, $return)
+    {
+        // The HTML id of the gallery
+        $id = 'displayed_gallery_' . $displayed_gallery->id();
+        $thumbnail_size_name = $this->object->_get_displayed_gallery_thumbnail_size_name($displayed_gallery);
         // Get entities
         $entities = $this->object->_prepare_entities($displayed_gallery, $thumbnail_size_name);
         // Render view/template
-        $params = array_merge($displayed_gallery->display_settings, array('entities' => $entities, 'effect_code' => $this->object->get_effect_code($displayed_gallery), 'id' => $id, 'thumbnail_size_name' => $thumbnail_size_name, 'css_class' => $this->object->_get_css_class(), 'hovercaptions' => !empty($displayed_gallery->display_settings['captions_enabled']) && $displayed_gallery->display_settings['captions_enabled'] ? TRUE : FALSE));
+        $params = array_merge($displayed_gallery->display_settings, array('entities' => $entities, 'effect_code' => $this->object->get_effect_code($displayed_gallery), 'id' => $id, 'thumbnail_size_name' => $thumbnail_size_name, 'css_class' => $this->object->_get_css_class()));
         $params = $this->object->prepare_display_parameters($displayed_gallery, $params);
         if (!is_null($original_entities)) {
             $displayed_gallery->display_settings['original_album_id'] = 'a' . $displayed_gallery->container_ids[0];
@@ -265,26 +362,36 @@ class Mixin_NextGen_Pro_Album_Controller extends Mixin
             $entity->thumb_size = $storage->get_image_dimensions($preview_img, $thumbnail_size_name);
             $entity->previewpic_image_url = $storage->get_image_url($preview_img, 'full');
             $entity->previewpic_thumbnail_url = $entity->previewpic_thumb_url = $storage->get_image_url($preview_img, $thumbnail_size_name, TRUE);
-            // If we're to open a gallery in a lightbox, we need to expose it to the lightbox
-            // as a displayed gallery
-            if (isset($displayed_gallery->display_settings['open_gallery_in_lightbox']) && $entity_type == 'gallery') {
-                $entity->displayed_gallery = new C_Displayed_Gallery();
-                $entity->displayed_gallery->display_settings = $displayed_gallery->display_settings;
-                $entity->displayed_gallery->container_ids = array($entity->{$entity->id_field});
-                $entity->displayed_gallery->returns = 'included';
-                $entity->displayed_gallery->source = 'galleries';
-                $entity->displayed_gallery->images_list_count = $entity->displayed_gallery->get_entity_count();
-                $entity->displayed_gallery->is_album_gallery = TRUE;
-                $entity->displayed_gallery->to_transient();
+            // If the setting is on we need to inject an effect code
+            if (!empty($displayed_gallery->display_settings['open_gallery_in_lightbox']) && $entity_type == 'gallery') {
+                $entity = $this->object->make_child_displayed_gallery($entity, $displayed_gallery->display_settings);
                 if ($this->does_lightbox_support_displayed_gallery($displayed_gallery)) {
                     $entity->displayed_gallery->effect_code = $this->object->get_effect_code($entity->displayed_gallery);
                 }
-                // Add "galleries.gallery_1 = {};"
-                $this->object->_add_script_data('ngg_common', 'galleries.gallery_' . $entity->displayed_gallery->id(), (array) $entity->displayed_gallery->get_entity(), FALSE);
-                $this->object->_add_script_data('ngg_common', 'galleries.gallery_' . $entity->displayed_gallery->id() . '.wordpress_page_root', get_permalink(), FALSE);
             }
         }
+        $entities = apply_filters('ngg_pro_album_prepared_child_entity', $entities, $displayed_gallery);
         return $entities;
+    }
+    /**
+     * Creates a displayed gallery of a gallery belonging to an album. Shared by index_action() and cache_action() to
+     * allow lightboxes to open album children directly.
+     *
+     * @param $gallery
+     * @param $display_settings
+     * @return $gallery
+     */
+    function make_child_displayed_gallery($gallery, $display_settings)
+    {
+        $gallery->displayed_gallery = new C_Displayed_Gallery();
+        $gallery->displayed_gallery->container_ids = array($gallery->{$gallery->id_field});
+        $gallery->displayed_gallery->display_settings = $display_settings;
+        $gallery->displayed_gallery->returns = 'included';
+        $gallery->displayed_gallery->source = 'galleries';
+        $gallery->displayed_gallery->images_list_count = $gallery->displayed_gallery->get_entity_count();
+        $gallery->displayed_gallery->is_album_gallery = TRUE;
+        $gallery->displayed_gallery->to_transient();
+        return $gallery;
     }
     function index_action($displayed_gallery, $return = FALSE)
     {

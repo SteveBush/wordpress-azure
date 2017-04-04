@@ -132,7 +132,7 @@ class Mixin_Wordpress_Comment_Container extends Mixin
 class C_Comment_Mapper extends C_CustomPost_DataMapper_Driver
 {
     public static $_instances = array();
-    function define($object_name, $context = FALSE)
+    function define($object_name = FALSE, $context = FALSE)
     {
         parent::define('photocrati-comments', array($context, 'photocrati-comments'));
         $this->add_mixin('Mixin_Comment_Mapper');

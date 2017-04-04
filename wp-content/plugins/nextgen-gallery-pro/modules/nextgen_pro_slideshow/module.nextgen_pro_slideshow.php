@@ -11,16 +11,23 @@ define('NGG_PRO_SLIDESHOW', 'photocrati-nextgen_pro_slideshow');
 
 class M_NextGen_Pro_Slideshow extends C_Base_Module
 {
-	function define($context=FALSE)
+    function define($id = 'pope-module',
+                    $name = 'Pope Module',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri = '',
+                    $context = FALSE)
 	{
 		parent::define(
 			'photocrati-nextgen_pro_slideshow',
 			'NextGen Pro Slideshow',
 			"Provides Photocrati's Slideshow Gallery Type",
-            '0.22',
-			'http://www.photocrati.com',
-			'Photocrati Media',
-			'http://www.photocrati.com',
+            '0.24',
+            'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
+            'Imagely',
+            'https://www.imagely.com',
 			$context
 		);
 
@@ -32,7 +39,6 @@ class M_NextGen_Pro_Slideshow extends C_Base_Module
 		return array(
 			'A_Nextgen_Pro_Slideshow_Controller' => 'adapter.nextgen_pro_slideshow_controller.php',
 			'A_Nextgen_Pro_Slideshow_Form' => 'adapter.nextgen_pro_slideshow_form.php',
-			'A_Nextgen_Pro_Slideshow_Forms' => 'adapter.nextgen_pro_slideshow_forms.php',
 			'A_Nextgen_Pro_Slideshow_Mapper' => 'adapter.nextgen_pro_slideshow_mapper.php'
 		);
 	}
@@ -53,14 +59,19 @@ class M_NextGen_Pro_Slideshow extends C_Base_Module
         {
             // Provides a display settings form
             $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Slideshow_Form', $this->module_id);
-            $this->get_registry()->add_adapter('I_Form_Manager', 'A_NextGen_Pro_Slideshow_Forms');
         }
 	}
+
+    function initialize()
+    {
+        if (M_Attach_To_Post::is_atp_url() || is_admin())
+            C_Form_Manager::get_instance()->add_form(NGG_DISPLAY_SETTINGS_SLUG, NGG_PRO_SLIDESHOW);
+    }
 }
 
 class C_NextGen_Pro_Slideshow_Installer extends C_Gallery_Display_Installer
 {
-    function install($reset=FALSE)
+    function install($reset = FALSE)
     {
         $this->install_display_types();
     }
@@ -84,18 +95,13 @@ class C_NextGen_Pro_Slideshow_Installer extends C_Gallery_Display_Installer
         );
     }
 
-    function uninstall($hard=FALSE)
+    function uninstall()
     {
         $mapper = C_Display_Type_Mapper::get_instance();
-        if (($entity = $mapper->find_by_name(NGG_PRO_SLIDESHOW))) {
-            if ($hard)
-            {
-                $mapper->destroy($entity);
-            }
-            else {
-                $entity->hidden_from_ui = TRUE;
-                $mapper->save($entity);
-            }
+        if (($entity = $mapper->find_by_name(NGG_PRO_SLIDESHOW)))
+        {
+            $entity->hidden_from_ui = TRUE;
+            $mapper->save($entity);
         }
     }
 }

@@ -18,9 +18,14 @@
     };
 
     $(function(){
-        $('a,img,picture,figure,figcaption').pressure({
-            endDeepPress: protect_image,
-            startDeepPress: protect_image
+        $('a,img,picture,figure,figcaption').each(function () {
+        	try {
+        		$(this).pressure({
+		          endDeepPress: protect_image,
+		          startDeepPress: protect_image
+        		});
+        	}
+        	catch (ex) { }
         });
     });
 

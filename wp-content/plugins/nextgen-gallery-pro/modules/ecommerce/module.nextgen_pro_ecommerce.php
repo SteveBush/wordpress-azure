@@ -18,16 +18,23 @@ define('NGG_PRO_MAIL_FORM', 'ngg-mail');
 
 class M_NextGen_Pro_Ecommerce extends C_Base_Module
 {
-    function define($context=FALSE)
+    function define($id = 'pope-module',
+                    $name = 'Pope Module',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri = '',
+                    $context = FALSE)
     {
         parent::define(
             'photocrati-nextgen_pro_ecommerce',
             'Ecommerce',
             'Provides ecommerce capabilities for the NextGEN Pro Lightbox',
-            '0.31',
-            'http://www.nextgen-gallery.com',
-            'Photocrati Media',
-            'http://www.photocrati.com',
+            '0.34',
+            'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
+            'Imagely',
+            'https://www.imagely.com',
             $context
         );
 
@@ -757,17 +764,34 @@ class M_NextGen_Pro_Ecommerce extends C_Base_Module
         if (!wp_script_is('sprintf'))
             wp_register_script('sprintf', $router->get_static_url('photocrati-nextgen_pro_ecommerce#sprintf.js'));
 
+        $cart_dependencies = array(
+            'photocrati_ajax', 'backbone', 'sprintf', 'jquery'
+        );
+
+        $use_cookies = (bool) C_NextGen_Settings::get_instance()->get('ecommerce_cookies_enable', TRUE);
+        if (!$use_cookies)
+        {
+            wp_enqueue_script('ngg_basil_storage', $router->get_static_url('photocrati-nextgen_pro_ecommerce#basil.min.js'));
+            $cart_dependencies[] = 'ngg_basil_storage';
+        }
+
         wp_register_script(
             'ngg_pro_cart',
             $router->get_static_url('photocrati-nextgen_pro_ecommerce#cart.js'),
-            array('photocrati_ajax', 'backbone', 'sprintf', 'jquery')
+            $cart_dependencies
         );
 
         wp_enqueue_script('ngg_pro_cart');
-        wp_localize_script('ngg_pro_cart', 'Ngg_Pro_Cart_Settings', array(
-            'currency_format'    =>   M_NextGen_Pro_Ecommerce::get_price_format_string(),
-            'checkout_url'       =>   M_NextGen_Pro_Ecommerce::get_checkout_page_url()
-        ));
+        wp_localize_script(
+            'ngg_pro_cart',
+            'Ngg_Pro_Cart_Settings',
+            array(
+                'currency_format' => M_NextGen_Pro_Ecommerce::get_price_format_string(),
+                'checkout_url'    => M_NextGen_Pro_Ecommerce::get_checkout_page_url(),
+                // Because wp_localize_script() doesn't much care for booleans or the string '0'
+                'use_cookies'     => ($use_cookies ? 'true' : 'false')
+            )
+        );
     }
 
 	function enqueue_backend_resources()
@@ -1196,6 +1220,7 @@ class C_NextGen_Pro_Ecommerce_Installer
         $settings->set_default_value('ecommerce_tax_enable', FALSE);
         $settings->set_default_value('ecommerce_tax_rate', '8.5');
         $settings->set_default_value('ecommerce_tax_include_shipping', FALSE);
+        $settings->set_default_value('ecommerce_cookies_enable', TRUE);
 
         $ngg_pro_lightbox = $settings->get('ngg_pro_lightbox');
         if (empty($ngg_pro_lightbox['display_cart']))

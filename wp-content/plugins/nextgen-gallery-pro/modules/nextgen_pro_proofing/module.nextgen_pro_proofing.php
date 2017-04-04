@@ -10,16 +10,23 @@ define('NGG_PRO_PROOFING_TRIGGER', 'photocrati-proofing');
 
 class M_NextGen_Pro_Proofing extends C_Base_Module
 {
-    function define($context=FALSE)
+    function define($id = 'pope-module',
+                    $name = 'Pope Module',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri = '',
+                    $context = FALSE)
     {
         parent::define(
             NGG_PRO_PROOFING,
             'NextGEN Pro Proofing',
             'Provides rating capabilities',
-            '0.13',
-            'http://www.photocrati.com',
-            'Photocrati Media',
-            'http://www.photocrati.com',
+            '0.15',
+            'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
+            'Imagely',
+            'https://www.imagely.com',
             $context
         );
 
@@ -212,7 +219,7 @@ class M_NextGen_Pro_Proofing extends C_Base_Module
                 $confirmation_url = self::get_page_url($settings->proofing_page_confirmation, $confirmation_param);
             }
             else {
-                $confirmation_url = self::add_to_querystring(site_url('/?ngg_pro_proofing_page=1'), $confirmation_param);
+                $confirmation_url = self::_add_to_querystring(home_url('/?ngg_pro_proofing_page=1'), $confirmation_param);
             }
 
             if ($image_list != null)

@@ -6,16 +6,23 @@
  */
 class M_NextGen_Pro_Captions extends C_Base_Module
 {
-    function define($context=FALSE)
+    function define($id = 'pope-module',
+                    $name = 'Pope Module',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri = '',
+                    $context = FALSE)
     {
         parent::define(
             'photocrati-nextgen_pro_captions',
             'NextGEN Pro Captions',
             "Provides image caption effects",
-            '0.12',
-            'http://www.nextgen-gallery.com',
-            'Photocrati Media',
-            'http://www.photocrati.com',
+            '0.14',
+            'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
+            'Imagely',
+            'https://www.imagely.com',
             $context
         );
     }
@@ -50,9 +57,18 @@ class M_NextGen_Pro_Captions extends C_Base_Module
             array('jquery')
         );
         wp_register_script(
+            'bluebird',
+            $router->get_static_url('photocrati-nextgen_pro_captions#bluebird.min.js')
+        );
+        wp_register_script(
+            'nextgen_pro_captions_imagesloaded',
+            $router->get_static_url('photocrati-nextgen_pro_captions#imagesloaded.min.js'),
+            array('jquery')
+        );
+        wp_register_script(
             'nextgen_pro_captions-js',
             $router->get_static_url('photocrati-nextgen_pro_captions#captions.js'),
-            array('jquery.dotdotdot'),
+            array('jquery.dotdotdot', 'bluebird', 'nextgen_pro_captions_imagesloaded'),
             FALSE,
             TRUE
         );

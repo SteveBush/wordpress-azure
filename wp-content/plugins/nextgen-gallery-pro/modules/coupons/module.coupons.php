@@ -5,13 +5,20 @@ define('NGG_PRO_COUPONS', 'photocrati-coupons');
 
 class M_NextGen_Pro_Coupons extends C_Base_Module
 {
-    function define($context = FALSE)
+    function define($id = 'pope-module',
+                    $name = 'Pope Module',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri =  '',
+                    $context = FALSE)
     {
         parent::define(
             NGG_PRO_COUPONS,
             'NextGEN Pro Coupons',
             'Provides coupons',
-            '0.9',
+            '0.10',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',

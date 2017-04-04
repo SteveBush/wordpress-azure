@@ -7,16 +7,23 @@
 define('NGG_PRO_SIDESCROLL', 'photocrati-nextgen_pro_sidescroll');
 class M_NextGen_Pro_Sidescroll extends C_Base_Module
 {
-	function define($context=FALSE)
+    function define($id = 'pope-module',
+                    $name = 'Pope Module',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri = '',
+                    $context = FALSE)
 	{
 		parent::define(
 			'photocrati-nextgen_pro_sidescroll',
 			'NextGEN Pro Sidescroll',
 			'Provides a horizontal scrolling gallery for NextGEN Gallery',
-            '0.6',
-			'http://www.imagely.com',
-			'Imagely',
-			'http://www.imagely.com',
+            '0.9',
+            'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
+            'Imagely',
+            'https://www.imagely.com',
 			$context
 		);
 
@@ -28,7 +35,6 @@ class M_NextGen_Pro_Sidescroll extends C_Base_Module
 		return array(
 			'A_Nextgen_Pro_Sidescroll_Controller' => 'adapter.nextgen_pro_sidescroll_controller.php',
 			'A_Nextgen_Pro_Sidescroll_Form' => 'adapter.nextgen_pro_sidescroll_form.php',
-			'A_Nextgen_Pro_Sidescroll_Forms' => 'adapter.nextgen_pro_sidescroll_forms.php',
 			'A_Nextgen_Pro_Sidescroll_Mapper' => 'adapter.nextgen_pro_sidescroll_mapper.php',
 		);
 	}
@@ -44,14 +50,20 @@ class M_NextGen_Pro_Sidescroll extends C_Base_Module
         if (M_Attach_To_Post::is_atp_url() || is_admin())
         {
             $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Sidescroll_Form', $this->module_id);
-            $this->get_registry()->add_adapter('I_Form_Manager', 'A_NextGen_Pro_Sidescroll_Forms');
         }
 	}
+
+    function initialize()
+    {
+        parent::initialize();
+        if (M_Attach_To_Post::is_atp_url() || is_admin())
+            C_Form_Manager::get_instance()->add_form(NGG_DISPLAY_SETTINGS_SLUG, NGG_PRO_SIDESCROLL);
+    }
 }
 
 class C_NextGen_Pro_Sidescroll_Installer extends C_Gallery_Display_Installer
 {
-    function install()
+    function install($reset = FALSE)
     {
         $this->install_display_types();
     }
@@ -74,18 +86,13 @@ class C_NextGen_Pro_Sidescroll_Installer extends C_Gallery_Display_Installer
         );
     }
 
-    function uninstall($hard)
+    function uninstall()
     {
         $mapper = C_Display_Type_Mapper::get_instance();
-        if (($entity = $mapper->find_by_name(NGG_PRO_SIDESCROLL))) {
-            if ($hard)
-            {
-                $mapper->destroy($entity);
-            }
-            else {
-                $entity->hidden_from_ui = TRUE;
-                $mapper->save($entity);
-            }
+        if (($entity = $mapper->find_by_name(NGG_PRO_SIDESCROLL)))
+        {
+            $entity->hidden_from_ui = TRUE;
+            $mapper->save($entity);
         }
     }
 }

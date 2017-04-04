@@ -44,20 +44,8 @@ class A_Mosaic_Display_Type_Mapper extends Mixin
             $this->object->_set_default_value($entity, 'settings', 'lazy_load_enable', '1');
             $this->object->_set_default_value($entity, 'settings', 'lazy_load_initial', '35');
             $this->object->_set_default_value($entity, 'settings', 'lazy_load_batch', '15');
+            $this->_set_default_value($entity, 'settings', 'display_type_view', 'default');
         }
-    }
-}
-/**
- * Class A_Mosaic_Forms
- * @mixin C_Form_Manager
- * @adapts I_Form_Manager
- */
-class A_Mosaic_Forms extends Mixin
-{
-    function get_forms($type, $instantiate = FALSE)
-    {
-        $this->add_form(NGG_DISPLAY_SETTINGS_SLUG, NGG_PRO_MOSAIC);
-        return $this->call_parent('get_forms', $type, $instantiate);
     }
 }
 /**
@@ -81,7 +69,7 @@ class A_Mosaic_Form extends Mixin_Display_Type_Form
     }
     function _get_field_names()
     {
-        return array('mosaic_row_height', 'mosaic_margins', 'mosaic_last_row', 'mosaic_lazy_load_enable', 'mosaic_lazy_load_initial', 'mosaic_lazy_load_batch');
+        return array('mosaic_row_height', 'mosaic_margins', 'mosaic_last_row', 'mosaic_lazy_load_enable', 'mosaic_lazy_load_initial', 'mosaic_lazy_load_batch', 'display_type_view');
     }
     function _render_mosaic_row_height_field($display_type)
     {

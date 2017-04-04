@@ -162,9 +162,9 @@ class Mixin_AutoUpdate_Admin_Ajax extends Mixin
  */
 class C_AutoUpdate_Admin_Ajax extends C_Component
 {
-	function define()
+	function define($context = FALSE)
 	{
-		parent::define();
+		parent::define($context);
 		
 		$this->add_mixin('Mixin_AutoUpdate_Admin_Ajax');
 	}

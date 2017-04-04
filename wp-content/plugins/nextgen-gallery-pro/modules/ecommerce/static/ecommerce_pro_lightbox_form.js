@@ -14,4 +14,18 @@
 
     var $effect_tbody = $('select#lightbox_library').parents('tbody');
     $context_tbody.insertAfter($effect_tbody);
+
+    // The following two fields are incompatible; when a change occurs disable the other option
+    $('input[name="photocrati-nextgen_pro_lightbox[display_cart]"]').on('change', function() {
+        if ($(this).val() == 1) {
+            $('#photocrati-nextgen_pro_lightbox_display_comments_no').attr('checked', true);
+        }
+    });
+
+    $('input[name="photocrati-nextgen_pro_lightbox[display_comments]"]').on('change', function() {
+        if ($(this).val() == 1) {
+            $('#photocrati-nextgen_pro_lightbox_display_cart_no').attr('checked', true);
+        }
+    });
+
 })(jQuery);

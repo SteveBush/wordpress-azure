@@ -178,7 +178,7 @@ class C_Coupon extends C_DataMapper_Model
 class C_Coupon_Admin_Page extends C_NextGen_Admin_Page_Controller
 {
     static $_instance = NULL;
-    static function get_instance()
+    static function get_instance($context = FALSE)
     {
         if (!isset(self::$_instance)) {
             $klass = get_class();
@@ -186,7 +186,7 @@ class C_Coupon_Admin_Page extends C_NextGen_Admin_Page_Controller
         }
         return self::$_instance;
     }
-    function define()
+    function define($context = FALSE)
     {
         parent::define('ngg_pro_coupons');
     }

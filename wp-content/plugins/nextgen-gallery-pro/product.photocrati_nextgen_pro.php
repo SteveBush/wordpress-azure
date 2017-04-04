@@ -26,7 +26,8 @@ class P_Photocrati_NextGen_Pro extends C_Base_Product
             'photocrati-nextgen_pro_masonry',
             'photocrati-nextgen_pro_albums',
             'photocrati-nextgen_pro_mosaic',
-            'photocrati-nextgen_pro_sidescroll'
+            'photocrati-nextgen_pro_sidescroll',
+            'photocrati-nextgen_pro_imagebrowser'
         );
 
         // Add auto-update modules if this is an admin request
@@ -54,7 +55,14 @@ class P_Photocrati_NextGen_Pro extends C_Base_Product
         ));
     }
 
-	function define()
+	function define($id = 'pope-product',
+                    $name = 'Pope Product',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri = '',
+                    $context = FALSE)
 	{
 		parent::define(
 			'photocrati-nextgen-pro',
@@ -69,7 +77,6 @@ class P_Photocrati_NextGen_Pro extends C_Base_Product
 		$module_path = path_join(dirname(__FILE__), 'modules');
 		$registry = $this->get_registry();
 		$registry->set_product_module_path($this->module_id, $module_path);
-		$registry->add_module_path($module_path, TRUE, FALSE);
         $this->define_modules();
 
 		foreach (self::$modules as $module_name) $registry->load_module($module_name);
