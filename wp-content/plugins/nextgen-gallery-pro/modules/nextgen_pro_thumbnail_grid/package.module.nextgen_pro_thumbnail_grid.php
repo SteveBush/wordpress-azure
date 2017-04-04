@@ -87,7 +87,7 @@ class A_NextGen_Pro_Thumbnail_Grid_Form extends Mixin_Display_Type_Form
      */
     function _get_field_names()
     {
-        return array('thumbnail_override_settings', 'nextgen_pro_thumbnail_grid_images_per_page', 'nextgen_pro_thumbnail_grid_border_size', 'nextgen_pro_thumbnail_grid_border_color', 'nextgen_pro_thumbnail_grid_spacing', 'nextgen_pro_thumbnail_grid_number_of_columns');
+        return array('thumbnail_override_settings', 'nextgen_pro_thumbnail_grid_images_per_page', 'nextgen_pro_thumbnail_grid_border_size', 'nextgen_pro_thumbnail_grid_border_color', 'nextgen_pro_thumbnail_grid_spacing', 'nextgen_pro_thumbnail_grid_number_of_columns', 'display_type_view');
     }
     /**
      * Renders the images_per_page settings field
@@ -117,19 +117,6 @@ class A_NextGen_Pro_Thumbnail_Grid_Form extends Mixin_Display_Type_Form
     }
 }
 /**
- * Class A_NextGen_Pro_Thumbnail_Grid_Forms
- * @mixin C_Form_Manager
- * @adapts I_Form_Manager
- */
-class A_NextGen_Pro_Thumbnail_Grid_Forms extends Mixin
-{
-    function get_forms($type, $instantiate = FALSE)
-    {
-        $this->add_form(NGG_DISPLAY_SETTINGS_SLUG, NGG_PRO_THUMBNAIL_GRID);
-        return $this->call_parent('get_forms', $type, $instantiate);
-    }
-}
-/**
  * Class A_NextGen_Pro_Thumbnail_Grid_Mapper
  * @mixin C_Display_Type_Mapper
  * @adapts I_Display_Type_Mapper
@@ -154,6 +141,7 @@ class A_NextGen_Pro_Thumbnail_Grid_Mapper extends Mixin
             $this->_set_default_value($entity, 'settings', 'spacing', 2);
             $this->_set_default_value($entity, 'settings', 'number_of_columns', 0);
             $this->_set_default_value($entity, 'settings', 'ngg_triggers_display', 'never');
+            $this->_set_default_value($entity, 'settings', 'display_type_view', 'default');
         }
     }
 }

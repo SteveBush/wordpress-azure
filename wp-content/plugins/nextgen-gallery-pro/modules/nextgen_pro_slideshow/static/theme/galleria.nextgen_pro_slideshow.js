@@ -1,7 +1,7 @@
 (function($) {
     Galleria.addTheme({
         name: 'nextgen_pro_slideshow',
-        author: 'Photocrati Media',
+        author: 'Imagely',
         version: 2.0,
         defaults: {
             carousel:   false,

@@ -31,7 +31,7 @@
 .nextgen_pro_grid_album .image_description {
     display: none;
 }
-.nextgen_pro_grid_album .gallery_link {
+.nextgen_pro_grid_album .gallery_link a {
     display: block;
     max-width: 100% !important;
     border-bottom: none;
@@ -59,7 +59,7 @@
     box-sizing: content-box;
 }
 
-.nextgen_pro_grid_album .caption_link {
+.nextgen_pro_grid_album .caption_link a {
     line-height: normal;
     max-height: 1.6em;
     display: none;

@@ -5,7 +5,7 @@ if(preg_match('#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'])) { die('You 
 /*
  * Plugin Name: NextGEN Pro
  * Description: The complete "Pro" add-on for NextGEN Gallery. Enjoy ecommerce, beautiful new gallery displays, and a fullscreen, responsive Pro Lightbox with social sharing and commenting.
- * Version: 2.3.63
+ * Version: 2.5.0
  * Plugin URI: http://www.nextgen-gallery.com
  * Author: Imagely
  * Author URI: https://www.imagely.com
@@ -35,14 +35,14 @@ class NextGEN_Gallery_Pro
 		    define('NGG_PRO_MODULE_URL', plugins_url(path_join(basename(dirname(__FILE__)), 'modules')));
 		    // NOTE: for legacy reasons we keep a definition of the old constant name as well, this might otherwise break when incorrect autoupdate modules are used
 		    define('NEXTGEN_GALLERY_PRO_MODULE_URL', NGG_PRO_MODULE_URL);
-		    define('NGG_PRO_PLUGIN_VERSION', '2.3.63');
+		    define('NGG_PRO_PLUGIN_VERSION', '2.5.0');
 
-		    if (class_exists('C_Component_Registry') && did_action('load_nextgen_gallery_modules')) {
-			    add_action('init', array($this, 'load_product'));
-		    }
-		    else {
-			    add_action('load_nextgen_gallery_modules', array($this, 'load_product'));
-		    }
+			$ngg_activated 				= class_exists('C_NextGEN_Bootstrap');
+			$ngg_modules_initialized	= did_action('load_nextgen_gallery_modules');
+			if ((!$ngg_activated && !$ngg_modules_initialized)) {
+				add_action('load_nextgen_gallery_modules', array(&$this, 'load_product'));
+			}
+			else $this->load_product(NULL, $ngg_activated, $ngg_modules_initialized);
 	    }
 
 	    $this->_register_hooks();
@@ -52,7 +52,7 @@ class NextGEN_Gallery_Pro
      * Loads the product providing NextGEN Gallery Pro functionality
      * @param C_Component_Registry $registry
      */
-    function load_product($registry = NULL)
+    function load_product($registry = NULL, $ngg_activated=TRUE, $ngg_modules_loaded=FALSE)
     {
 	    $retval = FALSE;
 
@@ -69,10 +69,10 @@ class NextGEN_Gallery_Pro
 		    // Get the component registry if one wasn't provided
 		    if (!$registry) $registry = C_Component_Registry::get_instance();
 
-		    // Tell the registry where it can find our products/modules
-		    $dir = dirname(__FILE__);
-		    $registry->add_module_path($dir, TRUE, TRUE);
-		    $registry->initialize_all_modules();
+			$dir = dirname(__FILE__);
+			$registry->add_module_path($dir, 3, FALSE);
+			$registry->load_all_products();
+			$registry->initialize_all_modules();
 
 		    $retval = self::$product_loaded = TRUE;
 	    }
@@ -85,7 +85,7 @@ class NextGEN_Gallery_Pro
 
 	function is_activating()
 	{
-		$retval =  strpos($_SERVER['REQUEST_URI'], 'plugins.php') !== FALSE && isset($_REQUEST['action']) && $_REQUEST['action'] == 'activate';
+		$retval =  strpos($_SERVER['REQUEST_URI'], 'plugins.php') !== FALSE && isset($_REQUEST['action']) && in_array($_REQUEST['action'], array('activate', 'activate-selected'));
 		if (!$retval && strpos($_SERVER['REQUEST_URI'], 'update.php') !== FALSE && isset($_REQUEST['action']) && $_REQUEST['action'] == 'install-plugin' && isset($_REQUEST['plugin']) && strpos($_REQUEST['plugin'], 'nextgen-gallery-pro') === 0) {
 			$retval = TRUE;
 		}

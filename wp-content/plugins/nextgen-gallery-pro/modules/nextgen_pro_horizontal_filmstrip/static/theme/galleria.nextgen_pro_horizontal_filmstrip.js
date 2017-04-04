@@ -1,7 +1,7 @@
 (function($) {
     Galleria.addTheme({
         name: 'nextgen_pro_horizontal_filmstrip',
-        author: 'Photocrati Media',
+        author: 'Imagely',
         version: 2.0,
         defaults: {
             carousel:   true,

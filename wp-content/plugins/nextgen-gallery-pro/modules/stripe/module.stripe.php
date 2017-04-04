@@ -6,16 +6,23 @@
 **/
 class M_Photocrati_Stripe extends C_Base_Module
 {
-	function define()
+    function define($id = 'pope-module',
+                    $name = 'Pope Module',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri = '',
+                    $context = FALSE)
 	{
 		parent::define(
 			'photocrati-stripe',
 			'Stripe',
 			'Provides integration with Stripe payment gateway',
-			'0.11',
-			'http://www.nextgen-gallery.com',
-			'Photocrati Media',
-			'http://www.photocrati.com'
+			'0.13',
+            'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
+            'Imagely',
+            'https://www.imagely.com'
 		);
 
         C_Photocrati_Installer::add_handler($this->module_id, 'C_Stripe_Installer');

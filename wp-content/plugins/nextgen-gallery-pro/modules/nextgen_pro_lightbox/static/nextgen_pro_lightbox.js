@@ -741,7 +741,7 @@
                         });
                     },
 
-                    get_ajax_info: function(gallery_id){
+                    get_ajax_info: function(gallery_id) {
                         if (typeof(this.ajax_info[gallery_id]) == 'undefined') {
                             this.ajax_info[gallery_id] = {
                                 current: 0,
@@ -752,25 +752,25 @@
                         return this.ajax_info[gallery_id];
                     },
 
-                    increment_ajax_page: function(gallery_id){
+                    increment_ajax_page: function(gallery_id) {
                         var info = this.get_ajax_info(gallery_id);
                         info.page++;
                         this.update_ajax_info(gallery_id, info);
                     },
 
-                    decrement_ajax_current: function(gallery_id){
+                    decrement_ajax_current: function(gallery_id) {
                         var info = this.get_ajax_info(gallery_id);
                         info.current--;
                         this.update_ajax_info(gallery_id, info);
                     },
 
-                    increment_ajax_current: function(gallery_id){
+                    increment_ajax_current: function(gallery_id) {
                         var info = this.get_ajax_info(gallery_id);
                         info.current++;
                         this.update_ajax_info(gallery_id, info);
                     },
 
-                    update_ajax_info: function(gallery_id, info){
+                    update_ajax_info: function(gallery_id, info) {
                         this.ajax_info[gallery_id] = info;
                     },
 

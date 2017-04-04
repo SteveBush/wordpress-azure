@@ -14,16 +14,23 @@ class M_AutoUpdate_Admin extends C_Base_Module
 		var $_controller = null;
 		var $_ajax_handler = null;
 
-    function define()
+    function define($id = 'pope-module',
+                    $name = 'Pope Module',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri = '',
+                    $context = FALSE)
     {
         parent::define(
             'photocrati-auto_update-admin',
             'Photocrati Auto Update Admin',
             "Provides an AJAX admin interface to sequentially and progressively download and install updates",
-            '0.18',
-            'http://www.photocrati.com',
-            'Photocrati Media',
-            'http://www.photocrati.com'
+            '0.20',
+            'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
+            'Imagely',
+            'https://www.imagely.com'
         );
     }
 
@@ -60,7 +67,7 @@ class M_AutoUpdate_Admin extends C_Base_Module
     {
 		// If we haven't checked for an update in a while...
 		$check_date = get_option('photocrati_auto_update_admin_check_date', 0);
-		if ((time() - $check_date) >= 60*60*8) {
+		if ((time() - (int)$check_date) >= 60*60*8) {
 			$this->_updater = $this->get_registry()->get_module('photocrati-auto_update');
 			$return = $this->_updater->check_product_list();
 			$update_list = array();
@@ -237,7 +244,7 @@ class M_AutoUpdate_Admin extends C_Base_Module
 	      $dashboard_label = __('Welcome to Photocrati');
       }
       
-   		wp_add_dashboard_widget('photocrati_admin_dashboard_widget', __('Welcome to Photocrati'), array($this, 'dashboard_widget'));
+   		wp_add_dashboard_widget('photocrati_admin_dashboard_widget', $dashboard_label, array($this, 'dashboard_widget'));
 
 			global $wp_meta_boxes;
 

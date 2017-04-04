@@ -35,18 +35,17 @@ class A_Galleria_Controller extends Mixin
                 break;
             case 'image_average':
                 if ($list != null) {
-                    $computed_ratio = 0;
+                    $ratio_sum = 0;
+                    $image_count = 0;
                     foreach ($list as $image) {
                         $dims = $storage->get_image_dimensions($image);
-                        $ratio = round($dims['width'] / $dims['height'], 2);
-                        if ($computed_ratio == 0) {
-                            $computed_ratio = $ratio;
-                        } else {
-                            if (abs($computed_ratio - $ratio) > 0.001) {
-                                $computed_ratio = ($computed_ratio + $ratio) / 2;
-                            }
+                        if ($dims) {
+                            $ratio = round($dims['width'] / $dims['height'], 2);
+                            $ratio_sum += $ratio;
+                            $image_count++;
                         }
                     }
+                    $computed_ratio = round($ratio_sum / $image_count, 2);
                     if ($computed_ratio > 0) {
                         $displayed_gallery->display_settings['aspect_ratio_computed'] = $computed_ratio;
                     }

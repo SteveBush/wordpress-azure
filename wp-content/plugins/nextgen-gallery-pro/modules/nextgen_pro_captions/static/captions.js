@@ -280,15 +280,25 @@
                 $newfigure.addClass(classList);
             }
 
+            // When the image has loaded then trigger the dotdotdot processing
+            $newfigure.imagesLoaded().done(function() {
+                nggc_adjust($header);
+                nggc_adjust($body_div);
+            });
+
             $newfigure.parent('p').before($newfigure);
         });
 
         $(document).trigger('ngg-captions-added');
     };
 
-    var nggc_adjust = function() {
+    var nggc_adjust = function($elements) {
+        if (typeof $elements == 'undefined') {
+            $elements = $('figcaption.ngg-figcaption h6, figcaption.ngg-figcaption .nggc-body');
+        }
+
         // Concatenate our text so it won't overflow
-        $('figcaption.ngg-figcaption h6, figcaption.ngg-figcaption .nggc-body').each(function() {
+        $elements.each(function() {
             var $self   = $(this);
             var gallery = nggc_get_gallery($self.parents('a').first().data('ngg-captions-id'));
             var style   = nggc_get_setting(gallery, 'captions_animation', 'slideup');

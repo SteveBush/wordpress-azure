@@ -341,7 +341,7 @@ class A_Ecommerce_Options_Form extends Mixin
     }
     function _get_field_names()
     {
-        return array('nextgen_pro_ecommerce_home_country', 'nextgen_pro_ecommerce_currency', 'nextgen_pro_ecommerce_page_checkout', 'nextgen_pro_ecommerce_page_thanks', 'nextgen_pro_ecommerce_page_cancel', 'nextgen_pro_ecommerce_page_digital_downloads', 'nextgen_pro_ecommerce_cart_menu_item', 'nextgen_pro_ecommerce_not_for_sale_msg', 'nextgen_pro_ecommerce_tax_enable', 'nextgen_pro_ecommerce_tax_include_shipping', 'nextgen_pro_ecommerce_tax_rate');
+        return array('nextgen_pro_ecommerce_home_country', 'nextgen_pro_ecommerce_currency', 'nextgen_pro_ecommerce_page_checkout', 'nextgen_pro_ecommerce_page_thanks', 'nextgen_pro_ecommerce_page_cancel', 'nextgen_pro_ecommerce_page_digital_downloads', 'nextgen_pro_ecommerce_cart_menu_item', 'nextgen_pro_ecommerce_not_for_sale_msg', 'nextgen_pro_ecommerce_tax_enable', 'nextgen_pro_ecommerce_tax_include_shipping', 'nextgen_pro_ecommerce_tax_rate', 'nextgen_pro_ecommerce_cookies_enable');
     }
     function add_checkout_page_to_menu()
     {
@@ -510,6 +510,13 @@ class A_Ecommerce_Options_Form extends Mixin
         $model = new stdClass();
         $model->name = 'ecommerce';
         return $this->_render_radio_field($model, 'tax_enable', __('Enable sales tax', 'nextgen-gallery-pro'), $settings->ecommerce_tax_enable);
+    }
+    function _render_nextgen_pro_ecommerce_cookies_enable_field($model)
+    {
+        $settings = C_NextGen_Settings::get_instance();
+        $model = new stdClass();
+        $model->name = 'ecommerce';
+        return $this->_render_radio_field($model, 'cookies_enable', __('Use cookies for cart storage', 'nextgen-gallery-pro'), $settings->ecommerce_cookies_enable, __("Cookies are adequate for most customers but can only hold a limited number (around 30) of products due to browser limitations. When disabled the browser localStorage API will be used which does not have this problem but cart contents will be different on example.com vs www.example.com as well as across HTTP/HTTPS", 'nextgen-gallery-pro'));
     }
     function _render_nextgen_pro_ecommerce_tax_rate_field($model)
     {
@@ -1481,7 +1488,7 @@ class C_NextGen_Pro_Cart
                     foreach ($inner_items_array as $item_id => $item) {
                         $pricelist = $mapper->find($pricelist_id);
                         $field = $sources->get($item->source, 'settings_field');
-                        $settings = $pricelist->{$field};
+                        $settings = $field && isset($pricelist->{$field}) ? $pricelist->{$field} : array();
                         if (isset($settings['allow_global_shipments']) && $settings['allow_global_shipments']) {
                             $retval = TRUE;
                             break;
@@ -2342,7 +2349,16 @@ class C_Pricelist extends C_DataMapper_Model
     {
         $mapper = C_Pricelist_Item_Mapper::get_instance();
         $conditions = array(array("pricelist_id = %d", $this->object->id()), array("source IN %s", array(NGG_PRO_MANUAL_PRICELIST_SOURCE)));
-        return $mapper->select()->where($conditions)->order_by('ID', 'ASC')->run_query();
+        // Omit placeholder items that were incorrectly saved
+        $retval = array();
+        $items = $mapper->select()->where($conditions)->order_by('ID', 'ASC')->run_query();
+        foreach ($items as $item) {
+            if (empty($item->title) && empty($item->price)) {
+                continue;
+            }
+            $retval[] = $item;
+        }
+        return $retval;
     }
     /**
      * Gets all digital downloads for the pricelist
@@ -2362,6 +2378,10 @@ class C_Pricelist extends C_DataMapper_Model
                 $retval = array();
                 $storage = C_Gallery_Storage::get_instance();
                 foreach ($items as $item) {
+                    // Omit placeholder items that were incorrectly saved
+                    if (empty($item->title) && empty($item->price)) {
+                        continue;
+                    }
                     $source_width = $image->meta_data['width'];
                     $source_height = $image->meta_data['height'];
                     // the downloads themselves come from the backup as source so if possible only filter images
@@ -2790,14 +2810,19 @@ class C_Pricelist_Source_Page extends C_NextGen_Admin_Page_Controller
         // disable caching or the changes we're about to save() won't be displayed
         $mapper = C_Pricelist_Mapper::get_instance();
         $mapper->_use_cache = FALSE;
-        if ($pricelist->save($_REQUEST['pricelist'])) {
+        // A prior bug caused titles to have quotation marks escaped every time the pricelist was saved.
+        // For this reason we now strip backslashes entirely from pricelist & item titles
+        $pricelist_param = $this->object->param('pricelist');
+        $pricelist_param['title'] = str_replace('\\', '', $pricelist_param['title']);
+        if ($pricelist->save($pricelist_param)) {
             // Reset the pricelist object
             $this->pricelist = $pricelist;
             // Create price list items
             $item_mapper = C_Pricelist_Item_Mapper::get_instance();
-            foreach ($_POST['pricelist_item'] as $id => $updates) {
+            foreach ($this->object->param('pricelist_item') as $id => $updates) {
                 // Set the pricelist associated to each item
                 $updates['pricelist_id'] = $pricelist->id();
+                $updates['title'] = str_replace('\\', '', $updates['title']);
                 if (strpos($id, 'new-') !== FALSE) {
                     $item = $item_mapper->create($updates);
                     $item->save();

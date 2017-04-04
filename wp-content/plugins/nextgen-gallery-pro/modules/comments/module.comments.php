@@ -12,16 +12,23 @@ class M_Photocrati_Comments extends C_Base_Module
     // not all parts of WP should 'see' our comments
     public static $_filter_comments = TRUE;
 
-    function define($context=FALSE)
+    function define($id = 'pope-module',
+                    $name = 'Pope Module',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri = '',
+                    $context = FALSE)
     {
         parent::define(
             'photocrati-comments',
             'Comments',
             'AJAX operations for retrieving and creating comments on arbitrary items',
-            '0.20',
-            'http://www.photocrati.com',
-            'Photocrati Media',
-            'http://www.photocrati.com',
+            '0.22',
+            'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
+            'Imagely',
+            'https://www.imagely.com',
             $context
         );
     }

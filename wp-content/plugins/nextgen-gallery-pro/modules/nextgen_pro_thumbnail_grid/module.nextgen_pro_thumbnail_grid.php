@@ -10,16 +10,23 @@ define('NGG_PRO_THUMBNAIL_GRID', 'photocrati-nextgen_pro_thumbnail_grid');
 
 class M_NextGen_Pro_Thumbnail_Grid extends C_Base_Module
 {
-	function define($context=FALSE)
+    function define($id = 'pope-module',
+                    $name = 'Pope Module',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri = '',
+                    $context = FALSE)
 	{
 		parent::define(
 			NGG_PRO_THUMBNAIL_GRID,
 			'NextGen Pro Thumbnail Grid',
 			'Provides a thumbnail grid for NextGEN Pro',
-            '0.21',
-			'http://www.photocrati.com',
-			'Photocrati Media',
-			'http://www.photocrati.com',
+            '0.24',
+            'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
+            'Imagely',
+            'https://www.imagely.com',
 			$context
 		);
 
@@ -32,7 +39,6 @@ class M_NextGen_Pro_Thumbnail_Grid extends C_Base_Module
 			'A_Nextgen_Pro_Thumbnail_Grid_Controller' => 'adapter.nextgen_pro_thumbnail_grid_controller.php',
 			'A_Nextgen_Pro_Thumbnail_Grid_Dynamic_Styles' => 'adapter.nextgen_pro_thumbnail_grid_dynamic_styles.php',
 			'A_Nextgen_Pro_Thumbnail_Grid_Form' => 'adapter.nextgen_pro_thumbnail_grid_form.php',
-			'A_Nextgen_Pro_Thumbnail_Grid_Forms' => 'adapter.nextgen_pro_thumbnail_grid_forms.php',
 			'A_Nextgen_Pro_Thumbnail_Grid_Mapper' => 'adapter.nextgen_pro_thumbnail_grid_mapper.php'
 		);
 	}
@@ -51,14 +57,20 @@ class M_NextGen_Pro_Thumbnail_Grid extends C_Base_Module
         if (M_Attach_To_Post::is_atp_url() || is_admin())
         {
             $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Thumbnail_Grid_Form', $this->module_id);
-            $this->get_registry()->add_adapter('I_Form_Manager', 'A_NextGen_Pro_Thumbnail_Grid_Forms');
         }
 	}
+
+    function initialize()
+    {
+        parent::initialize();
+        if (M_Attach_To_Post::is_atp_url() || is_admin())
+            C_Form_Manager::get_instance()->add_form(NGG_DISPLAY_SETTINGS_SLUG, NGG_PRO_THUMBNAIL_GRID);
+    }
 }
 
 class C_NextGen_Pro_Thumbnail_Grid_Installer extends C_Gallery_Display_Installer
 {
-    function install($reset=FALSE)
+    function install($reset = FALSE)
     {
         $this->install_display_types();
     }
@@ -88,18 +100,13 @@ class C_NextGen_Pro_Thumbnail_Grid_Installer extends C_Gallery_Display_Installer
         );
     }
 
-    function uninstall($hard=FALSE)
+    function uninstall()
     {
         $mapper = C_Display_Type_Mapper::get_instance();
-        if (($entity = $mapper->find_by_name(NGG_PRO_THUMBNAIL_GRID))) {
-            if ($hard)
-            {
-                $mapper->destroy($entity);
-            }
-            else {
-                $entity->hidden_from_ui = TRUE;
-                $mapper->save($entity);
-            }
+        if (($entity = $mapper->find_by_name(NGG_PRO_THUMBNAIL_GRID)))
+        {
+            $entity->hidden_from_ui = TRUE;
+            $mapper->save($entity);
         }
     }
 }

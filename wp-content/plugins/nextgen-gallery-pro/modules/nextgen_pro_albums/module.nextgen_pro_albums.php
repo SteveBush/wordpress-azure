@@ -11,16 +11,23 @@ define('NGG_PRO_GRID_ALBUM',		 'photocrati-nextgen_pro_grid_album');
 
 class M_NextGen_Pro_Albums extends C_Base_Module
 {
-	function define($context=FALSE)
+    function define($id = 'pope-module',
+                    $name = 'Pope Module',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri = '',
+                    $context = FALSE)
 	{
 		parent::define(
 			'photocrati-nextgen_pro_albums',
 			'NextGEN Pro Albums',
 			'Provides Photocrati styled albums for NextGEN Gallery',
-            '0.25',
-			'http://www.nextgen-gallery.com',
-			'Photocrati Media',
-			'http://www.photocrati.com',
+            '0.28',
+            'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
+            'Imagely',
+            'https://www.imagely.com',
 			$context
 		);
 
@@ -30,6 +37,7 @@ class M_NextGen_Pro_Albums extends C_Base_Module
 	function get_type_list()
 	{
 		return array(
+		    'A_NextGen_Pro_Album_Child_Entities' => 'adapter.nextgen_pro_album_child_entities.php',
 			'A_Nextgen_Pro_Album_Mapper' => 'adapter.nextgen_pro_album_mapper.php',
 			'A_Nextgen_Pro_Album_Routes' => 'adapter.nextgen_pro_album_routes.php',
 			'A_Nextgen_Pro_Album_Form' => 'adapter.nextgen_pro_album_form.php',
@@ -40,7 +48,6 @@ class M_NextGen_Pro_Albums extends C_Base_Module
 			'A_Nextgen_Pro_List_Album_Controller' => 'adapter.nextgen_pro_list_album_controller.php',
 			'A_Nextgen_Pro_List_Album_Dynamic_Styles' => 'adapter.nextgen_pro_list_album_dynamic_styles.php',
 			'A_Nextgen_Pro_List_Album_Form' => 'adapter.nextgen_pro_list_album_form.php',
-			'A_Nextgen_Pro_List_Album_Forms' => 'adapter.nextgen_pro_list_album_forms.php',
 			'Mixin_Nextgen_Pro_Album_Controller' => 'mixin.nextgen_pro_album_controller.php'
 		);
 	}
@@ -88,6 +95,8 @@ class M_NextGen_Pro_Albums extends C_Base_Module
                 'I_Displayed_Gallery_Renderer',
                 'A_NextGen_Pro_Album_Routes'
             );
+
+            $this->get_registry()->add_adapter('I_MVC_View', 'A_NextGen_Pro_Album_Child_Entities');
         }
 
         if (M_Attach_To_Post::is_atp_url() || is_admin())
@@ -102,9 +111,21 @@ class M_NextGen_Pro_Albums extends C_Base_Module
                 'A_NextGen_Pro_Grid_Album_Form',
                 NGG_PRO_GRID_ALBUM
             );
-            $this->get_registry()->add_adapter(
-                'I_Form_Manager',
-                'A_NextGen_Pro_Album_Forms'
+        }
+    }
+
+    function initialize()
+    {
+        parent::initialize();
+
+        if (M_Attach_To_Post::is_atp_url() || is_admin()) {
+            $forms = C_Form_Manager::get_instance();
+
+            $forms->add_form(
+                NGG_DISPLAY_SETTINGS_SLUG, NGG_PRO_LIST_ALBUM
+            );
+            $forms->add_form(
+                NGG_DISPLAY_SETTINGS_SLUG, NGG_PRO_GRID_ALBUM
             );
         }
     }
@@ -112,7 +133,7 @@ class M_NextGen_Pro_Albums extends C_Base_Module
 
 class C_NextGen_Pro_Album_Installer extends C_Gallery_Display_Installer
 {
-    function install()
+    function install($reset = FALSE)
     {
         $this->install_display_types();
     }
@@ -152,20 +173,14 @@ class C_NextGen_Pro_Album_Installer extends C_Gallery_Display_Installer
         );
     }
 
-    function uninstall($hard=TRUE)
+    function uninstall()
     {
         $mapper = C_Display_Type_Mapper::get_instance();
         foreach (array(NGG_PRO_GRID_ALBUM, NGG_PRO_LIST_ALBUM) as $display_type_name) {
-            if (($display_type = $mapper->find_by_name($display_type_name))) {
-                if ($hard)
-                {
-                    $mapper->destroy($display_type);
-                }
-                else {
-                    $display_type->hidden_from_ui = TRUE;
-                    $mapper->save($display_type);
-                }
-
+            if (($display_type = $mapper->find_by_name($display_type_name)))
+            {
+                $display_type->hidden_from_ui = TRUE;
+                $mapper->save($display_type);
             }
         }
     }

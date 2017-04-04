@@ -1,6 +1,28 @@
 NextGEN Pro
 by Imagely
 
+= V2.5.0 - 03.28.2017 =
+* NEW:       Pro Imagebrowser Gallery
+* NEW:       Template support for Pro Galleries (requires NextGEN Gallery 2.2.0 or later)
+* NEW:       Three new Pro Imagebrowser templates (requires NextGEN Gallery 2.2.0 or later)
+* NEW:       Three new Pro Thumbnail Grid templates (requires NextGEN Gallery 2.2.0 or later)
+* Changed:   Updated Imagely branding in Pro Modules
+* Changed:   Branding changes from Photocrati to Imagely
+* Changed:   Use localStorage for cart instead of cookies by default. May adjust using option.
+* Fixed:     Digital Downloads tab showing in sidebar without products added
+* Fixed:     View Cart button in Pro Lightbox not working in IE11 in certain cases	
+* Fixed:     Album setting 'Open gallery in Pro Lightbox' working on thumbnail but not title
+* Fixed:     Pro Lightbox settings to display comments and cart initially can both be selected 
+* Fixed:     Presure.js generating errors in IE11 in certain cases 
+* Fixed:     Pro Lightbox 'Localize limit' interferes with Pro Album 'Open in Lightbox' option
+* Fixed:     Ensure that modules are loaded when NGG re-activates using WordPress 4.7
+* Fixed:     Incompatibilities with Elegant Themes
+* Fixed:     Hover captions not appearing
+* Fixed:     Misalignment of images in the Pro Lightbox
+* Fixed:     Images appear as zoomed in the Pro Lightbox
+* Fixed:     Ability to use quotes in pricelist titles
+* Fixed:     Various PHP warnings and notices
+
 = V2.3.63 - 12.13.2016 =
 * NEW:       Added display type aliases to Pro display types
 * Changed:   Minimum required version of NextGEN Gallery is now 2.1.49 or higher

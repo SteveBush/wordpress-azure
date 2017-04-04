@@ -6,16 +6,23 @@
  **/
 class M_Photocrati_cheque extends C_Base_Module
 {
-    function define()
+    function define($id = 'pope-module',
+                    $name = 'Pope Module',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri = '',
+                    $context = FALSE)
     {
         parent::define(
             'photocrati-cheque',
             'Pay by cheque',
             'Allows users to pay by mail with a cheque',
-            '0.9',
-            'http://www.nextgen-gallery.com',
-            'Photocrati Media',
-            'http://www.photocrati.com'
+            '0.11',
+            'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
+            'Imagely',
+            'https://www.imagely.com'
         );
 
         C_Photocrati_Installer::add_handler($this->module_id, 'C_Cheque_Installer');

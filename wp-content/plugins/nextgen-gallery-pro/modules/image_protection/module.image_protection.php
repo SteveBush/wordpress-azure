@@ -9,16 +9,23 @@
 
 class M_Photocrati_Image_Protection extends C_Base_Module
 {
-    function define()
+    function define($id = 'pope-module',
+                    $name = 'Pope Module',
+                    $description = '',
+                    $version = '',
+                    $uri = '',
+                    $author = '',
+                    $author_uri = '',
+                    $context = FALSE)
     {
         parent::define(
             'photocrati-image_protection',
             'Protect Images',
             'Protects images from being stored locally by preventing right clicks and drag & drop of the images',
-            '0.16',
-            'http://www.photocrati.com',
-            'Photocrati Media',
-            'http://www.photocrati.com'
+            '0.17',
+            'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
+            'Imagely',
+            'https://www.imagely.com'
         );
 
         C_Photocrati_Installer::add_handler($this->module_id, 'C_Image_Protection_Installer');

@@ -46,7 +46,7 @@ class A_NextGen_Pro_Sidescroll_Form extends Mixin_Display_Type_Form
      */
     function _get_field_names()
     {
-        return array('nextgen_pro_sidescroll_height');
+        return array('nextgen_pro_sidescroll_height', 'display_type_view');
     }
     /**
      * Renders the images_per_page settings field
@@ -59,14 +59,6 @@ class A_NextGen_Pro_Sidescroll_Form extends Mixin_Display_Type_Form
         return $this->_render_number_field($display_type, 'height', __('Gallery Height', 'nextgen-gallery-pro'), $display_type->settings['height'], __('Provide desired gallery height in pixels.', 'nextgen-gallery-pro'), FALSE, '', 0);
     }
 }
-class A_NextGen_Pro_Sidescroll_Forms extends Mixin
-{
-    function get_forms($type, $instantiate = FALSE)
-    {
-        $this->add_form(NGG_DISPLAY_SETTINGS_SLUG, NGG_PRO_SIDESCROLL);
-        return $this->call_parent('get_forms', $type, $instantiate);
-    }
-}
 class A_NextGen_Pro_Sidescroll_Mapper extends Mixin
 {
     function set_defaults($entity)
@@ -75,5 +67,6 @@ class A_NextGen_Pro_Sidescroll_Mapper extends Mixin
         if ($entity->name == NGG_PRO_SIDESCROLL) {
             $this->_set_default_value($entity, 'settings', 'height', 400);
         }
+        $this->_set_default_value($entity, 'settings', 'display_type_view', 'default');
     }
 }

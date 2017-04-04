@@ -77,7 +77,7 @@ class A_NextGen_Pro_Masonry_Form extends Mixin_Display_Type_Form
      */
     function _get_field_names()
     {
-        return array('nextgen_pro_masonry_size', 'nextgen_pro_masonry_padding');
+        return array('nextgen_pro_masonry_size', 'nextgen_pro_masonry_padding', 'display_type_view');
     }
     function _render_nextgen_pro_masonry_size_field($display_type)
     {
@@ -86,19 +86,6 @@ class A_NextGen_Pro_Masonry_Form extends Mixin_Display_Type_Form
     function _render_nextgen_pro_masonry_padding_field($display_type)
     {
         return $this->_render_number_field($display_type, 'padding', __('Image padding', 'nextgen-gallery-pro'), $display_type->settings['padding'], __('Measured in pixels', 'nextgen-gallery-pro'));
-    }
-}
-/**
- * Class A_NextGen_Pro_Masonry_Forms
- * @mixin C_Form_Manager
- * @adapts I_Form_Manager
- */
-class A_NextGen_Pro_Masonry_Forms extends Mixin
-{
-    function get_forms($type, $instantiate = FALSE)
-    {
-        $this->add_form(NGG_DISPLAY_SETTINGS_SLUG, NGG_PRO_MASONRY);
-        return $this->call_parent('get_forms', $type, $instantiate);
     }
 }
 /**
@@ -115,6 +102,7 @@ class A_NextGen_Pro_Masonry_Mapper extends Mixin
             $this->object->_set_default_value($entity, 'settings', 'size', 180);
             $this->object->_set_default_value($entity, 'settings', 'padding', 10);
             $this->object->_set_default_value($entity, 'settings', 'ngg_triggers_display', 'always');
+            $this->_set_default_value($entity, 'settings', 'display_type_view', 'default');
         }
     }
 }

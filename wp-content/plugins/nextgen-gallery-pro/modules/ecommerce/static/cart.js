@@ -94,9 +94,31 @@
             });
         },
 
+        get_storage: function() {
+            if (Ngg_Pro_Cart_Settings.use_cookies == "true") {
+                return Ngg_Store;
+            } else {
+                var cart_storage_options = {
+                    namespace: 'nextgen-gallery-cart',
+                    storages: ['local', 'cookie'],
+                    storage: 'local',
+                    expiresDays: 10,
+                    secure: false
+                };
+                var storage = new window.Basil(cart_storage_options);
+                return {
+                    get: function(key) { return storage.get(key); },
+                    set: function(key, value) { return storage.set(key, value); },
+                    del: function(key) { storage.remove(key); return !this.has(key); },
+                    has: function(key) { var value = this.get(key); return typeof(value) != 'undefined' && value != null; },
+                    save: function() { return true; }
+                };
+            }
+        },
+
         initialize: function(){
             this.ready = false;
-            this.storage = Ngg_Store;
+            this.storage = this.get_storage();
 
             // Internal representation of the cart stored in the browser
             // We store a simplified version of the cart to conserve memory
@@ -633,7 +655,6 @@
             } else {
                 url += "?referrer="+referrer;
             }
-            $.nplModal('close_modal');
             parent.location = url;
         },
 

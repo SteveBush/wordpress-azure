@@ -96,7 +96,7 @@ class A_NextGen_Pro_Film_Form extends Mixin_Display_Type_Form
      */
     function _get_field_names()
     {
-        return array('thumbnail_override_settings', 'nextgen_pro_film_images_per_page', 'nextgen_pro_film_image_spacing', 'nextgen_pro_film_border_size', 'nextgen_pro_film_frame_size', 'nextgen_pro_film_border_color', 'nextgen_pro_film_frame_color');
+        return array('thumbnail_override_settings', 'nextgen_pro_film_images_per_page', 'nextgen_pro_film_image_spacing', 'nextgen_pro_film_border_size', 'nextgen_pro_film_frame_size', 'nextgen_pro_film_border_color', 'nextgen_pro_film_frame_color', 'display_type_view');
     }
     /**
      * Renders the images_per_page settings field
@@ -130,19 +130,6 @@ class A_NextGen_Pro_Film_Form extends Mixin_Display_Type_Form
     }
 }
 /**
- * Class A_NextGen_Pro_Film_Forms
- * @mixin C_Form_Manager
- * @adapts I_Form_Manager
- */
-class A_NextGen_Pro_Film_Forms extends Mixin
-{
-    function get_forms($type, $instantiate = FALSE)
-    {
-        $this->add_form(NGG_DISPLAY_SETTINGS_SLUG, NGG_PRO_FILM);
-        return $this->call_parent('get_forms', $type, $instantiate);
-    }
-}
-/**
  * Class A_NextGen_Pro_Film_Mapper
  * @mixin C_Display_Type_Mapper
  * @adapts I_Display_Type_Mapper
@@ -168,6 +155,7 @@ class A_NextGen_Pro_Film_Mapper extends Mixin
             $this->_set_default_value($entity, 'settings', 'frame_size', 20);
             $this->_set_default_value($entity, 'settings', 'image_spacing', 5);
             $this->object->_set_default_value($entity, 'settings', 'ngg_triggers_display', 'always');
+            $this->_set_default_value($entity, 'settings', 'display_type_view', 'default');
         }
     }
 }
