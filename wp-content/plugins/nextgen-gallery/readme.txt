@@ -2,8 +2,8 @@
 Contributors: photocrati, imagely
 Tags: wordpress gallery plugin, gallery, nextgen, nextgen gallery, photo gallery, image gallery, photography, slideshow, images, photo, photo album, watermark
 Requires at least: 4.0.0
-Stable tag: 2.1.79
-Tested up to: 4.7.2
+Stable tag: 2.2.1
+Tested up to: 4.7.3
 License: GPLv2
 
 The most popular WordPress gallery plugin and one of the most popular plugins of all time with over 16.5 million downloads.
@@ -187,8 +187,19 @@ For more information, feel free to visit the official website for the NextGEN Ga
 
 == Changelog ==
 
+= V2.2.1 - 03.13.2017 =
+* NEW:      Template mechanism for all display types
+* NEW:      Review notices
+* Changed:  Updated branding to Imagely
+* Changed:  Added the ability to click on a gallery title and have it open direct to Pro Lightbox
+* Fixed:    Problems with activation after initial installation
+* Fixed:    Don't display legacy shortcodes after creating new galleries
+* Fixed:    false positive malware detection notices against 'eval'
+* Fixed:    Various PHP notices and warnings
+* Fixed:    Issue with dynamic container height for Imagebrowser display types
+
 = V2.1.79 - 02.23.2017 =
-* Changed:  Tag display adjustment
+* Secured: Resolved vulnerability with tag cloud displays
 
 = V2.1.77 - 01.31.2017 =
 * Changed:  Corrected Facebook link
