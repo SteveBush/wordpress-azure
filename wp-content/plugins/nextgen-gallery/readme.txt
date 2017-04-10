@@ -2,7 +2,7 @@
 Contributors: photocrati, imagely
 Tags: wordpress gallery plugin, gallery, nextgen, nextgen gallery, photo gallery, image gallery, photography, slideshow, images, photo, photo album, watermark
 Requires at least: 4.0.0
-Stable tag: 2.2.2
+Stable tag: 2.2.3
 Tested up to: 4.7.3
 License: GPLv2
 
@@ -186,6 +186,9 @@ For more information, feel free to visit the official website for the NextGEN Ga
 
 
 == Changelog ==
+
+= V2.2.3 - 04.05.2017 =
+* Fixed:    E_WARNING on Gallery Settings page due to improper use of array_combine() on PHP <= 5.3
 
 = V2.2.2 -  04.04.2017 =
 * Fixed:    Hyperlinks in image descriptions
