@@ -23,7 +23,7 @@ class M_NextGen_Pro_Proofing extends C_Base_Module
             NGG_PRO_PROOFING,
             'NextGEN Pro Proofing',
             'Provides rating capabilities',
-            '0.15',
+            '0.18',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -83,6 +83,7 @@ class M_NextGen_Pro_Proofing extends C_Base_Module
         add_action('admin_init', array(&$this, 'register_forms'));
         add_action('add_meta_boxes', array($this, 'add_meta_box'));
         add_filter('the_posts', array($this, 'serve_proofing_page'));
+        add_filter('ngg_pro_settings_reset_installers', array($this, 'return_own_installer'));
 
         if (!empty($_GET['post_type']) && $_GET['post_type'] == 'nextgen_proof')
             add_action('admin_head', array($this, 'hide_add_new_button'));
@@ -310,6 +311,12 @@ class M_NextGen_Pro_Proofing extends C_Base_Module
         return $url;
     }
 
+    public function return_own_installer($installers)
+    {
+        $installers[] = 'C_NextGen_Pro_Proofing_Installer';
+        return $installers;
+    }
+
     function get_type_list()
     {
         return array(
@@ -329,15 +336,19 @@ class M_NextGen_Pro_Proofing extends C_Base_Module
     }
 }
 
-class C_NextGen_Pro_Proofing_Installer
+class C_NextGen_Pro_Proofing_Installer extends AC_NextGen_Pro_Settings_Installer
 {
-    function install()
+
+    function __construct()
     {
-        $settings = C_NextGen_Settings::get_instance();
-        $settings->set_default_value('proofing_page_confirmation', '');
-        $settings->set_default_value('proofing_lightbox_active_color', '#ffff00');
-        $settings->set_default_value('proofing_trigger_text', __('Submit proofs', 'nextgen-gallery-pro'));
-        $settings->set_default_value('proofing_email_template', __('Hi %%admin%% Administrator,
+        $this->set_defaults(array(
+            'proofing_page_confirmation' => '',
+            'proofing_lightbox_active_color' => '#ffff00',
+            'proofing_trigger_text' => __('Submit proofs', 'nextgen-gallery-pro'),
+            'proofing_enable_user_email' => 0,
+            'proofing_user_email_subject' => __('Confirmation of image proof', 'nextgen-gallery-pro'),
+            'proofing_user_confirmation_not_found' => __('Oops! This page usually displays details for image proofs, but you have not proofed any images yet. Please feel free to continue browsing. Thanks for visiting.', 'nextgen-gallery-pro'),
+            'proofing_email_template' => __('Hi %%admin%% Administrator,
 
 %%user_name%% has submitted images from a proofing gallery.
 
@@ -347,27 +358,19 @@ Here is a comma separated list of the image file names. You can copy and
 paste this in your favorite image management software to quickly search for
 and find all selected images.
 
-Files: %%file_list%%', 'nextgen-gallery-pro'));
-
-        $settings->set_default_value('proofing_enable_user_email', 0);
-        $settings->set_default_value('proofing_user_email_subject', __('Confirmation of image proof', 'nextgen-gallery-pro'));
-        $settings->set_default_value('proofing_user_email_template', __('Hello %%user_name%%,
+Files: %%file_list%%', 'nextgen-gallery-pro'),
+        'proofing_user_email_template' => __('Hello %%user_name%%,
 
 This is confirmation that you have selected and submitted the following
 images from one of our proofing galleries: %%proof_link%%
 
-Thanks very much!', 'nextgen-gallery-pro'));
-
-        $settings->set_default_value(
-            'proofing_user_confirmation_template',
-            __('<p>%%user_name%% has submitted the following images for proofing. <a href="%%proof_link%%">Go back</a></p>
+Thanks very much!', 'nextgen-gallery-pro'),
+            'proofing_user_confirmation_template' => __('<p>%%user_name%% has submitted the following images for proofing. <a href="%%proof_link%%">Go back</a></p>
 
  %%proof_details%%', 'nextgen-gallery-pro')
-        );
-        $settings->set_default_value(
-            'proofing_user_confirmation_not_found',
-            __('Oops! This page usually displays details for image proofs, but you have not proofed any images yet. Please feel free to continue browsing. Thanks for visiting.', 'nextgen-gallery-pro')
-        );
+        ));
+
+        $this->set_groups(array('ecommerce'));
     }
 }
 

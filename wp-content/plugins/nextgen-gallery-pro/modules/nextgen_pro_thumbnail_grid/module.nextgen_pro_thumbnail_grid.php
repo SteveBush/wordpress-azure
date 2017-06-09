@@ -23,7 +23,7 @@ class M_NextGen_Pro_Thumbnail_Grid extends C_Base_Module
 			NGG_PRO_THUMBNAIL_GRID,
 			'NextGen Pro Thumbnail Grid',
 			'Provides a thumbnail grid for NextGEN Pro',
-            '0.24',
+            '0.26',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -100,13 +100,19 @@ class C_NextGen_Pro_Thumbnail_Grid_Installer extends C_Gallery_Display_Installer
         );
     }
 
-    function uninstall()
+    function uninstall($hard = FALSE)
     {
         $mapper = C_Display_Type_Mapper::get_instance();
         if (($entity = $mapper->find_by_name(NGG_PRO_THUMBNAIL_GRID)))
         {
-            $entity->hidden_from_ui = TRUE;
-            $mapper->save($entity);
+            if ($hard)
+            {
+                $mapper->destroy($entity);
+            }
+            else {
+                $entity->hidden_from_ui = TRUE;
+                $mapper->save($entity);
+            }
         }
     }
 }

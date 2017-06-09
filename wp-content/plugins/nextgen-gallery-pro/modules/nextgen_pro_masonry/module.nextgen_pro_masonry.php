@@ -23,7 +23,7 @@ class M_NextGen_Pro_Masonry extends C_Base_Module
             'photocrati-nextgen_pro_masonry',
             'NextGEN Pro Masonry',
             'Provides the NextGEN Pro Masonry Display Type',
-            '0.25',
+            '0.27',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com'
@@ -97,13 +97,19 @@ class C_NextGen_Pro_Masonry_Installer extends C_Gallery_Display_Installer
         );
     }
 
-    function uninstall()
+    function uninstall($hard = FALSE)
     {
         $mapper = C_Display_Type_Mapper::get_instance();
         if (($entity = $mapper->find_by_name(NGG_PRO_MASONRY)))
         {
-            $entity->hidden_from_ui = TRUE;
-            $mapper->save($entity);
+            if ($hard)
+            {
+                $mapper->destroy($entity);
+            }
+            else {
+                $entity->hidden_from_ui = TRUE;
+                $mapper->save($entity);
+            }
         }
     }
 }

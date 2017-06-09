@@ -27,7 +27,9 @@
         ?>
         <div id="<?php echo esc_attr('ngg-image-' . $id . '-' . $i) ?>" class="image-wrapper" style="<?php echo esc_attr($style); ?>">
             <?php if (!empty($displayed_gallery->display_settings['display_captions']) && $displayed_gallery->display_settings['caption_location'] == 'above') { ?>
-                <p class="ngg_pro_blog_gallery_caption_above"><?php echo $image->description; ?></p>
+                <p class="ngg_pro_blog_gallery_caption_above">
+                    <?php print wp_kses($image->description, M_NextGen_Pro_I18N::get_kses_allowed_html()); ?>
+                </p>
             <?php } ?>
             <?php $this->start_element('nextgen_gallery.image', 'item', $image); ?>
             <a href="<?php echo esc_attr($storage->get_image_url($image))?>"
@@ -44,7 +46,9 @@
             </a>
             <?php $this->end_element(); ?>
             <?php if (!empty($displayed_gallery->display_settings['display_captions']) && $displayed_gallery->display_settings['caption_location'] == 'below') { ?>
-                <p class="ngg_pro_blog_gallery_caption_below"><?php echo $image->description; ?></p>
+                <p class="ngg_pro_blog_gallery_caption_below">
+                    <?php print wp_kses($image->description, M_NextGen_Pro_I18N::get_kses_allowed_html()); ?>
+                </p>
             <?php } ?>
         </div>
         <div class="ngg-clear"></div>

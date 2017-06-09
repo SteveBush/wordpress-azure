@@ -65,8 +65,7 @@
     </div>
 
     <div class='ngg-imagebrowser-desc'>
-
-            <p><?php echo $image->description; ?></p>
+            <p><?php print wp_kses($image->description, M_NextGen_Pro_I18N::get_kses_allowed_html()); ?></p>
     </div>
 
 </div>
