@@ -51,7 +51,8 @@ class P_Photocrati_NextGen_Pro extends C_Base_Product
 	        'photocrati-free_gateway',
             'photocrati-image_protection',
             'photocrati-nextgen_pro_proofing',
-            'photocrati-nextgen_pro_captions'
+            'photocrati-nextgen_pro_captions',
+            'photocrati-nextgen_pro_settings',
         ));
     }
 
@@ -79,9 +80,11 @@ class P_Photocrati_NextGen_Pro extends C_Base_Product
 		$registry->set_product_module_path($this->module_id, $module_path);
         $this->define_modules();
 
-		foreach (self::$modules as $module_name) $registry->load_module($module_name);
+		foreach (self::$modules as $module_name) {
+		    $registry->load_module($module_name);
+        }
 
-		include_once('class.nextgen_pro_installer.php');
+        include_once('class.nextgen_pro_installer.php');
 		C_Photocrati_Installer::add_handler($this->module_id, 'C_NextGen_Pro_Installer');
 	}
 }

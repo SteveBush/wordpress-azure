@@ -19,7 +19,7 @@ class M_Photocrati_Stripe extends C_Base_Module
 			'photocrati-stripe',
 			'Stripe',
 			'Provides integration with Stripe payment gateway',
-			'0.13',
+			'0.16',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com'
@@ -40,6 +40,7 @@ class M_Photocrati_Stripe extends C_Base_Module
     function _register_hooks()
     {
         add_action('init', array(&$this, 'route'));
+        add_filter('ngg_pro_settings_reset_installers', array($this, 'return_own_installer'));
     }
 
     function route()
@@ -51,6 +52,12 @@ class M_Photocrati_Stripe extends C_Base_Module
         }
     }
 
+    public function return_own_installer($installers)
+    {
+        $installers[] = 'C_Stripe_Installer';
+        return $installers;
+    }
+
 	function get_type_list()
 	{
         return array(
@@ -60,14 +67,17 @@ class M_Photocrati_Stripe extends C_Base_Module
 	}
 }
 
-class C_Stripe_Installer
+class C_Stripe_Installer extends AC_NextGen_Pro_Settings_Installer
 {
-    function install()
+    function __construct()
     {
-        $settings = C_NextGen_Settings::get_instance();
-        $settings->set_default_value('ecommerce_stripe_enable', '0');
-        $settings->set_default_value('ecommerce_stripe_key_public', '');
-        $settings->set_default_value('ecommerce_stripe_key_private', '');
+        $this->set_defaults(array(
+            'ecommerce_stripe_enable'      => '0',
+            'ecommerce_stripe_key_public'  => '',
+            'ecommerce_stripe_key_private' => ''
+        ));
+
+        $this->set_groups(array('ecommerce'));
     }
 }
 

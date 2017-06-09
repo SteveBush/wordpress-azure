@@ -34,7 +34,7 @@
             </a>
             <?php $this->end_element(); ?>
             <div class="ngg-caption">
-                <?php echo(html_entity_decode($image->description))?>
+                <?php print wp_kses($image->description, M_NextGen_Pro_I18N::get_kses_allowed_html()); ?>
             </div>
         </div>
 

@@ -3,7 +3,7 @@
 /* { Module: photocrati-nextgen_pro_mosaic } */
 
 define('NGG_PRO_MOSAIC', 'photocrati-nextgen_pro_mosaic');
-define('NGG_PRO_MOSAIC_VERSION', '0.20');
+define('NGG_PRO_MOSAIC_VERSION', '0.22');
 
 class M_NextGen_Pro_Mosaic extends C_Base_Module
 {
@@ -89,13 +89,19 @@ class C_NextGen_Pro_Mosaic_Installer extends C_Gallery_Display_Installer
         );
     }
 
-    function uninstall()
+    function uninstall($hard = FALSE)
     {
         $mapper = C_Display_Type_Mapper::get_instance();
         if (($entity = $mapper->find_by_name(NGG_PRO_MOSAIC)))
         {
-            $entity->hidden_from_ui = TRUE;
-            $mapper->save($entity);
+            if ($hard)
+            {
+                $mapper->destroy($entity);
+            }
+            else {
+                $entity->hidden_from_ui = TRUE;
+                $mapper->save($entity);
+            }
         }
     }
 }
