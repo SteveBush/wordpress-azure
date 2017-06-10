@@ -27,7 +27,7 @@ class Genesis_Script_Loader {
 	 *
 	 * @var string suffix
 	 */
-	private $suffix = '.min';
+	private $suffix = '';
 
 	/**
 	 * Hook into WordPress.
@@ -53,8 +53,8 @@ class Genesis_Script_Loader {
 	 */
 	public function register_front_scripts() {
 
-		if ( defined( 'SCRIPT_DEBUG' ) || SCRIPT_DEBUG ) {
-			$this->suffix = '';
+		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+			$this->suffix = '.min';
 		}
 
 		wp_register_script( 'superfish', GENESIS_JS_URL . "/menu/superfish{$this->suffix}.js", array( 'jquery', 'hoverIntent', ), '1.7.5', true );
@@ -74,7 +74,7 @@ class Genesis_Script_Loader {
 	public function register_admin_scripts() {
 
 		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
-			$this->suffix = '';
+			$this->suffix = '.min';
 		}
 
 		wp_register_script( 'genesis_admin_js', GENESIS_JS_URL . "/admin{$this->suffix}.js", array( 'jquery' ), PARENT_THEME_VERSION, true );

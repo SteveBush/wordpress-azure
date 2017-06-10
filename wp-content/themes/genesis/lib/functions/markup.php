@@ -112,7 +112,7 @@ function genesis_markup( $args = array() ) {
 	// Add attributes to open tag.
 	if ( $args['context'] ) {
 
-		$open = $args['open'] ? sprintf( $args['open'], genesis_attr( $args['context'], array(), $args ) ) : '';
+		$open = sprintf( $args['open'], genesis_attr( $args['context'], array(), $args ) );
 
 		/**
 		 * Contextual filter to modify 'open' markup.
@@ -125,7 +125,6 @@ function genesis_markup( $args = array() ) {
 		 * @see genesis_markup $args Array.
 		 */
 		$open = apply_filters( "genesis_markup_{$args['context']}_open", $open, $args );
-
 		/**
 		 * Contextual filter to modify 'close' markup.
 		 *
@@ -192,7 +191,7 @@ add_action( 'after_setup_theme', 'genesis_xhtml_check' );
 function genesis_xhtml_check() {
 
 	if ( ! genesis_html5() ) {
-		require_once( PARENT_DIR . '/lib/structure/xhtml.php' );
+		require_once( GENESIS_STRUCTURE_DIR . '/xhtml.php' );
 
 		_genesis_builtin_sidebar_params();
 	}
