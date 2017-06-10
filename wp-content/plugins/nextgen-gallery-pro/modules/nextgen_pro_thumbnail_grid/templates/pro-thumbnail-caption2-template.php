@@ -35,8 +35,8 @@
             </a>
             <?php $this->end_element(); ?>
             <div class="ngg-caption">
-                <h4><?php echo esc_html($image->alttext); ?></h4>
-                <?php echo esc_html($image->description); ?>
+                <h4><?php print wp_kses($image->alttext, M_NextGen_Pro_I18N::get_kses_allowed_html()); ?></h4>
+                <?php print wp_kses($image->description, M_NextGen_Pro_I18N::get_kses_allowed_html()); ?>
             </div>
         </div>
 
