@@ -9,7 +9,7 @@
 define('NGG_PRO_LIGHTBOX', 'photocrati-nextgen_pro_lightbox');
 define('NGG_PRO_LIGHTBOX_TRIGGER', NGG_PRO_LIGHTBOX);
 define('NGG_PRO_LIGHTBOX_COMMENT_TRIGGER', 'photocrati-nextgen_pro_lightbox_comments');
-define('NGG_PRO_LIGHTBOX_VERSION', '0.62');
+define('NGG_PRO_LIGHTBOX_VERSION', '0.60');
 
 class M_NextGen_Pro_Lightbox extends C_Base_Module
 {
@@ -207,6 +207,7 @@ class M_NextGen_Pro_Lightbox extends C_Base_Module
     }
 }
 
+if (!class_exists('C_NextGen_Pro_Lightbox_Installer')) {
 class C_NextGen_Pro_Lightbox_Installer
 {
     function get_registry()
@@ -287,16 +288,6 @@ class C_NextGen_Pro_Lightbox_Installer
     {
         $this->install_pro_lightbox_settings(C_NextGen_Settings::get_instance());
     }
-
-    function uninstall($hard = FALSE)
-    {
-        $settings = C_Photocrati_Settings_Manager::get_instance();
-        if ($hard)
-        {
-            $settings->delete('ngg_pro_lightbox');
-            $settings->save();
-        }
-    }
-}
+}}
 
 new M_NextGen_Pro_Lightbox;

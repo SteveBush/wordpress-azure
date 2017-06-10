@@ -20,7 +20,7 @@ class M_NextGen_Pro_Film extends C_Base_Module
 			'photocrati-nextgen_pro_film',
 			'NextGEN Pro Film',
 			'Provides a film-like gallery for NextGEN Gallery',
-            '0.27',
+            '0.25',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -90,19 +90,13 @@ class C_NextGen_Pro_Film_Installer extends C_Gallery_Display_Installer
         );
     }
 
-    function uninstall($hard = FALSE)
+    function uninstall()
     {
         $mapper = C_Display_Type_Mapper::get_instance();
         if (($entity = $mapper->find_by_name(NGG_PRO_FILM)))
         {
-            if ($hard)
-            {
-                $mapper->destroy($entity);
-            }
-            else {
-                $entity->hidden_from_ui = TRUE;
-                $mapper->save($entity);
-            }
+            $entity->hidden_from_ui = TRUE;
+            $mapper->save($entity);
         }
     }
 }

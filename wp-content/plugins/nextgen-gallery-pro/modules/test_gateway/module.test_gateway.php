@@ -19,18 +19,13 @@ class M_Photocrati_Test_Gateway extends C_Base_Module
             'photocrati-test_gateway',
             'Test gateway',
             'Provides a test payment gateway',
-            '0.16',
+            '0.13',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com'
         );
 
         C_Photocrati_Installer::add_handler($this->module_id, 'C_Test_Gateway_Installer');
-    }
-
-    function _register_hooks()
-    {
-        add_filter('ngg_pro_settings_reset_installers', array($this, 'return_own_installer'));
     }
 
     function _register_adapters()
@@ -43,12 +38,6 @@ class M_Photocrati_Test_Gateway extends C_Base_Module
 
     }
 
-    public function return_own_installer($installers)
-    {
-        $installers[] = 'C_Test_Gateway_Installer';
-        return $installers;
-    }
-
     function get_type_list()
     {
         return array(
@@ -58,15 +47,12 @@ class M_Photocrati_Test_Gateway extends C_Base_Module
     }
 }
 
-class C_Test_Gateway_Installer extends AC_NextGen_Pro_Settings_Installer
+class C_Test_Gateway_Installer
 {
-    function __construct()
+    function install()
     {
-        $this->set_defaults(array(
-            'ecommerce_test_gateway_enable' => '0'
-        ));
-
-        $this->set_groups(array('ecommerce'));
+        $settings = C_NextGen_Settings::get_instance();
+        $settings->set_default_value('ecommerce_test_gateway_enable', '0');
     }
 }
 

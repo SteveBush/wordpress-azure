@@ -20,7 +20,7 @@ class M_NextGen_Pro_Blog_Gallery extends C_Base_Module
             NGG_PRO_BLOG_GALLERY,
             'NextGEN Pro Blog Gallery',
             "Provides Photocrati's Blog Style gallery type for NextGEN Gallery",
-            '0.29',
+            '0.27',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -96,19 +96,13 @@ class C_NextGen_Pro_Blog_Installer extends C_Gallery_Display_Installer
         );
     }
 
-    function uninstall($hard = FALSE)
+    function uninstall()
     {
         $mapper = C_Display_Type_Mapper::get_instance();
         if (($entity = $mapper->find_by_name(NGG_PRO_BLOG_GALLERY)))
         {
-            if ($hard)
-            {
-                $mapper->destroy($entity);
-            }
-            else {
-                $entity->hidden_from_ui = TRUE;
-                $mapper->save($entity);
-            }
+            $entity->hidden_from_ui = TRUE;
+            $mapper->save($entity);
         }
     }
 }

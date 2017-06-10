@@ -834,6 +834,22 @@ class A_Payment_Gateway_Form extends Mixin
         return $this->_render_textarea_field($model, 'cheque_instructions', __('Instructions', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_cheque_instructions, __('Use this to inform users how to pay and where they should send their payment', 'nextgen-gallery-pro'), !C_NextGen_Settings::get_instance()->ecommerce_cheque_enable ? TRUE : FALSE);
     }
 }
+class A_Reset_Ecommerce_Settings_Form extends Mixin
+{
+    function render()
+    {
+        // Get the rendered form
+        $retval = $this->call_parent('render');
+        // Inject a paragraph, warning the user that this includes all Pro and e-commerce settings
+        $warning = esc_html__("Please note that this includes all NextGEN Pro settings, including ecommerce options.");
+        if (($index = strrpos($retval, '</td>')) !== FALSE) {
+            $beginning = substr($retval, 0, $index);
+            $end = substr($retval, $index);
+            $retval = "{$beginning}<p><em>{$warning}</em></p>{$end}";
+        }
+        return $retval;
+    }
+}
 /**
  * NextGEN Gallery 2.0.66 didn't have proper implementations of handling backup images
  */

@@ -19,7 +19,7 @@ class M_Photocrati_cheque extends C_Base_Module
             'photocrati-cheque',
             'Pay by cheque',
             'Allows users to pay by mail with a cheque',
-            '0.14',
+            '0.11',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com'
@@ -41,7 +41,6 @@ class M_Photocrati_cheque extends C_Base_Module
     function _register_hooks()
     {
         add_filter('ngg_order_details', array($this, 'add_cheque_reminder_to_order_details'), 10, 2);
-        add_filter('ngg_pro_settings_reset_installers', array($this, 'return_own_installer'));
 
         // enable "Verify cheque payment" bulk action
         if (strpos($_SERVER['SCRIPT_NAME'], '/wp-admin/edit.php') !== FALSE
@@ -113,7 +112,10 @@ class M_Photocrati_cheque extends C_Base_Module
                     }
                 }
 
-                setcookie('ngg_pro_verified_cheques', (int)$verified, time() + 18000, ADMIN_COOKIE_PATH, COOKIE_DOMAIN);
+                if (session_id() == '')
+                    session_start();
+                $_SESSION['ngg_verified_cheques'] = $verified;
+                session_write_close();
                 wp_redirect($url);
                 throw new E_Clean_Exit;
             default:
@@ -128,21 +130,23 @@ class M_Photocrati_cheque extends C_Base_Module
     {
         global $post_type;
 
-        if (empty($_COOKIE['ngg_pro_verified_cheques']))
-            return;
+        if (session_id() == '')
+            session_start();
 
-        if ($post_type == 'ngg_order')
+        if (!empty($_SESSION['ngg_verified_cheques'])
+        &&  $post_type == 'ngg_order')
         {
-            setcookie('ngg_pro_verified_cheques', 0, time() - 3600, ADMIN_COOKIE_PATH, COOKIE_DOMAIN);
+
             $message = sprintf(
                 _n(
                     'Order payment verified',
                     '%s orders payment verified',
-                    (int)$_COOKIE['ngg_pro_verified_cheques']
+                    (int)$_SESSION['ngg_verified_cheques']
                 ),
-                number_format_i18n((int)$_COOKIE['ngg_pro_verified_cheques'])
+                number_format_i18n((int)$_SESSION['ngg_verified_cheques'])
             );
             echo "<div class='updated'><p>{$message}</p></div>";
+            unset($_SESSION['ngg_verified_cheques']);
         }
     }
 
@@ -157,12 +161,6 @@ class M_Photocrati_cheque extends C_Base_Module
         return $text;
     }
 
-    public function return_own_installer($installers)
-    {
-        $installers[] = 'C_Cheque_Installer';
-        return $installers;
-    }
-
     function get_type_list()
     {
         return array(
@@ -172,16 +170,13 @@ class M_Photocrati_cheque extends C_Base_Module
     }
 }
 
-class C_Cheque_Installer extends AC_NextGen_Pro_Settings_Installer
+class C_Cheque_Installer
 {
-    function __construct()
+    function install()
     {
-        $this->set_defaults(array(
-            'ecommerce_cheque_enable' => '0',
-            'ecommerce_cheque_instructions' => __("<p>Thanks very much for your purchase! We'll be in touch shortly via email to confirm your order and to provide details on payment.</p>", 'nextgen-gallery-pro')
-        ));
-
-        $this->set_groups(array('ecommerce'));
+        $settings = C_NextGen_Settings::get_instance();
+        $settings->set_default_value('ecommerce_cheque_enable', '0');
+        $settings->set_default_value('ecommerce_cheque_instructions', __("<p>Thanks very much for your purchase! We'll be in touch shortly via email to confirm your order and to provide details on payment.</p>", 'nextgen-gallery-pro'));
     }
 }
 

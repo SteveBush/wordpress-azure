@@ -209,10 +209,10 @@
             var inlineStyles = $this.attr('style');
             var imageStyles  = $img.attr('style');
 
-            $this.removeAttr('title');
             if (!$this.data('ngg-captions-nostylecopy')) {
                 $this.removeAttr('class');
                 $this.removeAttr('style');
+                $this.removeAttr('title');
             }
 
             // each class is responsible for a different animation

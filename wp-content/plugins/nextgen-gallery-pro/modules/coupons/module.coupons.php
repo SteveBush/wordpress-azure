@@ -18,7 +18,7 @@ class M_NextGen_Pro_Coupons extends C_Base_Module
             NGG_PRO_COUPONS,
             'NextGEN Pro Coupons',
             'Provides coupons',
-            '0.12',
+            '0.10',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -43,8 +43,7 @@ class M_NextGen_Pro_Coupons extends C_Base_Module
     {
         // This class handles creating the page & everything to do with its (saving / deleting) actions
         C_Coupon_Admin_Page::get_instance()->register_hooks();
-
-        add_filter('ngg_pro_settings_reset_installers', array($this, 'return_own_installer'));
+        
         add_action('ngg_order_saved', array($this, 'add_order_metadata'), 10, 2);
 
         if (M_Attach_To_Post::is_atp_url() || is_admin())
@@ -84,12 +83,6 @@ class M_NextGen_Pro_Coupons extends C_Base_Module
         return !C_NextGen_Settings::get_instance()->get('ecommerce_coupons_disabled', FALSE);
     }
 
-    public function return_own_installer($installers)
-    {
-        $installers[] = 'C_NextGen_Pro_Coupon_Installer';
-        return $installers;
-    }
-
     function get_type_list()
     {
         return array(
@@ -103,15 +96,12 @@ class M_NextGen_Pro_Coupons extends C_Base_Module
     }
 }
 
-class C_NextGen_Pro_Coupon_Installer extends AC_NextGen_Pro_Settings_Installer
+class C_NextGen_Pro_Coupon_Installer
 {
-    function __construct()
+    function install()
     {
-        $this->set_defaults(array(
-            'ecommerce_coupons_disabled' => FALSE
-        ));
-
-        $this->set_groups(array('ecommerce'));
+        $settings = C_NextGen_Settings::get_instance();
+        $settings->set_default_value('ecommerce_coupons_disabled', FALSE);
     }
 }
 

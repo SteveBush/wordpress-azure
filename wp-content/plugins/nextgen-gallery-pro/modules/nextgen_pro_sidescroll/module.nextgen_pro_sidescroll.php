@@ -20,7 +20,7 @@ class M_NextGen_Pro_Sidescroll extends C_Base_Module
 			'photocrati-nextgen_pro_sidescroll',
 			'NextGEN Pro Sidescroll',
 			'Provides a horizontal scrolling gallery for NextGEN Gallery',
-            '0.11',
+            '0.9',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -86,19 +86,13 @@ class C_NextGen_Pro_Sidescroll_Installer extends C_Gallery_Display_Installer
         );
     }
 
-    function uninstall($hard = FALSE)
+    function uninstall()
     {
         $mapper = C_Display_Type_Mapper::get_instance();
         if (($entity = $mapper->find_by_name(NGG_PRO_SIDESCROLL)))
         {
-            if ($hard)
-            {
-                $mapper->destroy($entity);
-            }
-            else {
-                $entity->hidden_from_ui = TRUE;
-                $mapper->save($entity);
-            }
+            $entity->hidden_from_ui = TRUE;
+            $mapper->save($entity);
         }
     }
 }
