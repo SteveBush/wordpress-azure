@@ -316,6 +316,7 @@
     box-shadow: none;
     text-decoration: none;
     padding: 0;
+    border: none;
 }
 
 .ngg-imagebrowser-side .ngg-imagebrowser-nav .counter {

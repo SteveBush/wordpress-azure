@@ -17,7 +17,7 @@ class M_Free_Gateway extends C_Base_Module
             'photocrati-free_gateway',
             'Free gateway',
             'Handles orders with a free total amount',
-            '0.5',
+            '0.7',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com'
@@ -52,8 +52,6 @@ class C_Free_Gateway_Installer
 {
     function install()
     {
-        $settings = C_NextGen_Settings::get_instance();
-//        $settings->set_default_value('', );
     }
 }
 

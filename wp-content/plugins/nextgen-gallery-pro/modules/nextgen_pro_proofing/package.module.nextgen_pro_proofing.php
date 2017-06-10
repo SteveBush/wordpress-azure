@@ -56,7 +56,7 @@ class A_NextGen_Pro_Proofing_Ajax extends Mixin
                     $content->set_property('proof_link', $confirmation_url);
                     $content->set_property('user', array('email' => $email, 'name' => $customer_name));
                     $content->load_template($settings->proofing_email_template);
-                    $mailman->send_mail($content, get_bloginfo('admin_email'));
+                    $mailman->send_mail($content, $settings->ecommerce_email_notification_recipient);
                     // potentially send email to the submitting user
                     if ($settings->proofing_enable_user_email) {
                         $content = $mailman->create_content();

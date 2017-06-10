@@ -21,7 +21,7 @@ class M_NextGen_PictureFill extends C_Base_Module
 			'photocrati-nextgen_picturefill',
 			'Picturefill',
 			'Provides support for the picture element using the PictureFill polyfill library',
-			'0.13',
+			'1.0.1',
 			'Imagely',
 			'https://www.imagely.com',
 			$context
@@ -43,7 +43,9 @@ class M_NextGen_PictureFill extends C_Base_Module
 	{
 		wp_register_script(
 			'picturefill',
-			C_Router::get_instance()->get_static_url('photocrati-nextgen_picturefill#picturefill.js')
+			C_Router::get_instance()->get_static_url('photocrati-nextgen_picturefill#picturefill.min.js'),
+            array(),
+            '3.0.2'
 		);
 	}
 

@@ -31,7 +31,7 @@ class M_NextGen_Pro_Ecommerce extends C_Base_Module
             'photocrati-nextgen_pro_ecommerce',
             'Ecommerce',
             'Provides ecommerce capabilities for the NextGEN Pro Lightbox',
-            '0.34',
+            '0.37',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -87,7 +87,6 @@ class M_NextGen_Pro_Ecommerce extends C_Base_Module
             $this->get_registry()->add_adapter('I_NextGen_Admin_Page', 'A_Ecommerce_Options_Controller', NGG_PRO_ECOMMERCE_OPTIONS_PAGE);
             $this->get_registry()->add_adapter('I_NextGen_Admin_Page', 'A_Ecommerce_Instructions_Controller', NGG_PRO_ECOMMERCE_INSTRUCTIONS_PAGE);
             $this->get_registry()->add_adapter('I_Page_Manager',   'A_Ecommerce_Pages');
-            $this->get_registry()->add_adapter('I_Form', 'A_Reset_Ecommerce_Settings_Form', 'reset');
             $this->get_registry()->add_adapter('I_Form', 'A_Ecommerce_Pro_Lightbox_Form', NGG_PRO_LIGHTBOX);
         }
 
@@ -115,6 +114,7 @@ class M_NextGen_Pro_Ecommerce extends C_Base_Module
         //add_filter('wp_get_nav_menu_items', array($this, 'get_menu_items'), 10, 3);
         add_filter('wp_nav_menu_objects', array($this, 'nav_menu_objects'), 10, 2);
         //add_filter('wp_setup_nav_menu_item', array($this, 'setup_menu_item'));
+        add_filter('ngg_pro_settings_reset_installers', array($this, 'return_own_installer'));
 
         if (M_Attach_To_Post::is_atp_url() || is_admin())
         {
@@ -1151,6 +1151,12 @@ class M_NextGen_Pro_Ecommerce extends C_Base_Module
         echo "</select>";
     }
 
+    public function return_own_installer($installers)
+    {
+        $installers[] = 'C_NextGen_Pro_Ecommerce_Installer';
+        return $installers;
+    }
+
     function get_type_list()
     {
         return array(
@@ -1183,7 +1189,6 @@ class M_NextGen_Pro_Ecommerce extends C_Base_Module
             'C_NextGen_Pro_Cart'                    =>  'class.nextgen_pro_cart.php',
             'A_Ecommerce_Instructions_Form'         =>  'adapter.ecommerce_instructions_form.php',
             'C_NextGen_Pro_Order_Verification'      =>  'class.nextgen_pro_order_verification.php',
-            'A_Reset_Ecommerce_Settings_Form'       =>  'adapter.reset_ecommerce_settings_form.php',
             'A_NplModal_Ecommerce_Overrides'        =>  'adapter.nplmodal_ecommerce_overrides.php',
             'A_Ecommerce_Factory'                   =>  'adapter.ecommerce_factory.php',
             'A_Ecommerce_Instructions_Controller'   =>  'adapter.ecommerce_instructions_controller.php',
@@ -1193,35 +1198,39 @@ class M_NextGen_Pro_Ecommerce extends C_Base_Module
     }
 }
 
-class C_NextGen_Pro_Ecommerce_Installer
+class C_NextGen_Pro_Ecommerce_Installer extends AC_NextGen_Pro_Settings_Installer
 {
-    function install()
+    function __construct()
     {
-        $settings = C_NextGen_Settings::get_instance();
-        $this->install_ecommerce_settings($settings);
+        $this->set_defaults(array(
+            'ecommerce_currency'                     => 840, // 'USD'
+            'ecommerce_home_country'                 => 840, // 'United States'
+            'ecommerce_page_checkout'                => '',
+            'ecommerce_page_thanks'                  => '',
+            'ecommerce_page_cancel'                  => '',
+            'ecommerce_page_digital_downloads'       => '',
+            'ecommerce_enable_email_notification'    => TRUE,
+            'ecommerce_email_notification_subject'   => __('New Purchase!', 'nextgen-gallery-pro'),
+            'ecommerce_email_notification_recipient' => get_bloginfo('admin_email'),
+            'ecommerce_enable_email_receipt'         => TRUE,
+            'ecommerce_email_receipt_subject'        => __("Thank you for your purchase!", 'nextgen-gallery-pro'),
+            'ecommerce_email_receipt_body'           => __("Thank you for your order, %%customer_name%%.\n\nYou ordered %%item_count%% items, and have been billed a total of %%total_amount%%.\n\nTo review your order, please go to %%order_details_page%%.\n\nThanks for shopping at %%site_url%%!", 'nextgen-gallery-pro'),
+            'ecommerce_email_notification_body'      => __("You received a payment of %%total_amount%% from %%customer_name%%. For more details, visit: %%order_details_page%%\n\n%%gateway_admin_note%%\n\nHere is a comma separated list of the image file names. You can copy and\npaste this in your favorite image management software to quickly search for\nand find all selected images.\n\nFiles: %%file_list%%", 'nextgen-gallery-pro'),
+            'ecommerce_not_for_sale_msg'             => __("Sorry, this image is not currently for sale.", 'nextgen-gallery-pro'),
+            'ecommerce_tax_enable'                   => FALSE,
+            'ecommerce_tax_rate'                     => '8.5',
+            'ecommerce_tax_include_shipping'         => FALSE,
+            'ecommerce_cookies_enable'               => TRUE
+        ));
+
+        $this->set_groups(array('ecommerce'));
     }
 
-    function install_ecommerce_settings($settings)
+    function install()
     {
-        $settings->set_default_value('ecommerce_currency', 840); // 'USD'
-        $settings->set_default_value('ecommerce_home_country', 840); // 'United States'
-        $settings->set_default_value('ecommerce_page_checkout', '');
-        $settings->set_default_value('ecommerce_page_thanks', '');
-        $settings->set_default_value('ecommerce_page_cancel', '');
-        $settings->set_default_value('ecommerce_page_digital_downloads', '');
-        $settings->set_default_value('ecommerce_enable_email_notification', TRUE);
-        $settings->set_default_value('ecommerce_email_notification_subject', __('New Purchase!', 'nextgen-gallery-pro'));
-        $settings->set_default_value('ecommerce_email_notification_recipient', get_bloginfo('admin_email'));
-        $settings->set_default_value('ecommerce_enable_email_receipt', TRUE);
-        $settings->set_default_value('ecommerce_email_receipt_subject', __("Thank you for your purchase!", 'nextgen-gallery-pro'));
-        $settings->set_default_value('ecommerce_email_receipt_body', __("Thank you for your order, %%customer_name%%.\n\nYou ordered %%item_count%% items, and have been billed a total of %%total_amount%%.\n\nTo review your order, please go to %%order_details_page%%.\n\nThanks for shopping at %%site_url%%!", 'nextgen-gallery-pro'));
-        $settings->set_default_value('ecommerce_email_notification_body', __("You received a payment of %%total_amount%% from %%customer_name%%. For more details, visit: %%order_details_page%%\n\n%%gateway_admin_note%%\n\nHere is a comma separated list of the image file names. You can copy and\npaste this in your favorite image management software to quickly search for\nand find all selected images.\n\nFiles: %%file_list%%", 'nextgen-gallery-pro'));
-        $settings->set_default_value('ecommerce_not_for_sale_msg', __("Sorry, this image is not currently for sale.", 'nextgen-gallery-pro'));
-        $settings->set_default_value('ecommerce_tax_enable', FALSE);
-        $settings->set_default_value('ecommerce_tax_rate', '8.5');
-        $settings->set_default_value('ecommerce_tax_include_shipping', FALSE);
-        $settings->set_default_value('ecommerce_cookies_enable', TRUE);
+        parent::install();
 
+        $settings = C_NextGen_Settings::get_instance();
         $ngg_pro_lightbox = $settings->get('ngg_pro_lightbox');
         if (empty($ngg_pro_lightbox['display_cart']))
         {

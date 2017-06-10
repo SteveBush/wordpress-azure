@@ -24,7 +24,7 @@ class M_NextGen_Pro_Slideshow extends C_Base_Module
 			'photocrati-nextgen_pro_slideshow',
 			'NextGen Pro Slideshow',
 			"Provides Photocrati's Slideshow Gallery Type",
-            '0.24',
+            '0.26',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -95,13 +95,19 @@ class C_NextGen_Pro_Slideshow_Installer extends C_Gallery_Display_Installer
         );
     }
 
-    function uninstall()
+    function uninstall($hard = FALSE)
     {
         $mapper = C_Display_Type_Mapper::get_instance();
         if (($entity = $mapper->find_by_name(NGG_PRO_SLIDESHOW)))
         {
-            $entity->hidden_from_ui = TRUE;
-            $mapper->save($entity);
+            if ($hard)
+            {
+                $mapper->destroy($entity);
+            }
+            else {
+                $entity->hidden_from_ui = TRUE;
+                $mapper->save($entity);
+            }
         }
     }
 }

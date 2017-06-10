@@ -22,7 +22,7 @@ class M_NextGen_Pro_ImageBrowser extends C_Base_Module
 			'photocrati-nextgen_pro_imagebrowser',
 			'NextGEN Pro ImageBrowser',
 			'Provides the NextGEN Pro ImageBrowser Display Type',
-            '0.07',
+            '0.09',
 			'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
 			'Imagely',
 			'https://www.imagely.com'
@@ -188,10 +188,11 @@ class C_NextGen_Pro_ImageBrowser_Installer extends C_Gallery_Display_Installer
 		);
 	}
 
-	function uninstall()
+	function uninstall($hard = FALSE)
     {
         $mapper = C_Display_Type_Mapper::get_instance();
-        if (($entity = $mapper->find_by_name(NGG_PRO_IMAGEBROWSER))) {
+        if (($entity = $mapper->find_by_name(NGG_PRO_IMAGEBROWSER)))
+        {
             if ($hard)
             {
                 $mapper->destroy($entity);

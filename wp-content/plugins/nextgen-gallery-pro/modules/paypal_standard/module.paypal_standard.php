@@ -20,7 +20,7 @@ class M_PayPal_Standard extends C_Base_Module
             'photocrati-paypal_standard',
             'PayPal Standard',
             'Provides integration with PayPal Standard',
-            '0.14',
+            '0.16',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com'
@@ -43,6 +43,7 @@ class M_PayPal_Standard extends C_Base_Module
     function _register_hooks()
     {
         add_action('init', array(&$this, 'process_paypal_responses'));
+        add_filter('ngg_pro_settings_reset_installers', array($this, 'return_own_installer'));
     }
 
     function process_paypal_responses()
@@ -66,6 +67,12 @@ class M_PayPal_Standard extends C_Base_Module
 
     }
 
+    public function return_own_installer($installers)
+    {
+        $installers[] = 'C_PayPal_Standard_Installer';
+        return $installers;
+    }
+
     function get_type_list()
     {
         return array(
@@ -76,14 +83,17 @@ class M_PayPal_Standard extends C_Base_Module
     }
 }
 
-class C_PayPal_Standard_Installer
+class C_PayPal_Standard_Installer extends AC_NextGen_Pro_Settings_Installer
 {
-    function install()
+    function __construct()
     {
-        $settings = C_NextGen_Settings::get_instance();
-        $settings->set_default_value('ecommerce_paypal_std_enable', 0);
-        $settings->set_default_value('ecommerce_paypal_std_sandbox', 1);
-        $settings->set_default_value('ecommerce_paypal_std_email', '');
+        $this->set_defaults(array(
+            'ecommerce_paypal_std_enable'  => 0,
+            'ecommerce_paypal_std_sandbox' => 1,
+            'ecommerce_paypal_std_email'   => ''
+        ));
+
+        $this->set_groups(array('ecommerce'));
     }
 }
 
