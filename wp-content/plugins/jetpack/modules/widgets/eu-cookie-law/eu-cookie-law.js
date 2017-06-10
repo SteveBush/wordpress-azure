@@ -1,6 +1,4 @@
 ( function( $ ) {
-	$( '.widget_eu_cookie_law_widget' ).appendTo( 'body' );
-
 	var overlay = $( '#eu-cookie-law' ), initialScrollPosition, scrollFunction;
 
 	overlay.find( 'form' ).on( 'submit', accept );
