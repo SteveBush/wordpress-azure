@@ -46,26 +46,6 @@ function genesis_first_version_compare( $version, $operator  ) {
 }
 
 /**
- * Determine if a version string is considered a major release under Genesis rules.
- *
- * For Genesis, a release of something like 2.5.0 is a major release version, as is 2.6.0.
- * 2.5.1 or 2.6.2 is considered a minor release version.As such, we can just check if the final
- *
- * All values of `PARENT_THEME_VERSION` are given as 3 digits (5 characters), x.y.z. The major
- * release after 2.9.0 will be 3.0.0, and not 2.10.0 - Genesis does not follow semantic versioning.
- *
- * As such, we can simply check if the 4th and 5th characters until the end, are `.0`. This means
- * that a value of `2.6.0-dev` will NOT be counted as a major version.
- *
- * @since 2.6.0
- *
- * @return bool True if version has `.0` as 4th and 5th character onwards, false otherwise.
- */
-function genesis_is_major_version( $version ) {
-	return '.0' === substr( $version, 3 );
-}
-
-/**
  * Ping http://api.genesistheme.com/ asking if a new version of this theme is available.
  *
  * If not, it returns false.
@@ -143,22 +123,6 @@ function genesis_update_check() {
 	}
 
 	return $genesis_update;
-
-}
-
-/**
- * Upgrade the database to version 2503.
- *
- * @since 2.5.2
- */
-function genesis_upgrade_2503() {
-
-	// Update Settings.
-	genesis_update_settings( array(
-		'theme_version' => '2.5.2',
-		'db_version'    => '2503',
-		'upgrade'       => 1,
-	) );
 
 }
 
@@ -599,11 +563,6 @@ function genesis_upgrade() {
 		genesis_upgrade_2501();
 	}
 
-	// UPDATE DB TO VERSION 2502.
-	if ( genesis_get_option( 'db_version', null, false ) < '2502' ) {
-		genesis_upgrade_2502();
-	}
-
 	do_action( 'genesis_upgrade' );
 
 }
@@ -659,13 +618,9 @@ function genesis_upgrade_redirect() {
 		return;
 	}
 
-	if ( genesis_is_major_version( PARENT_THEME_VERSION ) ) {
-		genesis_admin_redirect( 'genesis-upgraded' ); // What's New page.
-	} else {
-		genesis_admin_redirect( 'genesis', array( // Theme Settings page.
-			'upgraded' => 'true',
-		) );
-	}
+	// genesis_admin_redirect( 'genesis', array( 'upgraded' => 'true' ) ); // Use to simulate an upgrade.
+	genesis_admin_redirect( 'genesis-upgraded' );
+	exit;
 
 }
 
