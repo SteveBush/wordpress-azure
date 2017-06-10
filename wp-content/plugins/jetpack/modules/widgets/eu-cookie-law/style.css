@@ -5,7 +5,6 @@
 	padding: 0;
 	position: fixed;
 	right: 1em;
-	width: auto;
 	z-index: 50001;
 }
 
@@ -17,7 +16,6 @@
 	line-height: 1.5;
 	overflow: hidden;
 	padding: 6px 6px 6px 15px;
-	position: relative;
 }
 
 #eu-cookie-law a,
