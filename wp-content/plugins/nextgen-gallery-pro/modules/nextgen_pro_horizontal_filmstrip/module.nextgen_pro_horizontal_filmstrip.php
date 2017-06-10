@@ -21,7 +21,7 @@ class M_NextGen_Pro_Horizontal_Filmstrip extends C_Base_Module
 			NGG_PRO_HORIZONTAL_FILMSTRIP,
 			'NextGEN Pro Horizontal Filmstrip',
 			"Provides Photocrati's Horizontal Filmstrip for NextGEN Gallery",
-            '0.27',
+            '0.25',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -89,19 +89,13 @@ class C_NextGen_Pro_Horizontal_Filmstrip_Installer extends C_Gallery_Display_Ins
         );
     }
 
-    function uninstall($hard = FALSE)
+    function uninstall()
     {
         $mapper = C_Display_Type_Mapper::get_instance();
         if (($entity = $mapper->find_by_name(NGG_PRO_HORIZONTAL_FILMSTRIP)))
         {
-            if ($hard)
-            {
-                $mapper->destroy($entity);
-            }
-            else {
-                $entity->hidden_from_ui = TRUE;
-                $mapper->save($entity);
-            }
+            $entity->hidden_from_ui = TRUE;
+            $mapper->save($entity);
         }
     }
 }

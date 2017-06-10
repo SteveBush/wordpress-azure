@@ -5,7 +5,7 @@ if(preg_match('#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'])) { die('You 
 /*
  * Plugin Name: NextGEN Pro
  * Description: The complete "Pro" add-on for NextGEN Gallery. Enjoy ecommerce, beautiful new gallery displays, and a fullscreen, responsive Pro Lightbox with social sharing and commenting.
- * Version: 2.5.5
+ * Version: 2.5.0
  * Plugin URI: http://www.nextgen-gallery.com
  * Author: Imagely
  * Author URI: https://www.imagely.com
@@ -18,8 +18,6 @@ if (!function_exists('bcmul')) { function bcmul($one, $two, $scale) { return $on
 if (!function_exists('bcdiv')) { function bcdiv($one, $two, $scale) { return $one / $two; }}
 if (!function_exists('bcsub')) { function bcsub($one, $two, $scale) { return $one - $two; }}
 if (!function_exists('bcmod')) { function bcmod($one, $two)         { return $one % $two; }}
-
-include_once('class.nextgen_pro_settings_installer.php');
 
 class NextGEN_Gallery_Pro
 {
@@ -37,7 +35,7 @@ class NextGEN_Gallery_Pro
 		    define('NGG_PRO_MODULE_URL', plugins_url(path_join(basename(dirname(__FILE__)), 'modules')));
 		    // NOTE: for legacy reasons we keep a definition of the old constant name as well, this might otherwise break when incorrect autoupdate modules are used
 		    define('NEXTGEN_GALLERY_PRO_MODULE_URL', NGG_PRO_MODULE_URL);
-		    define('NGG_PRO_PLUGIN_VERSION', '2.5.5');
+		    define('NGG_PRO_PLUGIN_VERSION', '2.5.0');
 
 			$ngg_activated 				= class_exists('C_NextGEN_Bootstrap');
 			$ngg_modules_initialized	= did_action('load_nextgen_gallery_modules');

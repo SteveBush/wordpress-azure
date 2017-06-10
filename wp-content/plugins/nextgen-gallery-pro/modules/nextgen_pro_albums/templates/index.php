@@ -26,10 +26,10 @@
                     </a>
                 </span>
                 <span class="caption_link">
-                    <a <?php echo $anchor; ?>><?php print wp_kses($entity->title, M_NextGen_Pro_I18N::get_kses_allowed_html()); ?></a>
+                    <a <?php echo $anchor; ?>><?php echo_safe_html($entity->title) ?></a>
                 </span>
                 <div class="image_description">
-                    <?php print wp_kses(nl2br($entity->galdesc), M_NextGen_Pro_I18N::get_kses_allowed_html()); ?>
+                    <?php echo_safe_html(nl2br($entity->galdesc)); ?>
                 </div>
                 <br class="clear"/>
             </div>

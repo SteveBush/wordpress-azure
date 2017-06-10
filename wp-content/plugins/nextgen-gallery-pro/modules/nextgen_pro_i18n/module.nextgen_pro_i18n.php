@@ -20,7 +20,7 @@ class M_NextGen_Pro_I18N extends C_Base_Module
             'photocrati-nextgen_pro_i18n',
             'Pro Internationalization',
             "Adds I18N resources and methods",
-            '0.14',
+            '0.12',
             'http://www.imagely.com/languages/',
             'Imagely',
             'https://www.imagely.com',
@@ -44,24 +44,6 @@ class M_NextGen_Pro_I18N extends C_Base_Module
 
         // Load text domain
         load_plugin_textdomain('nextgen-gallery-pro', false, $dir);
-    }
-
-    static public function get_kses_allowed_html()
-    {
-        global $allowedtags;
-
-        if (!empty($allowedtags))
-            return $allowedtags;
-
-        return array(
-            'a' => array('href'  => array(),
-                         'class' => array(),
-                         'title' => array()),
-            'br' => array(),
-            'em' => array(),
-            'strong' => array(),
-            'u' => array()
-        );
     }
 }
 

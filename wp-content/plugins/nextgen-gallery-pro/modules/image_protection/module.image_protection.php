@@ -22,7 +22,7 @@ class M_Photocrati_Image_Protection extends C_Base_Module
             'photocrati-image_protection',
             'Protect Images',
             'Protects images from being stored locally by preventing right clicks and drag & drop of the images',
-            '0.20',
+            '0.17',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com'
@@ -36,7 +36,6 @@ class M_Photocrati_Image_Protection extends C_Base_Module
         add_action('wp_enqueue_scripts', array($this, '_register_protection_js'));
         add_action('admin_init', array($this, 'register_forms'));
 	    add_action('ngg_created_new_gallery', array(&$this, 'protect_gallery'));
-        add_filter('ngg_pro_settings_reset_installers', array($this, 'return_own_installer'));
     }
 
     function _register_adapters()
@@ -101,12 +100,6 @@ class M_Photocrati_Image_Protection extends C_Base_Module
 		$imgprot->protect_gallery($gallery_id);
 	}
 
-    public function return_own_installer($installers)
-    {
-        $installers[] = 'C_Image_Protection_Installer';
-        return $installers;
-    }
-
 	function get_type_list()
 	{
 		return array(
@@ -117,16 +110,18 @@ class M_Photocrati_Image_Protection extends C_Base_Module
 	}
 }
 
-class C_Image_Protection_Installer extends AC_NextGen_Pro_Settings_Installer
+class C_Image_Protection_Installer
 {
-    function __construct()
+    function install()
     {
-        $this->set_defaults(array(
-            'protect_images'          => 0,
-            'protect_images_globally' => 0
-        ));
+        $settings = C_NextGen_Settings::get_instance();
+        $this->install_image_protection_settings($settings);
+    }
 
-        $this->set_groups(array(''));
+    function install_image_protection_settings($settings)
+    {
+        $settings->set_default_value('protect_images', 0);
+        $settings->set_default_value('protect_images_globally', 0);
     }
 }
 

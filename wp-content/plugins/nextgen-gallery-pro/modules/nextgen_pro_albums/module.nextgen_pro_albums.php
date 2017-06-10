@@ -24,7 +24,7 @@ class M_NextGen_Pro_Albums extends C_Base_Module
 			'photocrati-nextgen_pro_albums',
 			'NextGEN Pro Albums',
 			'Provides Photocrati styled albums for NextGEN Gallery',
-            '0.30',
+            '0.28',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -173,20 +173,14 @@ class C_NextGen_Pro_Album_Installer extends C_Gallery_Display_Installer
         );
     }
 
-    function uninstall($hard = FALSE)
+    function uninstall()
     {
         $mapper = C_Display_Type_Mapper::get_instance();
         foreach (array(NGG_PRO_GRID_ALBUM, NGG_PRO_LIST_ALBUM) as $display_type_name) {
-            if (($entity = $mapper->find_by_name($display_type_name)))
+            if (($display_type = $mapper->find_by_name($display_type_name)))
             {
-                if ($hard)
-                {
-                    $mapper->destroy($entity);
-                }
-                else {
-                    $entity->hidden_from_ui = TRUE;
-                    $mapper->save($entity);
-                }
+                $display_type->hidden_from_ui = TRUE;
+                $mapper->save($display_type);
             }
         }
     }
