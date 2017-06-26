@@ -242,12 +242,6 @@
                     // Determine the slug
                     if (params.gallery_id !== '!') {
                         params.slug = this.get_slug(params.gallery_id);
-                        if (params.slug !== 'undefined' && params.slug !== null) {
-                            if (params.slug.toString().indexOf('widget-ngg-images-') !== -1) {
-                                params.revert_image_id = params.image_id;
-                                params.image_id = '!';
-                            }
-                        }
                     }
 
                     // Run any registered callbacks for modifying lightbox params
@@ -1000,7 +994,7 @@
                         var slug = gallery_id;
 
                         $.each(galleries, function(index, gallery) {
-                            if (gallery.ID == gallery_id) {
+                            if (gallery.ID == gallery_id && typeof gallery.wordpress_page_root !== 'undefined') {
                                 url = gallery.wordpress_page_root;
                                 if (gallery.slug) {
                                     slug = gallery.slug;

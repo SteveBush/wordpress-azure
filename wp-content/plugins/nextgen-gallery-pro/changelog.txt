@@ -1,7 +1,16 @@
 NextGEN Pro
 by Imagely
 
-= V2.5.5 - 05.23.2017
+= V2.5.7 - 06.21.2017 =
+* NEW:       Added Dutch translations as provided by Frank Leenders
+* Changed:   Updated Pro Lightbox comment mechanism to use latest WP conventions
+* Changed:   Uses KSES sanitization where applicable
+* Fixed:     Pro Lightbox routing when wordpress_page_root not defined
+* Fixed:     Pricelist requires at least one item to be saved
+* Fixed:     NextGEN Widget always opens first image in Pro Lightbox
+* Fixed:     Masonry display in Twenty Seventeen has overlapping image borders
+
+= V2.5.5 - 05.23.2017 =
 * Changed:   Updated to PictureFill 3.0.2
 * Changed:   Use KSES sanitization for output of properties which allow HTML
 * Changed:   Provide the ability to reset NGG options with and without ecommerce settings

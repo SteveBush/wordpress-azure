@@ -25,7 +25,7 @@ class M_Photocrati_Comments extends C_Base_Module
             'photocrati-comments',
             'Comments',
             'AJAX operations for retrieving and creating comments on arbitrary items',
-            '0.22',
+            '0.23',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -63,12 +63,20 @@ class M_Photocrati_Comments extends C_Base_Module
 
     function comment_row_actions($actions, $comment)
     {
-        if (get_comment_meta($comment->comment_ID, 'generated_by', TRUE) != 'photocrati-comments')
+        if (get_comment_meta($comment->comment_ID, 'generated_by', TRUE) !== 'photocrati-comments')
+            return $actions;
+
+        $lightbox = C_Lightbox_Library_Manager::get_instance()->get_selected();
+        if ($lightbox->name !== NGG_PRO_LIGHTBOX)
+            return $actions;
+
+        $href = get_comment_meta($comment->comment_ID, 'ngg_origin_url', TRUE);
+        if (empty($href))
             return $actions;
 
         $actions['nextgen_source'] = sprintf(
             __("<a href='%s' target='_blank'>View in lightbox</a>", 'nextgen-gallery-pro'),
-            get_comment_meta($comment->comment_ID, 'ngg_origin_url', TRUE)
+            $href
         );
 
         return $actions;
