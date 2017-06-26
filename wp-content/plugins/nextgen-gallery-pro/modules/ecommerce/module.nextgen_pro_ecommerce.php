@@ -31,7 +31,7 @@ class M_NextGen_Pro_Ecommerce extends C_Base_Module
             'photocrati-nextgen_pro_ecommerce',
             'Ecommerce',
             'Provides ecommerce capabilities for the NextGEN Pro Lightbox',
-            '0.37',
+            '0.38',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -1114,7 +1114,7 @@ class M_NextGen_Pro_Ecommerce extends C_Base_Module
         $out[] = "<option {$selected} value='0'>{$gallery_default_label}</option>";
         $out[] = "<option {$none_selected} value='-1'>{$no_pricelist_label}</option>";
 
-        foreach ($mapper->find_all() as $pricelist) {
+        foreach ($mapper->find_all(array(), TRUE) as $pricelist) {
             $pricelist_id       = esc_attr($pricelist->{$pricelist->id_field});
             $pricelist_title    = esc_html($pricelist->title);
             $selected           = selected($selected_pricelist_id, $pricelist_id, FALSE);
@@ -1141,7 +1141,7 @@ class M_NextGen_Pro_Ecommerce extends C_Base_Module
         $selected = selected($selected_pricelist_id, 0, FALSE);
         echo "<option value='0' {$selected}>" . __('None', 'nextgen-gallery-pro') . "</option>";
 
-        foreach ($mapper->find_all() as $pricelist) {
+        foreach ($mapper->find_all(array(), TRUE) as $pricelist) {
             $pricelist_id       = $pricelist->{$pricelist->id_field};
             $pricelist_title    = esc_html($pricelist->title);
             $selected           = selected($selected_pricelist_id, $pricelist_id, FALSE);

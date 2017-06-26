@@ -484,10 +484,6 @@ class C_OpenGraph_Controller extends C_MVC_Controller
                 $lightbox_url = $router->get_url($uri, FALSE, 'root');
                 $lightbox_url .= '/';
             }
-            // widget galleries shouldn't have a url specific to one image
-            if (FALSE !== strpos($displayed_gallery_id, 'widget-ngg-images-')) {
-                $image_id = '!';
-            }
             $params['lightbox_url'] = "{$lightbox_url}#{$lightbox_slug}/{$displayed_gallery_id}/{$image_id}";
             // Add the blog name
             $params['blog_name'] = get_bloginfo('name');

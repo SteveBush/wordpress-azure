@@ -168,13 +168,13 @@ if (!function_exists('nextgen_comments_prev_link')) {
             <a href='javascript:void(0)'><?php echo __('Click here to cancel reply'); ?></a>
         </div>
         <div id='nggpl-comment-form-wrapper'>
-            <input id="ngg_comment_origin_url" type="hidden" name="ngg_comment_origin_url" value=""/>
             <?php
             // Because comment_form() includes hard-coded HTML with no option to control the id or class of the parent
             // HTML container we use PHP's output buffering to do a simple string replace later
             ob_start();
             comment_form(array(
-                'comment_notes_after' => '<input type="hidden" name="nextgen_generated_comment" value="true"/>',
+                'comment_notes_after' => '<input id="ngg_comment_origin_url" type="hidden" name="ngg_comment_origin_url" value=""/>
+                                          <input type="hidden" name="nextgen_generated_comment" value="true"/>',
                 'logged_in_as' => '',
                 'title_reply' => '',
                 'title_reply_to' => '',

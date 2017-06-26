@@ -348,8 +348,9 @@
                             events: {
                                 bind: function() {
                                     if (methods.nplModal.is_nextgen_gallery()
-                                        &&  $.nplModal('get_setting', 'enable_routing', false)
-                                        &&  $.nplModal('get_setting', 'enable_comments', false)) {
+                                    &&  $.nplModal('get_setting', 'enable_routing', false)
+                                    &&  $.nplModal('get_setting', 'enable_comments', false)
+                                    &&  !methods.nplModal.is_random_source()) {
                                         self.bind('image', this.image);
                                         self.bind('npl.init', this.npl_init);
                                         self.bind('npl.init.keys', this.npl_init_keys);
@@ -369,8 +370,8 @@
                                 _image_ran_once: false,
                                 image: function() {
                                     if (methods.nplModal.is_nextgen_gallery()
-                                        &&  $.nplModal('get_setting', 'enable_routing', false)
-                                        &&  $.nplModal('get_setting', 'enable_comments', false)) {
+                                    &&  $.nplModal('get_setting', 'enable_routing', false)
+                                    &&  $.nplModal('get_setting', 'enable_comments', false)) {
                                         if (methods.sidebars.comments._image_ran_once) {
                                             // updates the sidebar
                                             methods.sidebars.comments.load_more(methods.galleria.get_current_image_id());
@@ -965,9 +966,9 @@
                         },
                         create: function(target, iconcolor) {
                             if (methods.nplModal.is_random_source()
-                                ||  methods.nplModal.is_nextgen_widget()
-                                ||  !methods.nplModal.is_nextgen_gallery()
-                                ||  !$.nplModal('get_setting', 'enable_routing', false)) {
+                            ||  methods.nplModal.is_nextgen_widget()
+                            ||  !methods.nplModal.is_nextgen_gallery()
+                            ||  !$.nplModal('get_setting', 'enable_routing', false)) {
                                 return false;
                             }
 
