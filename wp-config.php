@@ -50,7 +50,7 @@ else {
     }
 
     // Turn off Debugging in production
-    define('WP_DEBUG', true);
+    define('WP_DEBUG', false);
 }
 
 
