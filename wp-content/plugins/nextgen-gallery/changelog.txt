@@ -1,6 +1,9 @@
 NextGEN Gallery
 by Imagely
 
+= V2.2.46 - 02.15.2018 =
+* Fixed:   Broken Manage Albums page
+
 = V2.2.45 - 02.14.2018 =
 * NEW:     Partner page for Imagify image optimization
 * Secured: Image property escaping case-sensitive
