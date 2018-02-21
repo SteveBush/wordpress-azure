@@ -300,7 +300,7 @@ class nggManageAlbum {
 <style type="text/css">
 	.select2-container {max-width: 580px; }
 	.select2-drop { max-width: 580px; }
-	.select2-choice { max-width: 580;}
+	.select2-choice { max-width: 580px;}
 </style>
 
 <script type="text/javascript">
@@ -602,7 +602,7 @@ function showDialog() {
                     'echo' => TRUE,
                     'name' => 'pageid',
                     'selected' => $album->pageid,
-                    'show_option_none' => esc_html_('Not linked', 'nggallery'),
+                    'show_option_none' => esc_html_e('Not linked', 'nggallery'),
                     'option_none_value' => 0
                 ));
                 $dropdown = ob_get_contents();
