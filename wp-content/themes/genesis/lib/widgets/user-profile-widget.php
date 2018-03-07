@@ -8,13 +8,13 @@
  * @package Genesis\Widgets
  * @author  StudioPress
  * @license GPL-2.0+
- * @link    http://my.studiopress.com/themes/genesis/
+ * @link    https://my.studiopress.com/themes/genesis/
  */
 
 /**
  * Genesis User Profile widget class.
  *
- * @since 0.1.8
+ * @since 1.0.0
  *
  * @package Genesis\Widgets
  */
@@ -74,7 +74,7 @@ class Genesis_User_Profile_Widget extends WP_Widget {
 		echo $args['before_widget'];
 
 			if ( ! empty( $instance['title'] ) ) {
-				echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base ) . $args['after_title'];
+				echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base ) . $args['after_title']; // WPCS: prefix ok.
 			}
 
 			$text = '';
@@ -151,14 +151,27 @@ class Genesis_User_Profile_Widget extends WP_Widget {
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_name( 'user' ) ); ?>"><?php _e( 'Select a user. The email address for this account will be used to pull the Gravatar image.', 'genesis' ); ?></label><br />
-			<?php wp_dropdown_users( array( 'who' => 'authors', 'name' => $this->get_field_name( 'user' ), 'selected' => $instance['user'] ) ); ?>
+			<?php
+			wp_dropdown_users(
+				array(
+					'who'      => 'authors',
+					'name'     => $this->get_field_name( 'user' ),
+					'selected' => $instance['user'],
+				)
+			);
+			?>
 		</p>
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'size' ) ); ?>"><?php _e( 'Gravatar Size', 'genesis' ); ?>:</label>
 			<select id="<?php echo esc_attr( $this->get_field_id( 'size' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'size' ) ); ?>">
 				<?php
-				$sizes = array( __( 'Small', 'genesis' ) => 45, __( 'Medium', 'genesis' ) => 65, __( 'Large', 'genesis' ) => 85, __( 'Extra Large', 'genesis' ) => 125 );
+				$sizes = array(
+					__( 'Small', 'genesis' )       => 45,
+					__( 'Medium', 'genesis' )      => 65,
+					__( 'Large', 'genesis' )       => 85,
+					__( 'Extra Large', 'genesis' ) => 125,
+				);
 				$sizes = apply_filters( 'genesis_gravatar_sizes', $sizes );
 				foreach ( (array) $sizes as $label => $size ) { ?>
 					<option value="<?php echo absint( $size ); ?>" <?php selected( $size, $instance['size'] ); ?>><?php printf( '%s (%spx)', $label, $size ); ?></option>
@@ -189,7 +202,15 @@ class Genesis_User_Profile_Widget extends WP_Widget {
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_name( 'page' ) ); ?>"><?php _e( 'Choose your extended "About Me" page from the list below. This will be the page linked to at the end of the about me section.', 'genesis' ); ?></label><br />
-			<?php wp_dropdown_pages( array( 'name' => $this->get_field_name( 'page' ), 'show_option_none' => __( 'None', 'genesis' ), 'selected' => $instance['page'] ) ); ?>
+			<?php
+			wp_dropdown_pages(
+				array(
+					'name'             => $this->get_field_name( 'page' ),
+					'show_option_none' => __( 'None', 'genesis' ),
+					'selected'         => $instance['page'],
+				)
+			);
+			?>
 		</p>
 
 		<p>

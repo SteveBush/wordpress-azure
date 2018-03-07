@@ -8,13 +8,13 @@
  * @package Genesis\Widgets
  * @author  StudioPress
  * @license GPL-2.0+
- * @link    http://my.studiopress.com/themes/genesis/
+ * @link    https://my.studiopress.com/themes/genesis/
  */
 
 /**
  * Genesis Featured Post widget class.
  *
- * @since 0.1.8
+ * @since 1.0.0
  *
  * @package Genesis\Widgets
  */
@@ -30,7 +30,7 @@ class Genesis_Featured_Post extends WP_Widget {
 	/**
 	 * Constructor. Set the default widget options and create widget.
 	 *
-	 * @since 0.1.8
+	 * @since 1.0.0
 	 */
 	public function __construct() {
 
@@ -79,7 +79,7 @@ class Genesis_Featured_Post extends WP_Widget {
 	/**
 	 * Echo the widget content.
 	 *
-	 * @since 0.1.8
+	 * @since 1.0.0
 	 *
 	 * @global WP_Query $wp_query               Query object.
 	 * @global array    $_genesis_displayed_ids Array of displayed post IDs.
@@ -100,7 +100,7 @@ class Genesis_Featured_Post extends WP_Widget {
 
 		// Set up the author bio.
 		if ( ! empty( $instance['title'] ) ) {
-			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base ) . $args['after_title'];
+			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base ) . $args['after_title']; // WPCS: prefix ok.
 		}
 
 		$query_args = array(
@@ -136,7 +136,9 @@ class Genesis_Featured_Post extends WP_Widget {
 				'format'  => 'html',
 				'size'    => $instance['image_size'],
 				'context' => 'featured-post-widget',
-				'attr'    => genesis_parse_attr( 'entry-image-widget', array ( 'alt' => get_the_title() ) ),
+				'attr'    => genesis_parse_attr( 'entry-image-widget', array(
+					'alt' => get_the_title(),
+				) ),
 			) );
 
 			if ( $image && $instance['show_image'] ) {
@@ -161,7 +163,7 @@ class Genesis_Featured_Post extends WP_Widget {
 					/**
 					 * Filter the featured post widget title.
 					 *
-					 * @since  2.2.0
+					 * @since 2.2.0
 					 *
 					 * @param string $title    Featured post title.
 					 * @param array  $instance {
@@ -239,7 +241,7 @@ class Genesis_Featured_Post extends WP_Widget {
 						'params'  => array(
 							'is_widget' => true,
 						),
-						'echo'    => false
+						'echo'    => false,
 					) );
 				}
 
@@ -361,7 +363,7 @@ class Genesis_Featured_Post extends WP_Widget {
 	 * The newly calculated value of $instance should be returned.
 	 * If "false" is returned, the instance won't be saved/updated.
 	 *
-	 * @since 0.1.8
+	 * @since 1.0.0
 	 *
 	 * @param array $new_instance New settings for this instance as input by the user via `form()`.
 	 * @param array $old_instance Old settings for this instance.
@@ -381,7 +383,7 @@ class Genesis_Featured_Post extends WP_Widget {
 	/**
 	 * Echo the settings update form.
 	 *
-	 * @since 0.1.8
+	 * @since 1.0.0
 	 *
 	 * @param array $instance Current settings.
 	 * @return void
@@ -429,7 +431,8 @@ class Genesis_Featured_Post extends WP_Widget {
 				<p>
 					<label for="<?php echo esc_attr( $this->get_field_id( 'orderby' ) ); ?>"><?php _e( 'Order By', 'genesis' ); ?>:</label>
 					<select id="<?php echo esc_attr( $this->get_field_id( 'orderby' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'orderby' ) ); ?>">
-						<option value="date" <?php selected( 'date', $instance['orderby'] ); ?>><?php _e( 'Date', 'genesis' ); ?></option>
+						<option value="date" <?php selected( 'date', $instance['orderby'] ); ?>><?php _e( 'Date Published', 'genesis' ); ?></option>
+						<option value="modified" <?php selected( 'modified', $instance['orderby'] ); ?>><?php _e( 'Date Modified', 'genesis' ); ?></option>
 						<option value="title" <?php selected( 'title', $instance['orderby'] ); ?>><?php _e( 'Title', 'genesis' ); ?></option>
 						<option value="parent" <?php selected( 'parent', $instance['orderby'] ); ?>><?php _e( 'Parent', 'genesis' ); ?></option>
 						<option value="ID" <?php selected( 'ID', $instance['orderby'] ); ?>><?php _e( 'ID', 'genesis' ); ?></option>
