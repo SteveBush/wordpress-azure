@@ -8,7 +8,7 @@
  * @package StudioPress\Genesis
  * @author  StudioPress
  * @license GPL-2.0+
- * @link    http://my.studiopress.com/themes/genesis/
+ * @link    https://my.studiopress.com/themes/genesis/
  */
 
 wp_nonce_field( 'genesis_inpost_scripts_save', 'genesis_inpost_scripts_nonce' );
@@ -26,6 +26,7 @@ wp_nonce_field( 'genesis_inpost_scripts_save', 'genesis_inpost_scripts_nonce' );
             </p>
             <p>
 				<?php
+				/* translators: %s: Name of head tag. */
 				printf( esc_html__( 'Output before the closing %s tag, after sitewide header scripts.', 'genesis' ), genesis_code( 'head' ) );
 				?>
             </p>
