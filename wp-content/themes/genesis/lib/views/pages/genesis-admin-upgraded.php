@@ -64,6 +64,10 @@ $genesis_allowed_code = array(
 			<li><?php esc_html_e( 'Check for post parents before outputting parent in breadcrumbs.', 'genesis' ); ?></li>
 			<li><?php echo wp_kses( __( 'Ensure <code>[post_tags]</code> and <code>[post_categories]</code> are valid for post type before outputting.', 'genesis' ), $genesis_allowed_code ); ?></li>
 			<li><?php echo wp_kses( __( 'Update <code>aria-label</code> attributes for <code>nav</code> elements to remove redundant "navigation" word.', 'genesis' ), $genesis_allowed_code ); ?></li>
+			<li><?php esc_html_e( 'Compatibility issue with breadcrumbs in Yoast SEO.', 'genesis' ); ?></li>
+			<li><?php esc_html_e( 'Issue with extra slashes in settings when using Customizer.', 'genesis' ); ?></li>
+			<li><?php esc_html_e( 'PHP 7 issue with non-static methods being used statically.', 'genesis' ); ?></li>
+			<li><?php echo wp_kses( __( 'Empty string warning in <code>skip-links.js</code>.', 'genesis' ), $genesis_allowed_code ); ?></li>
 		</ul>
 
 		<h3><?php esc_html_e( 'Removed', 'genesis' ); ?></h3>
