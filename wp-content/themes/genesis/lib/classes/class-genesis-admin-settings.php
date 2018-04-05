@@ -374,27 +374,6 @@ class Genesis_Admin_Settings extends Genesis_Admin_Boxes {
 			return $new_value;
 		}
 
-		// Prevent unnecessary slashing.
-		if (
-			(
-				isset( $new_value['header_scripts'], $old_value['header_scripts'] ) &&
-				$new_value['header_scripts'] !== $old_value['header_scripts']
-			) ||
-			isset( $new_value['header_scripts'] )
-		) {
-			$new_value['header_scripts'] = wp_slash( $new_value['header_scripts'] );
-		}
-
-		if (
-			(
-				isset( $new_value['footer_scripts'], $old_value['footer_scripts'] ) &&
-				$new_value['footer_scripts'] !== $old_value['footer_scripts']
-			) ||
-			isset( $new_value['footer_scripts'] )
-		) {
-			$new_value['footer_scripts'] = wp_slash( $new_value['footer_scripts'] );
-		}
-
 		// Validate AdSense publisher id format.
 		if ( isset( $new_value['adsense_id'] ) && 23 > strlen( $new_value['adsense_id'] ) ) {
 

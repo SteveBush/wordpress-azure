@@ -166,6 +166,25 @@ function genesis_upgrade_db_latest() {
 }
 
 /**
+ * Upgrade the database to version 2603.
+ *
+ * @since 2.6.1
+ */
+function genesis_upgrade_2603() {
+
+	genesis_unslash_post_meta_scripts();
+
+	genesis_update_settings( array(
+		'header_scripts' => stripslashes( genesis_get_option( 'header_scripts' ) ),
+		'footer_scripts' => stripslashes( genesis_get_option( 'footer_scripts' ) ),
+		'theme_version'  => '2.6.1',
+		'db_version'     => '2603',
+		'upgrade'        => 1,
+	) );
+
+}
+
+/**
  * Upgrade the database to version 2501.
  *
  * @since 2.5.0
@@ -417,6 +436,34 @@ function genesis_convert_term_meta() {
 	update_option( 'genesis-term-meta', $term_meta );
 }
 
+/**
+ * Strip slashes from header and body scripts saved as post meta.
+ *
+ * Called in `genesis_upgrade_2603()`.
+ *
+ * @since 2.6.1
+ */
+function genesis_unslash_post_meta_scripts() {
+
+	global $wpdb;
+
+	$header_scripts_posts = $wpdb->get_results( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_genesis_scripts'" );
+	$body_scripts_posts   = $wpdb->get_results( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_genesis_scripts_body'" );
+
+	foreach ( $header_scripts_posts as $post ) {
+		if ( ! empty( $post->post_id ) ) {
+			update_post_meta( $post->post_id, '_genesis_scripts', get_post_meta( $post->post_id, '_genesis_scripts', 1 ) );
+		}
+	}
+
+	foreach ( $body_scripts_posts as $post ) {
+		if ( ! empty( $post->post_id ) ) {
+			update_post_meta( $post->post_id, '_genesis_scripts_body', get_post_meta( $post->post_id, '_genesis_scripts_body', 1 ) );
+		}
+	}
+
+}
+
 add_action( 'admin_init', 'genesis_upgrade', 20 );
 /**
  * Update Genesis to the latest version.
@@ -614,6 +661,11 @@ function genesis_upgrade() {
 	// UPDATE DB TO VERSION 2501.
 	if ( genesis_get_option( 'db_version', null, false ) < '2501' ) {
 		genesis_upgrade_2501();
+	}
+
+	// UPDATE DB TO VERSION 2603.
+	if ( genesis_get_option( 'db_version', null, false ) < '2603' ) {
+		genesis_upgrade_2603();
 	}
 
 	// UPDATE DB TO LATEST VERSION.

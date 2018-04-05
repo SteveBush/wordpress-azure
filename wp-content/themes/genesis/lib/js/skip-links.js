@@ -14,8 +14,12 @@
  */
 function ga_skiplinks() {
 	'use strict';
-	var element = document.getElementById( location.hash.substring( 1 ) );
+	var fragmentID = location.hash.substring( 1 );
+	if ( ! fragmentID ) {
+		return;
+	}
 
+	var element = document.getElementById( fragmentID );
 	if ( element ) {
 		if ( false === /^(?:a|select|input|button|textarea)$/i.test( element.tagName ) ) {
 			element.tabIndex = -1;

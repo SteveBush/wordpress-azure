@@ -52,7 +52,7 @@ function genesis_get_option( $key, $setting = null, $use_cache = true ) {
 			return '';
 		}
 
-		return is_array( $options[ $key ] ) ? stripslashes_deep( $options[ $key ] ) : stripslashes( wp_kses_decode_entities( $options[ $key ] ) );
+		return is_array( $options[ $key ] ) ? $options[ $key ] : wp_kses_decode_entities( $options[ $key ] );
 	}
 
 	// Setup caches.
@@ -80,7 +80,7 @@ function genesis_get_option( $key, $setting = null, $use_cache = true ) {
 		$options_cache[ $setting ][ $key ] = '';
 	} else {
 		// Option has not been previously been cached, so cache now.
-		$options_cache[ $setting ][ $key ] = is_array( $options[ $key ] ) ? stripslashes_deep( $options[ $key ] ) : stripslashes( wp_kses_decode_entities( $options[ $key ] ) );
+		$options_cache[ $setting ][ $key ] = is_array( $options[ $key ] ) ? $options[ $key ] : wp_kses_decode_entities( $options[ $key ] );
 	}
 
 	return $options_cache[ $setting ][ $key ];
@@ -214,8 +214,7 @@ function genesis_get_custom_field( $field, $post_id = null ) {
 		return '';
 	}
 
-	// Return custom field, slashes stripped, sanitized if string.
-	return is_array( $custom_field ) ? stripslashes_deep( $custom_field ) : stripslashes( wp_kses_decode_entities( $custom_field ) );
+	return is_array( $custom_field ) ? $custom_field : wp_kses_decode_entities( $custom_field );
 
 }
 

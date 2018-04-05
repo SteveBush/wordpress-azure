@@ -30,7 +30,7 @@ class Genesis_Sanitizer {
 	 * @param mixed $new_value Should ideally be a 1 or 0 integer passed in.
 	 * @return int `1` or `0`.
 	 */
-	public function one_zero( $new_value ) {
+	public static function one_zero( $new_value ) {
 
 		return (int) (bool) $new_value;
 
@@ -44,7 +44,7 @@ class Genesis_Sanitizer {
 	 * @param mixed $new_value Should ideally be a positive integer.
 	 * @return int Positive integer.
 	 */
-	public function absint( $new_value ) {
+	public static function absint( $new_value ) {
 
 		return absint( $new_value );
 
@@ -58,7 +58,7 @@ class Genesis_Sanitizer {
 	 * @param string $new_value String, possibly with HTML in it.
 	 * @return string String without HTML in it.
 	 */
-	public function no_html( $new_value ) {
+	public static function no_html( $new_value ) {
 
 		return strip_tags( $new_value );
 
@@ -72,7 +72,7 @@ class Genesis_Sanitizer {
 	 * @param string $new_value String, a URL, possibly unsafe.
 	 * @return string String a safe URL.
 	 */
-	public function url( $new_value ) {
+	public static function url( $new_value ) {
 
 		return esc_url_raw( $new_value );
 
@@ -86,7 +86,7 @@ class Genesis_Sanitizer {
 	 * @param string $new_value String, an email address, possibly unsafe.
 	 * @return string String a safe email address.
 	 */
-	public function email_address( $new_value ) {
+	public static function email_address( $new_value ) {
 
 		return sanitize_email( $new_value );
 
@@ -100,7 +100,7 @@ class Genesis_Sanitizer {
 	 * @param string $new_value String with potentially unsafe HTML in it.
 	 * @return string String with only safe HTML in it.
 	 */
-	public function safe_html( $new_value ) {
+	public static function safe_html( $new_value ) {
 
 		return wp_kses_post( $new_value );
 
@@ -117,7 +117,7 @@ class Genesis_Sanitizer {
 	 * @return string New or previous value, depending if user has correct
 	 *                capability or not.
 	 */
-	public function requires_unfiltered_html( $new_value, $old_value ) {
+	public static function requires_unfiltered_html( $new_value, $old_value ) {
 
 		if ( current_user_can( 'unfiltered_html' ) ) {
 			return $new_value;
@@ -137,7 +137,7 @@ class Genesis_Sanitizer {
 	 * @return string New or safe HTML value, depending if user has correct
 	 *                capability or not.
 	 */
-	public function unfiltered_or_safe_html( $new_value, $old_value ) {
+	public static function unfiltered_or_safe_html( $new_value, $old_value ) {
 
 		if ( current_user_can( 'unfiltered_html' ) ) {
 			return $new_value;

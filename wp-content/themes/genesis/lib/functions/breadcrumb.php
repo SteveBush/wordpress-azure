@@ -66,7 +66,7 @@ function genesis_do_breadcrumbs() {
 		breadcrumbs();
 	} elseif ( function_exists( 'crumbs' ) ) {
 		crumbs();
-	} elseif ( class_exists( 'WPSEO_Breadcrumbs' ) && genesis_get_option( 'breadcrumbs-enable', 'wpseo_internallinks' ) ) {
+	} elseif ( class_exists( 'WPSEO_Breadcrumbs' ) && genesis_get_option( 'breadcrumbs-enable', 'wpseo_titles' ) ) {
 		yoast_breadcrumb( $breadcrumb_markup_open, '</div>' );
 	} elseif ( function_exists( 'yoast_breadcrumb' ) && ! class_exists( 'WPSEO_Breadcrumbs' ) ) {
 		yoast_breadcrumb( $breadcrumb_markup_open, '</div>' );

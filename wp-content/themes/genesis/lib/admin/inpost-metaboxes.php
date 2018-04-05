@@ -182,10 +182,6 @@ function genesis_inpost_scripts_save( $post_id, $post ) {
 		)
 	);
 
-	// Compensate for stripslashes in `genesis_get_custom_field()` by storing with slashes.
-	$data['_genesis_scripts']      = wp_slash( $data['_genesis_scripts'] );
-	$data['_genesis_scripts_body'] = wp_slash( $data['_genesis_scripts_body'] );
-
 	genesis_save_custom_fields( $data, 'genesis_inpost_scripts_save', 'genesis_inpost_scripts_nonce', $post );
 
 }

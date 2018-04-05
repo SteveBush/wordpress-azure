@@ -4,6 +4,13 @@ https://my.studiopress.com/themes/genesis/
 
 This project does not follow semantic versioning. It follows the WordPress policy where updates of _x_ and _y_ in an _x.y.z_ version number means a major release, and updates to _z_ means a patch release.
 
+## [2.6.1] - 2018-03-14
+### Fixed
+- Fix compatibility issue with breadcrumbs in Yoast SEO.
+- Fix issue with extra slashes in settings when using Customizer.
+- Fix PHP 7 issue with non-static methods being used statically.
+- Fix empty string warning in `skip-links.js`.
+
 ## [2.6.0] - 2018-03-05
 ### Added
 - Add option to sort Featured Posts by date modified.
@@ -1012,6 +1019,7 @@ _Requires WordPress 3.1.0._
 
 First public release.
 
+[2.6.1]: https://github.com/copyblogger/genesis/compare/2.6.0...2.6.1
 [2.6.0]: https://github.com/copyblogger/genesis/compare/2.5.3...2.6.0
 [2.5.3]: https://github.com/copyblogger/genesis/compare/2.5.2...2.5.3
 [2.5.3]: https://github.com/copyblogger/genesis/compare/2.5.2...2.5.3

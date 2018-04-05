@@ -56,7 +56,8 @@ function genesis_xhtml_doctype() {
  */
 function genesis_html5_doctype() {
 
-	?><!DOCTYPE html>
+?>
+<!DOCTYPE html>
 <html <?php language_attributes( 'html' ); ?>>
 <head <?php echo genesis_attr( 'head' ); ?>>
 <meta charset="<?php bloginfo( 'charset' ); ?>" />
@@ -472,13 +473,13 @@ function genesis_custom_header() {
 		apply_filters(
 			'genesis_custom_header_defaults',
 			array(
-			'width'                 => 960,
-			'height'                => 80,
-			'textcolor'             => '333333',
-			'no_header_text'        => false,
-			'header_image'          => '%s/images/header.png',
-			'header_callback'       => '',
-			'admin_header_callback' => '',
+				'width'                 => 960,
+				'height'                => 80,
+				'textcolor'             => '333333',
+				'no_header_text'        => false,
+				'header_image'          => '%s/images/header.png',
+				'header_callback'       => '',
+				'admin_header_callback' => '',
 			)
 		)
 	);
@@ -531,7 +532,7 @@ function genesis_custom_header_style() {
 	}
 
 	$header_selector = get_theme_support( 'custom-header', 'header-selector' );
-	$title_selector  = genesis_html5() ? '.custom-header .site-title'       : '.custom-header #title';
+	$title_selector  = genesis_html5() ? '.custom-header .site-title' : '.custom-header #title';
 	$desc_selector   = genesis_html5() ? '.custom-header .site-description' : '.custom-header #description';
 
 	// Header selector fallback.
@@ -622,7 +623,7 @@ function genesis_do_header() {
 		do_action( 'genesis_site_description' );
 
 	genesis_markup( array(
-		'close'    => '</div>',
+		'close'   => '</div>',
 		'context' => 'title-area',
 	) );
 
@@ -802,7 +803,7 @@ function genesis_header_menu_wrap( $menu ) {
 
 }
 
-add_action ( 'genesis_before_header', 'genesis_skip_links', 5 );
+add_action( 'genesis_before_header', 'genesis_skip_links', 5 );
 /**
  * Add skip links for screen readers and keyboard navigation.
  *
@@ -823,7 +824,7 @@ function genesis_skip_links() {
 	$links = array();
 
 	if ( genesis_nav_menu_supported( 'primary' ) && has_nav_menu( 'primary' ) ) {
-		$links['genesis-nav-primary'] =  __( 'Skip to primary navigation', 'genesis' );
+		$links['genesis-nav-primary'] = __( 'Skip to primary navigation', 'genesis' );
 	}
 
 	$links['genesis-content'] = __( 'Skip to content', 'genesis' );
@@ -843,7 +844,7 @@ function genesis_skip_links() {
 		}
 	}
 
-	 /**
+	/**
 	 * Filter the skip links.
 	 *
 	 * @since 2.2.0
@@ -861,8 +862,8 @@ function genesis_skip_links() {
 	$skiplinks = '<ul class="genesis-skip-link">';
 
 	// Add markup for each skiplink.
-	foreach ($links as $key => $value) {
-		$skiplinks .=  '<li><a href="' . esc_url( '#' . $key ) . '" class="screen-reader-shortcut"> ' . $value . '</a></li>';
+	foreach ( $links as $key => $value ) {
+		$skiplinks .= '<li><a href="' . esc_url( '#' . $key ) . '" class="screen-reader-shortcut"> ' . $value . '</a></li>';
 	}
 
 	$skiplinks .= '</ul>';
