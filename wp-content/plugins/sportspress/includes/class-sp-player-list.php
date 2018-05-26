@@ -5,7 +5,7 @@
  * The SportsPress player list class handles individual player list data.
  *
  * @class 		SP_Player_List
- * @version   2.5.5
+ * @version		2.6.4
  * @package		SportsPress/Classes
  * @category	Class
  * @author 		ThemeBoy
@@ -115,17 +115,9 @@ class SP_Player_List extends SP_Secondary_Post {
 					'terms' => $season_ids
 				);
 			endif;
-
-			if ( $position_ids ):
-				$args['tax_query'][] = array(
-					'taxonomy' => 'sp_position',
-					'field' => 'term_id',
-					'terms' => $position_ids
-				);
-			endif;
-
+			
+			$team_key = 'sp_team';
 			if ( $team ):
-				$team_key = 'sp_team';
 				switch ( $era ):
 					case 'current':
 						$team_key = 'sp_current_team';
@@ -142,7 +134,19 @@ class SP_Player_List extends SP_Secondary_Post {
 				);
 			endif;
 
-			$players = get_posts( $args );
+			if ( $position_ids ):
+				$args['tax_query'][] = array(
+					'taxonomy' => 'sp_position',
+					'field' => 'term_id',
+					'terms' => $position_ids
+				);
+			endif;
+
+			$args = apply_filters( 'sportspress_player_list_args', $args, $team );
+
+			$players = (array) get_posts( $args );
+
+			$players = apply_filters( 'sportspress_player_list_players', $players, $args, $team, $team_key );
 
 			if ( $players && is_array( $players ) ) {
 				foreach ( $players as $player ) {
@@ -434,7 +438,7 @@ class SP_Player_List extends SP_Secondary_Post {
 										endforeach;
 
 										// Subtract minutes prior to substitution
-										$substitution_time = sp_array_value( sp_array_value( sp_array_value( sp_array_value( $timeline, $team_id ), $player_id ), 'sub' ), 0, 0 );
+										$substitution_time = ( int ) sp_array_value( sp_array_value( sp_array_value( sp_array_value( $timeline, $team_id ), $player_id ), 'sub' ), 0, 0 );
 										$played_minutes -= $substitution_time;
 									else:
 

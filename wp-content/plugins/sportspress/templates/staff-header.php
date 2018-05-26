@@ -4,7 +4,7 @@
  *
  * @author 		ThemeBoy
  * @package 	SportsPress/Templates
- * @version   2.5.5
+ * @version   2.6
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 if ( ! isset( $id ) )
   $id = get_the_ID();
 
-$post = get_post( $id );
+$post = function_exists( 'icl_object_id' ) ? get_post( icl_object_id( $id, 'sp_staff', true ) ) : get_post( $id );
 $title = $post->post_title;
 if ( $title ) {
   $staff = new SP_Staff( $id );

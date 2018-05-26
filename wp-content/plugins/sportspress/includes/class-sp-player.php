@@ -5,7 +5,7 @@
  * The SportsPress player class handles individual player data.
  *
  * @class 		SP_Player
- * @version   2.5
+ * @version		2.6.3
  * @package		SportsPress/Classes
  * @category	Class
  * @author 		ThemeBoy
@@ -110,13 +110,32 @@ class SP_Player extends SP_Custom_Post {
 	 * @return array
 	 */
 	public function data( $league_id, $admin = false, $section = -1 ) {
-
-		$seasons = (array)get_the_terms( $this->ID, 'sp_season' );
+		$args = array(
+			'meta_query' => array(
+				'relation' => 'OR',
+				array(
+					'key' => 'sp_order',
+					'compare' => 'NOT EXISTS',
+				),
+				array(
+					'key' => 'sp_order',
+					'compare' => 'EXISTS',
+				),
+			),
+		);
+		$seasons = (array)get_the_terms( $this->ID, 'sp_season', $args );
 		$metrics = (array)get_post_meta( $this->ID, 'sp_metrics', true );
 		$stats = (array)get_post_meta( $this->ID, 'sp_statistics', true );
-		$leagues = sp_array_value( (array)get_post_meta( $this->ID, 'sp_leagues', true ), $league_id, array() );
-		$abbreviate_teams = get_option( 'sportspress_abbreviate_teams', 'yes' ) === 'yes' ? true : false;
+		$leagues = (array) sp_array_value( (array)get_post_meta( $this->ID, 'sp_leagues', true ), $league_id );
 		$manual_columns = 'manual' == get_option( 'sportspress_player_columns', 'auto' ) ? true : false;
+
+		$season_ids = array_filter(wp_list_pluck( $seasons, 'term_id' ));
+		$season_order = array_flip( $season_ids );
+		foreach ( $season_order as $season_id => $val ) {
+			$season_order[ $season_id ] = null;
+		}
+
+		$leagues = array_replace( $season_order, $leagues );
 		
 		// Get performance labels
 		$args = array(
@@ -237,8 +256,11 @@ class SP_Player extends SP_Custom_Post {
 
 		$data = array();
 
+		$league_stats = sp_array_value( $stats, $league_id, array() );
+		$div_ids = apply_filters( 'sportspress_player_data_season_ids', $div_ids, $league_stats );
+
 		// Get all seasons populated with data where available
-		$data = sp_array_combine( $div_ids, sp_array_value( $stats, $league_id, array() ) );
+		$data = sp_array_combine( $div_ids, $league_stats, true );
 
 		// Get equations from statistic variables
 		$equations = sp_get_var_equations( 'sp_statistic' );
@@ -321,7 +343,7 @@ class SP_Player extends SP_Custom_Post {
 				);
 			endif;
 
-			$args = apply_filters( 'sportspress_player_data_event_args', $args );
+			$args = apply_filters( 'sportspress_player_data_event_args', $args, $data, $div_id );
 
 			$events = get_posts( $args );
 
@@ -506,7 +528,7 @@ class SP_Player extends SP_Custom_Post {
 			if ( $outcomes ):
 				$outcome = reset( $outcomes );
 				$abbreviation = sp_get_abbreviation( $outcome->ID );
-				if ( empty( $abbreviation ) ) $abbreviation = strtoupper( substr( $outcome->post_title, 0, 1 ) );
+				if ( empty( $abbreviation ) ) $abbreviation = sp_strtoupper( sp_substr( $outcome->post_title, 0, 1 ) );
 				$totals['streak'] = $abbreviation . $streak['count'];
 			endif;
 
@@ -578,10 +600,10 @@ class SP_Player extends SP_Custom_Post {
 			if ( -1 == $team_id )
 				continue;
 
-			$season_name = sp_array_value( $season_names, $season_id, '&nbsp;' );
+			$season_name = sp_array_value( $season_names, (int) $season_id, '&nbsp;' );
 
 			if ( $team_id ):
-				$team_name = sp_get_team_name( $team_id, $abbreviate_teams );
+				$team_name = sp_team_short_name( $team_id );
 				
 				if ( get_option( 'sportspress_link_teams', 'no' ) == 'yes' ? true : false ):
 					$team_permalink = get_permalink( $team_id );

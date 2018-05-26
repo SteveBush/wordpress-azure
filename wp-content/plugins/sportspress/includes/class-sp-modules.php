@@ -5,7 +5,7 @@
  * The SportsPress modules class stores available modules.
  *
  * @class 		SP_Modules
- * @version   2.5
+ * @version		2.6
  * @package		SportsPress/Classes
  * @category	Class
  * @author 		ThemeBoy
@@ -28,6 +28,13 @@ class SP_Modules {
 					'label' => __( 'Calendars', 'sportspress' ),
 					'icon' => 'sp-icon-calendar',
 					'desc' => __( 'Organize and publish calendars using different layouts.', 'sportspress' ),
+				),
+				'results_matrix' => array(
+					'label' => __( 'Results Matrix', 'sportspress' ),
+					'class' => 'SportsPress_Results_Matrix',
+					'icon' => 'sp-icon-matrix',
+					'link' => 'https://www.themeboy.com/sportspress-extensions/results-matrix/',
+					'desc' => __( 'Display fixtures and results between teams in a grid layout.', 'sportspress' ),
 				),
 				'scoreboard' => array(
 					'label' => __( 'Scoreboard', 'sportspress' ),
@@ -99,6 +106,14 @@ class SP_Modules {
 					'icon' => 'sp-icon-list',
 					'desc' => __( 'Create team rosters, player galleries, and ranking charts.', 'sportspress' ),
 				),
+				'midseason_transfers' => array(
+					'label' => __( 'Midseason Transfers', 'sportspress' ),
+					'class' => 'SportsPress_Midseason_Transfers',
+					'icon' => 'sp-icon-sub',
+					'link' => 'https://www.themeboy.com/sportspress-extensions/midseason-transfers/',
+					'desc' => __( 'Statistics for players who transferred between teams during a season.', 'sportspress' ),
+					'default' => 'yes',
+				),
 				'staff_directories' => array(
 					'label' => __( 'Directories', 'sportspress' ),
 					'class' => 'SportsPress_Staff_Directories',
@@ -157,14 +172,6 @@ class SP_Modules {
 					'icon' => 'sp-icon-megaphone',
 					'link' => 'https://www.themeboy.com/sportspress-extensions/sponsors/',
 					'desc' => __( 'Attract sponsors by offering them advertising space on your website.', 'sportspress' ),
-				),
-				'wordpay' => array(
-					'label' => __( 'WordPay', 'sportspress' ),
-					'class' => 'WordPay',
-					'icon' => 'sp-icon-wordpay',
-					'link' => 'https://wordpay.org/sportspress/',
-					'desc' => __( 'Start collecting club membership payments with WordPay.', 'sportspress' ),
-					'tip' => __( 'Get WordPay', 'sportspress' ),
 				),
 			),
 		));

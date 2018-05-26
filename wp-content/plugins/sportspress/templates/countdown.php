@@ -4,7 +4,7 @@
  *
  * @author 		ThemeBoy
  * @package 	SportsPress/Templates
- * @version   2.5.5
+ * @version   2.6
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -21,6 +21,7 @@ $defaults = array(
 	'link_teams' => get_option( 'sportspress_link_teams', 'no' ) == 'yes' ? true : false,
 	'link_venues' => get_option( 'sportspress_link_venues', 'no' ) == 'yes' ? true : false,
 	'show_logos' => get_option( 'sportspress_countdown_show_logos', 'no' ) == 'yes' ? true : false,
+	'show_thumbnail' => get_option( 'sportspress_countdown_show_thumbnail', 'no' ) == 'yes' ? true : false,
 );
 if ( isset( $id ) ):
 	$post = get_post( $id );
@@ -75,6 +76,13 @@ if ( $link_events ) $title = '<a href="' . get_post_permalink( $post->ID, false,
 ?>
 <div class="sp-template sp-template-countdown">
 	<div class="sp-countdown-wrapper">
+	<?php 
+	if ( $show_thumbnail && has_post_thumbnail( $post ) ) {
+	?>
+	<div class="event-image sp-event-image">
+		<?php echo get_the_post_thumbnail( $post ); ?>
+	</div>
+	<?php } ?>
 		<h3 class="event-name sp-event-name">
 			<?php
 			if ( $show_logos ) {
