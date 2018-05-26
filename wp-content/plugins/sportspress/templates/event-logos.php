@@ -4,7 +4,7 @@
  *
  * @author 		ThemeBoy
  * @package 	SportsPress/Templates
- * @version     2.2
+ * @version   2.6
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -23,7 +23,6 @@ $layout = get_option( 'sportspress_event_logos_format', 'inline' );
 $show_team_names = get_option( 'sportspress_event_logos_show_team_names', 'yes' ) === 'yes' ? true : false;
 $show_time = get_option( 'sportspress_event_logos_show_time', 'no' ) === 'yes' ? true : false;
 $show_results = get_option( 'sportspress_event_logos_show_results', 'no' ) === 'yes' ? true : false;
-$abbreviate_teams = get_option( 'sportspress_abbreviate_teams', 'yes' ) === 'yes' ? true : false;
 $link_teams = get_option( 'sportspress_link_teams', 'no' ) === 'yes' ? true : false;
 
 if ( $show_results ) {
@@ -44,7 +43,6 @@ sp_get_template( 'event-logos-' . $layout . '.php', array(
 	'show_team_names' => $show_team_names,
 	'show_time' => $show_time,
 	'show_results' => $show_results,
-	'abbreviate_teams' => $abbreviate_teams,
 	'link_teams' => $link_teams,
 ) );
 

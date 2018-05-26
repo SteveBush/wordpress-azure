@@ -5,7 +5,7 @@
  * The SportsPress team class handles individual team data.
  *
  * @class 		SP_Team
- * @version		2.2.4
+ * @version		2.6.3
  * @package		SportsPress/Classes
  * @category	Class
  * @author 		ThemeBoy
@@ -323,7 +323,7 @@ class SP_Team extends SP_Custom_Post {
 				$outcome = reset( $outcomes );
 				$abbreviation = get_post_meta( $outcome->ID, 'sp_abbreviation', true );
 				if ( ! $abbreviation )
-					$abbreviation = substr( $outcome->post_title, 0, 1 );
+					$abbreviation = sp_substr( $outcome->post_title, 0, 1 );
 				$totals['streak'] = $abbreviation . $streak['count'];
 			endif;
 

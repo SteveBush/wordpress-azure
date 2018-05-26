@@ -7,7 +7,7 @@
  * @author 		ThemeBoy
  * @category 	Core
  * @package 	SportsPress/Functions
- * @version		2.5.5
+ * @version		2.6.3
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -123,6 +123,22 @@ function sp_locate_template( $template_name, $template_path = '', $default_path 
 	return apply_filters('sportspress_locate_template', $template, $template_name, $template_path);
 }
 
+function sp_substr( $string = '', $start = 0, $length = null ) {
+	if ( function_exists( 'mb_substr' ) ) {
+		return mb_substr( $string, $start, $length );
+	} else {
+		return substr( $string, $start, $length );
+	}
+}
+
+function sp_strtoupper( $string = '' ) {
+	if ( function_exists( 'mb_strtoupper' ) ) {
+		return mb_strtoupper( $string );
+	} else {
+		return strtoupper( $string );
+	}
+}
+
 /**
  * Get the timezone string.
  *
@@ -152,7 +168,7 @@ function sp_get_timezone() {
 
 /* deprecated functions below */
 
-if( !function_exists( 'date_diff' ) ) {
+if ( !function_exists( 'date_diff' ) ) {
 	class DateInterval {
 		public $y;
 		public $m;
@@ -418,7 +434,7 @@ if ( !function_exists( 'sp_get_post_abbreviation' ) ) {
 		if ( $abbreviation ):
 			return $abbreviation;
 		else:
-			return substr( get_the_title( $post_id ), 0, 1 );
+			return mb_substr( get_the_title( $post_id ), 0, 1 );
 		endif;
 	}
 }
@@ -1290,8 +1306,11 @@ if ( !function_exists( 'sp_get_eos_safe_slug' ) ) {
 }
 
 if ( !function_exists( 'sp_solve' ) ) {
-	function sp_solve( $equation, $vars, $precision = 0, $default = 0 ) {
+	function sp_solve( $equation, $vars, $precision = 0, $default = 0, $post_id = 0 ) {
 
+		// Add a hook to alter $equation
+		$equation = apply_filters( 'sportspress_equation_alter', $equation, $vars, $precision, $default );
+		
 		if ( $equation == null )
 			return $default;
 
@@ -1342,6 +1361,10 @@ if ( !function_exists( 'sp_solve' ) ) {
 			$awayrecord = sp_array_value( $vars, 'awayrecord', array( 0 ) );
 			return implode( '-', $awayrecord );
 
+		endif;
+
+		if ( $solution = apply_filters( 'sportspress_equation_solve_for_presets', null, $equation, $post_id ) ):
+			return $solution;
 		endif;
 
 		// Remove unnecessary variables from vars before calculating
@@ -1612,4 +1635,29 @@ function sp_get_shortcode_template( $shortcode, $id = null, $args = array() ) {
  */
 function sp_shortcode_template( $shortcode, $id = null, $args = array() ) {
 	echo sp_get_shortcode_template( $shortcode, $id, $args );
+}
+
+if( ! function_exists( 'array_replace' ) ) {
+	/**
+	 * array_replace for PHP version earlier than 5.3
+	 *
+	 * @link   http://be2.php.net/manual/fr/function.array-replace.php#115215
+	 */
+	function array_replace() {
+		$args = func_get_args();
+		$num_args = func_num_args();
+		$res = array();
+		for( $i = 0; $i < $num_args; $i++ ) {
+			if( is_array( $args[ $i ] ) ) {
+				foreach( $args[ $i ] as $key => $val ) {
+					$res[ $key ] = $val;
+				}
+			}
+			else {
+				trigger_error( __FUNCTION__ . '(): Argument #' . ( $i + 1 ) . ' is not an array', E_USER_WARNING );
+				return NULL;
+			}
+		}
+		return $res;
+	}
 }

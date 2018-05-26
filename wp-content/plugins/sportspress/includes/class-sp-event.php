@@ -5,7 +5,7 @@
  * The SportsPress event class handles individual event data.
  *
  * @class 		SP_Event
- * @version		2.5.2
+ * @version		2.6
  * @package		SportsPress/Classes
  * @category	Class
  * @author 		ThemeBoy
@@ -17,7 +17,7 @@ class SP_Event extends SP_Custom_Post{
 		$results = get_post_meta( $this->ID, 'sp_results', true );
 		if ( is_array( $results ) ) {
 			foreach( $results as $result ) {
-				$result = array_filter( $result );
+				$result = is_array( $result ) ? array_filter( $result ) : array();
 				if ( count( $result ) > 0 ) {
 					return 'results';
 				}
@@ -393,7 +393,7 @@ class SP_Event extends SP_Custom_Post{
 			$stats[ $index ]['number'] = sp_array_value( $player_numbers, $details['id'] );
 
 			if ( 'team' === $details['key'] ) {
-				$name = sp_get_team_name( $details['team'] );
+				$name = sp_team_short_name( $details['team'] );
 				$stats[ $index ]['name'] = $name;
 				$stats[ $index ]['label'] = $name;
 				$stats[ $index ]['icon'] = sp_get_logo( $details['team'] );
@@ -629,6 +629,9 @@ class SP_Event extends SP_Custom_Post{
 				$outcomes = get_posts( $args );
 				foreach ( $meta as $team => $team_results ) {
 					if ( $outcomes ) {
+						if ( empty( $meta[ $team ] ) ) {
+							$meta[ $team ] = array();
+						}
 						$meta[ $team ][ 'outcome' ] = array();
 						foreach ( $outcomes as $outcome ) {
 							$meta[ $team ][ 'outcome' ][] = $outcome->post_name;
@@ -705,6 +708,26 @@ class SP_Event extends SP_Custom_Post{
 	}
 
 	public function sort_timeline( $a, $b ) {
-		return $a['time'] - $b['time'];
+		return (float) $a['time'] - (float) $b['time'];
+	}
+	
+	/**
+	 * Returns formatted event specs
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function specs( $neg = null ) {
+		$specs = (array)get_post_meta( $this->ID, 'sp_specs', true );
+		$spec_labels = (array)sp_get_var_labels( 'sp_spec', $neg, false );
+		$data = array();
+		
+		foreach ( $spec_labels as $key => $value ):
+			$spec = sp_array_value( $specs, $key, null );
+			if ( $spec == null )
+				continue;
+			$data[ $value ] = sp_array_value( $specs, $key, '&nbsp;' );
+		endforeach;
+		return $data;
 	}
 }

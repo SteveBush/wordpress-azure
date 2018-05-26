@@ -4,7 +4,7 @@ Tags: calendars, club, club management, esports, events, fixtures, leagues, leag
 Donate link: http://tboy.co/donate
 Requires at least: 3.8
 Tested up to: 4.9
-Stable tag: 2.5.10
+Stable tag: 2.6.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -236,6 +236,42 @@ There are [3 different licenses](http://tboy.co/pro) that you can choose from: C
 When you upgrade to one of the SportsPress Pro licenses, you can simply activate the Pro version without losing any of your data. Please note that we recommend that you do a complete backup whenever you make big changes to your website.
 
 == Changelog ==
+
+= 2.6.4 =
+* Fix - Undefined variable notice in player list.
+
+= 2.6.3 =
+* Fix - Assign past teams during player import.
+* Fix - Next team column displaying events furthest away.
+* Fix - Add fallback array_replace function for PHP versions earlier than 5.3.
+* Fix - Add fallback for web hosts that don't support multibyte PHP functions, causing blank player profiles.
+
+= 2.6.2 =
+* Fix - Newly added players from past and current team appearing in player lists.
+* Fix - Player lists appearing empty without league, season, and team selected.
+
+= 2.6.1 =
+* Fix - Player lists with a team selected showing players from other teams.
+* Fix - REST API endpoints not resolving for players.
+* Fix - Empty system status page.
+
+= 2.6 =
+* Feature - Add custom details to events using event specs.
+* Feature - Conditional equations for variables.
+* Feature - Display the next opponent in league tables.
+* Feature - Short name option added to teams.
+* Feature - Automatic event titles using short name when available.
+* Feature - Display featured image in countdown widget.
+* Tweak - Stronger connections between leagues, seasons, and teams for automatic player lists.
+* Tweak - Relative date option added to editor shortcodes.
+* Tweak - Display only current team in player list.
+* Tweak - Filter players dropdown by current team only.
+* Tweak - Allow 0 as a squad number when importing players.
+* Tweak - Prevent filtering through empty results.
+* Fix - Interpreting non-integer substitution times.
+* Fix - Warning when sorting terms without order.
+* Localization - Add WPML support to staff header.
+* Localization - Fix RTL not being applied in league tables.
 
 = 2.5.10 =
 * Fix - Date ranges not being applied to calendars.
