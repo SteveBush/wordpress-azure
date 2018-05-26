@@ -19,7 +19,7 @@ class M_Photocrati_Stripe extends C_Base_Module
 			'photocrati-stripe',
 			'Stripe',
 			'Provides integration with Stripe payment gateway',
-			'0.16',
+			'2.6.0',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com'

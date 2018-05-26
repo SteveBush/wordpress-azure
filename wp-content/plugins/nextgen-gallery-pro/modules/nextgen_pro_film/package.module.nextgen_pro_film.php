@@ -69,7 +69,7 @@ class A_NextGen_Pro_Film_Controller extends Mixin
         $params = array('images' => $images, 'storage' => C_Gallery_Storage::get_instance(), 'thumbnail_size_name' => $thumbnail_size_name, 'effect_code' => $this->object->get_effect_code($displayed_gallery), 'id' => $id, 'pagination' => $pagination);
         $params = $this->object->prepare_display_parameters($displayed_gallery, $params);
         // Render view/template
-        return preg_replace('~>\\s*\\n\\s*<~', '><', $this->render_view('photocrati-nextgen_pro_film#nextgen_pro_film', $params, $return));
+        return preg_replace('~>\\s*\\n\\s*<~', '><', $this->render_partial('photocrati-nextgen_pro_film#nextgen_pro_film', $params, $return));
     }
 }
 /**

@@ -31,7 +31,7 @@ class M_NextGen_Pro_Ecommerce extends C_Base_Module
             'photocrati-nextgen_pro_ecommerce',
             'Ecommerce',
             'Provides ecommerce capabilities for the NextGEN Pro Lightbox',
-            '0.38',
+            '2.6.0',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -215,7 +215,8 @@ class M_NextGen_Pro_Ecommerce extends C_Base_Module
             'NextGEN Change options',
             NGG_PRO_ECOMMERCE_OPTIONS_PAGE,
             array(&$controller, 'index_action'),
-            path_join(NGGALLERY_URLPATH, 'admin/images/nextgen_16_color.png')
+            path_join(NGGALLERY_URLPATH, 'admin/images/imagely_icon.png'),
+            11
         );
     }
 
@@ -804,6 +805,10 @@ class M_NextGen_Pro_Ecommerce extends C_Base_Module
 			wp_enqueue_script('ngg_ecommerce_roles', $router->get_static_url('photocrati-nextgen_pro_ecommerce#roles.js'));
 			wp_localize_script('ngg_ecommerce_roles', 'ngg_change_options_note', __('(includes Ecommerce Options)', 'nextgen-gallery-pro'));
 		}
+        // Load ecommerce admin css file for orders admin pages
+        if ( isset($_REQUEST['post_type']) && ($_REQUEST['post_type'] == 'ngg_order') ) {
+            wp_enqueue_style( 'ngg_order_admin', $router->get_static_url('photocrati-nextgen_pro_ecommerce#admin.css'));
+        }
 	}
 
     function enqueue_resources()

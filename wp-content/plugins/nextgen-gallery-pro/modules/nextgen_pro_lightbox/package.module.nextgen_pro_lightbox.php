@@ -35,7 +35,11 @@ class A_NextGen_Pro_Lightbox_Ajax extends Mixin
                     $page = 1;
                 }
                 $offset = $settings['localize_limit'] * ($page === 1 ? $page : $page - 1);
-                $retval = M_Galleria::format_entities($displayed_gallery->get_entities($settings['localize_limit'], $offset));
+                $retval = M_Galleria::format_entities($displayed_gallery->get_entities(
+                    $settings['localize_limit'],
+                    // limit
+                    $offset
+                ));
             }
         }
         return apply_filters('ngg_pro_lightbox_images_queue', $retval);
@@ -128,7 +132,47 @@ class A_NextGen_Pro_Lightbox_Form extends Mixin
      */
     function _get_field_names()
     {
-        return array('nextgen_pro_lightbox_color_options_header', 'nextgen_pro_lightbox_style', 'nextgen_pro_lightbox_background_color', 'nextgen_pro_lightbox_sidebar_background_color', 'nextgen_pro_lightbox_sidebar_button_color', 'nextgen_pro_lightbox_carousel_background_color', 'nextgen_pro_lightbox_carousel_text_color', 'nextgen_pro_lightbox_overlay_icon_color', 'nextgen_pro_lightbox_sidebar_button_background', 'nextgen_pro_lightbox_icon_color', 'nextgen_pro_lightbox_icon_background_enabled', 'nextgen_pro_lightbox_icon_background_rounded', 'nextgen_pro_lightbox_icon_background', 'nextgen_pro_lightbox_lightbox_and_image_sizing_header', 'nextgen_pro_lightbox_padding', 'nextgen_pro_lightbox_image_crop', 'nextgen_pro_lightbox_image_pan', 'nextgen_pro_lightbox_enable_fullscreen', 'nextgen_pro_lightbox_social_header', 'nextgen_pro_lightbox_enable_comments', 'nextgen_pro_lightbox_display_comments', 'nextgen_pro_lightbox_enable_sharing', 'nextgen_pro_lightbox_facebook_app_id', 'nextgen_pro_lightbox_enable_twitter_cards', 'nextgen_pro_lightbox_twitter_username', 'nextgen_pro_lightbox_thumbnail_carousel_header', 'nextgen_pro_lightbox_display_carousel', 'nextgen_pro_lightbox_display_captions', 'nextgen_pro_lightbox_transition_effects_header', 'nextgen_pro_lightbox_transition_effect', 'nextgen_pro_lightbox_transition_speed', 'nextgen_pro_lightbox_slideshow_speed', 'nextgen_pro_lightbox_interaction_pause', 'nextgen_pro_lightbox_other_settings_header', 'nextgen_pro_lightbox_enable_routing', 'nextgen_pro_lightbox_router_slug', 'nextgen_pro_lightbox_localize_limit');
+        return array(
+            'nextgen_pro_lightbox_color_options_header',
+            'nextgen_pro_lightbox_style',
+            'nextgen_pro_lightbox_background_color',
+            'nextgen_pro_lightbox_sidebar_background_color',
+            'nextgen_pro_lightbox_sidebar_button_color',
+            'nextgen_pro_lightbox_sidebar_button_background',
+            'nextgen_pro_lightbox_carousel_background_color',
+            'nextgen_pro_lightbox_carousel_text_color',
+            'nextgen_pro_lightbox_overlay_icon_color',
+            'nextgen_pro_lightbox_icon_color',
+            'nextgen_pro_lightbox_icon_background_enabled',
+            'nextgen_pro_lightbox_icon_background_rounded',
+            'nextgen_pro_lightbox_icon_background',
+            'nextgen_pro_lightbox_lightbox_and_image_sizing_header',
+            'nextgen_pro_lightbox_padding',
+            'nextgen_pro_lightbox_image_crop',
+            'nextgen_pro_lightbox_image_pan',
+            'nextgen_pro_lightbox_enable_fullscreen',
+            'nextgen_pro_lightbox_social_header',
+            'nextgen_pro_lightbox_enable_comments',
+            'nextgen_pro_lightbox_display_comments',
+            'nextgen_pro_lightbox_enable_sharing',
+            'nextgen_pro_lightbox_facebook_app_id',
+            'nextgen_pro_lightbox_enable_twitter_cards',
+            'nextgen_pro_lightbox_twitter_username',
+            'nextgen_pro_lightbox_thumbnail_carousel_header',
+            'nextgen_pro_lightbox_display_carousel',
+            'nextgen_pro_lightbox_display_captions',
+            'nextgen_pro_lightbox_thumbnail_carousel_enabled',
+            // TODO: Add header "Ecommerce"
+            'nextgen_pro_lightbox_transition_effects_header',
+            'nextgen_pro_lightbox_transition_effect',
+            'nextgen_pro_lightbox_transition_speed',
+            'nextgen_pro_lightbox_slideshow_speed',
+            'nextgen_pro_lightbox_interaction_pause',
+            'nextgen_pro_lightbox_other_settings_header',
+            'nextgen_pro_lightbox_enable_routing',
+            'nextgen_pro_lightbox_router_slug',
+            'nextgen_pro_lightbox_localize_limit',
+        );
     }
     function _render_nextgen_pro_lightbox_color_options_header_field($lightbox)
     {
@@ -260,6 +304,10 @@ class A_NextGen_Pro_Lightbox_Form extends Mixin
     function _render_nextgen_pro_lightbox_display_captions_field($lightbox)
     {
         return $this->_render_radio_field($lightbox, 'display_captions', __('Display captions initially', 'nextgen-gallery-pro'), $lightbox->values['nplModalSettings']['display_captions'], __('When on the captions toolbar will be opened at startup', 'nextgen-gallery-pro'));
+    }
+    public function _render_nextgen_pro_lightbox_thumbnail_carousel_enabled_field($lightbox)
+    {
+        return $this->_render_select_field($lightbox, 'enable_carousel', __('Display carousel thumbnails', 'nextgen-gallery-pro'), array('always' => 'Always display thumbnails', 'never' => 'Never display thumbnails', 'nomobile' => 'Only on desktop browsers'), $lightbox->values['nplModalSettings']['enable_carousel'], __('Very large galleries can impact Pro Lightbox performance on mobile devices; disable carousel thumbnails to reduce that impact'));
     }
     function _render_nextgen_pro_lightbox_display_carousel_field($lightbox)
     {
@@ -496,7 +544,7 @@ class C_OpenGraph_Controller extends C_MVC_Controller
             $params['routed_url'] = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
             // Render the opengraph metadata
             $this->expires('+1 day');
-            $this->render_view("photocrati-nextgen_pro_lightbox#opengraph", $params);
+            $this->render_partial("photocrati-nextgen_pro_lightbox#opengraph", $params);
         } else {
             header(__('Status: 404 Image not found', 'nextgen-gallery-pro'));
             echo __('Image not found', 'nextgen-gallery-pro');

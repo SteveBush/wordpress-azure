@@ -1,54 +1,89 @@
 jQuery(function($) {
-    $('#npl_content').on('npl.ready', function(e, data){
+    $('#npl_content').on('npl_ready', function(e, data) {
+
         var methods = data.methods;
-        var self = data.galleria_theme;
+        var self    = data.galleria_theme;
+
+        log = function(message, table, level) {
+            jQuery.nplModal('log', message, table, level)
+        };
+
+        log("ecommerce initializing");
+
         methods.sidebars.cart = {
-            init: function() {},
+            init: function() {
+            },
+
             render: function(id) {
+                log("ecommerce sidebars.cart.render()", {
+                    id: id
+                });
+
                 // impose overlay
-                self.$('sidebar-overlay').addClass('npl-sidebar-overlay-open');
-                self.$('sidebar-container').empty();
+                $('#npl_wrapper').addClass('npl-sidebar-overlay-open');
+                var container = $('#npl_sidebar');
+                container.empty();
                 var app = new Ngg_Pro_Cart.Views.Add_To_Cart({
                     image_id: id,
-                    container: self.$('sidebar-container')
+                    container: container
                 });
+
                 app.on('rendered', this.show_licensing_terms);
                 app.on('ready', function() {
+                    log("ecommerce sidebars.cart.render() ready");
                     app.render();
-                    self.trigger('npl.sidebar.rendered');
+                    self.trigger('npl_sidebar_rendered');
                 });
             },
 
-            show_licensing_terms: function(){
+            show_licensing_terms: function() {
+                log("ecommerce sidebars.cart.show_licensing_terms() beginning");
+
                 var request = {
                     action: 'get_digital_download_settings',
                     image_id: this.image_id
                 };
+
                 var header = this.$el.find('#ngg_digital_downloads_header');
-                $.post(parent.photocrati_ajax.url, request, function(response){
-                    if (typeof(response) != 'object') response = JSON.parse(response);
+
+                $.post(parent.photocrati_ajax.url, request, function(response) {
+                    if (typeof(response) !== 'object') {
+                        response = JSON.parse(response);
+                    }
+
+                    log("ecommerce sidebars.cart.show_licensing_terms() response", {
+                        response: response
+                    });
+
                     header.html(response.header);
-                    self.$('sidebar-overlay').removeClass('npl-sidebar-overlay-open');
+                    $('#npl_wrapper').removeClass('npl-sidebar-overlay-open');
                 });
             },
 
             get_type: function() {
                 return 'cart';
             },
+
             events: {
+
                 bind: function() {
-                    self.bind('npl.init', this.npl_init);
-                    self.bind('npl.init.keys', this.npl_init_keys);
+                    log("ecommerce sidebars.cart.events.bind()");
+                    self.bind('npl_init', this.npl_init);
+                    self.bind('npl_init_keys', this.npl_init_keys);
                     self.bind('image', this.image);
                     self.bind('loadstart', this.loadstart);
                 },
+
                 loadstart: function() {
+                    log("ecommerce sidebars.cart.events.loadstart()");
                     if ($.nplModal('get_state').sidebar && $.nplModal('get_state').sidebar == methods.sidebars.cart.get_type()) {
-                        self.$('sidebar-overlay').addClass('npl-sidebar-overlay-open');
+                        $('#npl_wrapper').addClass('npl-sidebar-overlay-open');
                     }
                 },
+
                 _image_ran_once: false,
                 image: function() {
+                    log("ecommerce sidebars.cart.events.image()");
                     if (methods.sidebars.cart.events.is_ecommerce_enabled()) {
                         if (!methods.sidebars.cart._image_ran_once) {
                             // possibly display the cart sidebar at startup
@@ -82,6 +117,7 @@ jQuery(function($) {
                 },
 
                 npl_init: function() {
+                    log("ecommerce sidebars.cart.events.npl_init()");
                     var is_ecommerce_enabled = methods.sidebars.cart.events.is_ecommerce_enabled;
                     if (is_ecommerce_enabled()) {
                         // Add cart toolbar button
@@ -95,7 +131,9 @@ jQuery(function($) {
                         methods.thumbnails.register_button(cart_button);
                     }
                 },
+
                 npl_init_keys: function(event) {
+                    log("ecommerce sidebars.cart.events.npl_init_keys");
                     var input_types = methods.galleria.get_keybinding_exclude_list();
                     self.attachKeyboard({
                         // 'e' for shopping cart

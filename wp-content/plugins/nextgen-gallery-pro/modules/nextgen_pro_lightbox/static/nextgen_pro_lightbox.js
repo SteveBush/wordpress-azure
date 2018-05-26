@@ -4,6 +4,8 @@
     function nplModal() {
 
         var core = {
+            debug: false,
+            debug_level: 1, // 1-4
             state: {
                 slug: null,
                 gallery_id: null,
@@ -23,15 +25,29 @@
             },
 
             init: function(parameters) {
+                core.methods.log('nplModal.init()', {
+                    parameters: parameters,
+                    defaults: core.defaults,
+                    selector: core.selector,
+                    debug: core.debug,
+                    debug_level: core.debug_level
+                });
+
                 var overlay   = $("<div id='npl_overlay'></div>");
                 var wrapper   = $("<div id='npl_wrapper'></div>");
-                var spinner   = $("<div id='npl_spinner_container' class='npl-loading-spinner'><i id='npl_spinner' class='fa fa-spin fa-spinner hidden'></i></div>");
+                var spinner   = $("<div id='npl_spinner_container' class='npl-loading-spinner hidden'><i id='npl_spinner' class='fa fa-spin fa-spinner'></i></div>");
                 var btn_close = $("<div id='npl_button_close' class='hidden'><i class='fa fa-times-circle'></i></div>");
                 var content   = $("<div id='npl_content'></div>");
+                var sidebar   = $("<div id='npl_sidebar'></div>");
+                var s_overlay = $("<div id='npl_sidebar_overlay'><i class='fa fa-spin fa-spinner'/></div>");
+                var toggle    = $("<i   id='npl_sidebar_toggle' class='fa fa-arrow-circle-right'/>");
 
                 if (core.methods.mobile.browser.ios()) {
                     overlay.addClass('npl_ios_no_opacity');
                     wrapper.addClass('npl_ios_hack');
+                }
+                if (core.methods.is_ie9()) {
+                    wrapper.addClass('npl_ie9_flex_hack');
                 }
 
                 // Provide a hook for third-parties to add their own methods
@@ -40,13 +56,18 @@
                 overlay.css({background: core.methods.get_setting('background_color')});
                 spinner.css({color: core.methods.get_setting('icon_color')});
                 btn_close.css({color: core.methods.get_setting('overlay_icon_color')});
+                sidebar.css({background: core.methods.get_setting('sidebar_background_color')});
+                toggle.css({color: core.methods.get_setting('overlay_icon_color')});
 
                 var body = $('body');
                 body.append(overlay);
                 body.append(wrapper);
                 wrapper.append(spinner);
                 wrapper.append(btn_close);
+                wrapper.append(toggle);
                 wrapper.append(content);
+                wrapper.append(sidebar);
+                wrapper.append(s_overlay);
 
                 // get_setting() isn't available when declaring the base defaults
                 parameters = $.extend(parameters, {router_slug: core.methods.get_setting('router_slug')});
@@ -118,6 +139,9 @@
                         ratio = window.devicePixelRatio;
                     }
 
+                    core.methods.log('nplModal.getDPIRatio()', {
+                        result: ratio
+                    });
                     return ratio;
                 },
 
@@ -125,9 +149,9 @@
                     var slug     = arguments[0];
                     var image_id = arguments[1];
                     var sidebar  = null;
-                    if (arguments.length == 3) {
+                    if (arguments.length === 3) {
                         sidebar = arguments[2];
-                        if (sidebar == '1') {
+                        if (sidebar === '1') {
                             sidebar = 'comments';
                         }
                     }
@@ -139,6 +163,13 @@
                         gallery_id = slug;
                     }
 
+                    // Image_ID should remain an integer for all NGG provided images
+                    // but it's passed to this method as a string
+                    var old_state = this.get_state();
+                    if (parseInt(image_id) === old_state.image_id) {
+                        image_id = parseInt(image_id);
+                    }
+
                     var state = {
                         gallery_id: gallery_id,
                         image_id: image_id,
@@ -148,11 +179,9 @@
 
                     this.set_state(state);
 
-                    $('#npl_content').trigger('npl.url_handler', [state]);
+                    $('#npl_content').trigger('npl_url_handler', [state]);
 
-                    // the galleria theme handles url updates between image ids, so if the modal window is already open
-                    // and is already looking at the same gallery we don't need to do anything here
-                    if (this.is_open() && gallery_id == core.state.gallery_id) {
+                    if (this.is_open() && gallery_id === core.state.gallery_id) {
                         return;
                     }
 
@@ -176,6 +205,9 @@
                 },
 
                 set_state: function(state) {
+                    core.methods.log("nplModal.set_state()", {
+                        state: state
+                    });
                     core.state = state;
                 },
 
@@ -188,27 +220,40 @@
                     } else {
                         tmp = def;
                     }
-                    if (tmp == 1)   tmp = true;
-                    if (tmp == 0)   tmp = false;
-                    if (tmp == '1') tmp = true;
-                    if (tmp == '0') tmp = false;
+                    if (tmp === 1)   tmp = true;
+                    if (tmp === 0)   tmp = false;
+                    if (tmp === '1') tmp = true;
+                    if (tmp === '0') tmp = false;
+
+                    core.methods.log('nplModal.get_setting()', {
+                        name: name,
+                        result: tmp
+                    }, 3);
                     return tmp;
                 },
 
                 get_slug: function (gallery_id) {
                     var slug = gallery_id;
-                    if ('undefined' == typeof window.galleries) { return slug; }
+                    if ('undefined' === typeof window.galleries) { return slug; }
 
                     $.each(galleries, function(index, gallery) {
-                        if (gallery.slug && gallery.ID == gallery_id) {
+                        if (gallery.slug && gallery.ID === gallery_id) {
                             slug = gallery.slug;
                         }
                     });
 
+                    core.methods.log('nplModal.get_slug()', {
+                        gallery_id: gallery_id,
+                        result: slug
+                    });
                     return slug;
                 },
 
                 open: function($el) {
+                    core.methods.log('nplModal.open()', {
+                        el: $el
+                    });
+
                     if (this.mobile.browser.any()) {
                         this.fullscreen.enter();
                     }
@@ -233,10 +278,10 @@
 
                     // Determine the image id
                     if ($el.data('nplmodal-image-id'))
-                        params.image_id = $el.data('nplmodal-image-id');
+                        params.image_id = parseInt($el.data('nplmodal-image-id'));
                     else if ($el.data('image-id'))
-                        params.image_id = $el.data('image-id');
-                    else if (params.gallery_id == '!')
+                        params.image_id = parseInt($el.data('image-id'));
+                    else if (params.gallery_id === '!')
                         params.image_id = $el.attr('href');
 
                     // Determine the slug
@@ -250,11 +295,18 @@
                     // Are we to still open the lightbox?
                     if (params.open_the_lightbox) {
                         // open the pro-lightbox manually
-                        if (params.gallery_id == '!' || !this.get_setting('enable_routing')) {
+                        if (params.gallery_id === '!' || !this.get_setting('enable_routing')) {
                             this.open_modal(params.gallery_id, params.image_id, null);
                         } else {
                             // open the pro-lightbox through our backbone.js router
                             core.methods.router.front_page_pushstate(params.gallery_id, params.image_id);
+
+                            core.methods.set_state({
+                                gallery_id: params.gallery_id,
+                                image_id: params.image_id,
+                                sidebar: params.show_sidebar,
+                                slug: params.slug
+                            });
 
                             this.router.navigate(
                                 core.options.router_slug
@@ -319,6 +371,8 @@
                     $(window).bind('keydown', self.handle_keyboard_input);
                     $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', self.fullscreen.event_handler);
 
+                    $('#npl_content').bind('npl_images_ready', self.open_modal_final);
+
                     // handle exit clicks/touch events
                     $('#npl_overlay, #npl_button_close').on('touchstart click', function(event) {
                         event.stopPropagation();
@@ -331,62 +385,123 @@
                 },
 
                 open_modal: function(gallery_id, image_id, sidebar) {
+                    core.methods.log('nplModal.open_modal()', {
+                        gallery_id: gallery_id,
+                        image_id: image_id,
+                        sidebar: sidebar
+                    });
+
                     this._is_open = true;
-                    var self = this;
 
                     // disables browser scrollbar display
                     $('html, body').toggleClass('nextgen_pro_lightbox_open');
                     core.state.image_id   = image_id;
                     core.state.gallery_id = gallery_id;
 
-                    $('#npl_spinner, #npl_button_close').removeClass('hidden');
+                    $('#npl_spinner_container').removeClass('hidden');
+                    $('#npl_button_close').removeClass('hidden');
 
-                    self.fullsize.exit();
-                    self.mobile.open();
+                    this.fullsize.exit();
+                    this.mobile.open();
 
-                    setTimeout(function() {
-                        var images = core.methods.fetch_images.fetch_images(gallery_id, image_id);
-                        var show_ndx = 0;
-                        var show_hdpi = core.methods.getDPIRatio() > 1;
+                    // fetch_images(), when done building a list of images to feed to Galleria, will trigger
+                    // an event on #npl_content that is handled by open_modal_final()
+                    core.methods.fetch_images.fetch_images(gallery_id, image_id);
+                },
 
-                        $.each(images, function(index, element) {
-                            // Mark the requested image as the one to show at startup
-                            if (image_id == element.image_id) {
-                                show_ndx = index;
+                open_modal_final: function(event, gallery_id) {
+                    var show_ndx = 0;
+                    var show_hdpi = core.methods.getDPIRatio() > 1;
+                    var images = core.methods.fetch_images.gallery_image_cache[core.state.gallery_id];
+                    var sidebar = core.state.sidebar;
+
+                    $.each(images, function(index, element) {
+                        // Mark the requested image as the one to show at startup
+                        if (parseInt(core.state.image_id) === parseInt(element.image_id)) {
+                            show_ndx = index;
+                        }
+
+                        // In case we're viewing a WP or non-NGG image
+                        if (typeof element.full_use_hdpi !== 'undefined') {
+                            // Massage our data for High-DPI screens
+                            if (show_hdpi && element.full_use_hdpi) {
+                                element.image = element.full_srcsets.hdpi;
+                            } else {
+                                // In case the plain 'image' is a dynamically-shrunk version:
+                                // we always want to use the 'full' size image when available
+                                element.image = element.full_image;
                             }
+                        }
+                    });
 
-                            // In case we're viewing a WP or non-NGG image
-                            if (typeof element.full_use_hdpi != 'undefined') {
-                                // Massage our data for High-DPI screens
-                                if (show_hdpi && element.full_use_hdpi) {
-                                    element.image = element.full_srcsets.hdpi;
-                                } else {
-                                    // In case the plain 'image' is a dynamically-shrunk version:
-                                    // we always want to use the 'full' size image when available
-                                    element.image = element.full_image;
-                                }
-                            }
-                        });
+                    // Determine if carousel thumbnails should be enabled
+                    var thumbnails       = core.methods.get_setting('enable_carousel', 'always');
+                    var thumbnails_limit = core.methods.get_setting('carousel_thumbnails_limit', 250);
+                    var gallery          = core.methods.get_gallery_from_id(gallery_id);
+                    if (thumbnails === 'always') {
+                        thumbnails = 'lazy';
+                    } else if (thumbnails === 'never') {
+                        thumbnails = false;
+                    } else if (thumbnails === 'nomobile') {
+                        if (core.methods.mobile.browser.any()) {
+                            thumbnails = false;
+                        } else {
+                            thumbnails = 'lazy';
+                        }
+                    }
 
-                        Galleria.run('#npl_content', {
-                            responsive: true,
-                            thumbQuality: false,
-                            preload: 4,
-                            theme: 'nextgen_pro_lightbox',
-                            dataSource: images,
-                            show: show_ndx,
-                            variation:           'nggpl-variant-' + self.get_setting('style', ''),
-                            transition:          self.get_setting('transition_effect', 'slide'),
-                            touchTransition:     self.get_setting('touch_transition_effect', 'slide'),
-                            imagePan:            self.get_setting('image_pan', false),
-                            pauseOnInteraction:  self.get_setting('interaction_pause', true),
-                            imageCrop:           self.get_setting('image_crop', true),
-                            transitionSpeed:    (self.get_setting('transition_speed', 0.4) * 1000),
-                            nggSidebar:          sidebar
-                        });
+                    // Very large galleries can severely impact performance. Disabling carousel thumbnails
+                    // can greatly relieve that impact however, so we automatically change for very large galleries
+                    if (gallery && gallery.images_list_count >= thumbnails_limit) {
+                        thumbnails = false;
+                    }
 
-                        $('#npl_spinner').addClass('hidden');
-                    }, 5);
+                    if (!thumbnails) {
+                        $('#npl_wrapper').addClass('nggpl-carousel-hidden');
+                    }
+
+                    if (!core.methods.mobile.browser.any() && (sidebar
+                    || (core.methods.get_setting('display_cart', false)     && core.methods.get_displayed_gallery_setting(gallery_id, 'is_ecommerce_enabled', false))
+                    || (core.methods.get_setting('display_comments', false) && core.methods.get_setting('enable_comments', false)))) {
+                        $('#npl_wrapper').addClass('npl-sidebar-open npl-sidebar-overlay-open');
+                    }
+
+                    if (core.methods.get_setting('display_captions', false)) {
+                        $('#npl_wrapper').addClass('npl-info-open');
+                    }
+
+                    if (core.methods.get_setting('style')) {
+                        $('#npl_wrapper').addClass('npl-variant-' + core.methods.get_setting('style'))
+                    }
+
+                    if (images.length >= thumbnails_limit) {
+                        thumbnails = false;
+                    }
+
+                    core.methods.log('nplModal.open_modal() about to invoke Galleria.run()', {
+                        thumbnails: thumbnails,
+                        images: images,
+                        show: show_ndx,
+                        sidebar: sidebar
+                    });
+
+                    Galleria.run('#npl_content', {
+                        responsive: true,
+                        thumbQuality: false,
+                        thumbnails: thumbnails,
+                        preload: 4,
+                        theme: 'nextgen_pro_lightbox',
+                        dataSource: images,
+                        show: show_ndx,
+                        variation:           'nggpl-variant-' + core.methods.get_setting('style', ''),
+                        transition:          core.methods.get_setting('transition_effect', 'slide'),
+                        touchTransition:     core.methods.get_setting('touch_transition_effect', 'slide'),
+                        imagePan:            core.methods.get_setting('image_pan', false),
+                        pauseOnInteraction:  core.methods.get_setting('interaction_pause', true),
+                        imageCrop:           core.methods.get_setting('image_crop', true),
+                        transitionSpeed:    (core.methods.get_setting('transition_speed', 0.4) * 1000),
+                        nggSidebar:          sidebar
+                    });
                 },
 
                 // When rotaning or opening the keyboard some mobile browsers increase the user zoom level beyond the default.
@@ -396,7 +511,7 @@
                     meta: null,
                     original: null, // original viewport setting; it's restored at closing
                     adjust: true,
-                    ontouch: !!('ontouchstart' in window),
+                    ontouch: ('ontouchstart' in window),
                     init: function() {
                         // suppress a warning in desktop chrome (provided no touch input devices are attached) that the following
                         // content meta-attribute we're about to set is invalid. it technically is, but it's the only way
@@ -404,7 +519,6 @@
                         if (!this.ontouch) {
                             this.adjust = false;
                         }
-                        var version = this.ios_version();
                         var doc = window.document;
                         if (!doc.querySelector) { return; } // this isn't available on pre 3.2 safari
                         this.meta     = doc.querySelector("meta[name=viewport]");
@@ -412,18 +526,14 @@
                     },
                     open: function() {
                         if (this.adjust && this.meta) {
+                            core.methods.log('nplModal.mobile.open()');
                             this.meta.setAttribute("content", this.original + ', width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no');
                         }
                     },
                     close: function() {
                         if (this.adjust && this.meta) {
+                            core.methods.log('nplModal.mobile.close()');
                             this.meta.setAttribute("content", this.original);
-                        }
-                    },
-                    ios_version: function() {
-                        if (/iP(hone|od|ad)/.test(navigator.platform)) {
-                            var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
-                            return [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
                         }
                     },
                     browser: {
@@ -456,22 +566,28 @@
                     }
                 },
 
+                is_ie9: function() {
+                    return navigator.appVersion.indexOf("MSIE 9.") !== -1;
+                },
+
                 // hide our content and close up
                 close_modal: function() {
                     if (!this._is_open) {
                         return;
                     }
 
+                    core.methods.log('nplModal.close_modal()');
+
                     var content = $('#npl_content');
 
                     // allow for cleanup handlers to run
-                    content.trigger('npl.closing');
+                    content.trigger('npl_closing');
 
                     this.fullsize.enter();
                     this.fullscreen.exit();
 
                     // for use with Galleria it is important that npl_content never have display:none set
-                    $('#npl_spinner, #npl_button_close').addClass('hidden');
+                    $('#npl_spinner_container, #npl_button_close').addClass('hidden');
 
                     // enables displaying browser scrollbars
                     $('html, body').toggleClass('nextgen_pro_lightbox_open');
@@ -483,7 +599,11 @@
 
                     // reset our modified url to our original state
                     if (this.get_setting('enable_routing')) {
-                        history.pushState('', document.title, window.location.pathname + window.location.search);
+                        if (history.pushState) {
+                            history.pushState('', document.title, window.location.pathname + window.location.search);
+                        } else {
+                            window.location.hash = '';
+                        }
                         if (this.get_setting('is_front_page') && history.pushState) {
                             history.pushState({}, document.title, core.options.initial_url);
                         }
@@ -500,11 +620,15 @@
                     },
 
                     enter: function() {
+                        core.methods.log('nplModal.fullsize.enter()');
+
                         $('#npl_wrapper').removeClass('npl_open_with_padding');
                         this._is_fullsize = true;
                     },
 
                     exit: function() {
+                        core.methods.log('nplModal.fullsize.exit()');
+
                         if (parseInt(core.methods.get_setting('padding', '0')) > 0
                         &&  !core.methods.mobile.browser.ios()) {
                             $('#npl_wrapper').addClass('npl_open_with_padding');
@@ -514,6 +638,8 @@
                     },
 
                     toggle: function() {
+                        core.methods.log('nplModal.fullsize.toggle()');
+
                         if (this.fullsize._is_fullsize) {
                             this.fullsize.exit();
                         } else {
@@ -529,6 +655,8 @@
                     // NOTE: this can only be done in response to a user action; just calling enter_fullscreen() programatically
                     // will not work. Firefox & IE will produce errors, but Chrome (presently, 2013-04) silently fails
                     enter: function() {
+                        core.methods.log('nplModal.fullscreen.enter()');
+
                         // do not use a jquery selector, it will not work
                         var element = document.getElementById('npl_wrapper');
 
@@ -546,6 +674,8 @@
                     },
 
                     exit: function() {
+                        core.methods.log('nplModal.fullscreen.exit()');
+
                         if (document.cancelFullScreen) {
                             document.cancelFullScreen();
                         } else if (document.exitFullscreen) {
@@ -560,6 +690,8 @@
                     },
 
                     toggle: function() {
+                        core.methods.log('nplModal.fullscreen.toggle()');
+
                         if (this.fullscreen.has_support()) {
                             if (this.fullscreen.active()) {
                                 this.fullscreen.exit();
@@ -584,14 +716,20 @@
                     },
 
                     has_support: function() {
-                        return document.fullscreenEnabled || document.mozFullScreenEnabled || document.webkitFullscreenEnabled|| document.msFullscreenEnabled ? true : false;
+                        var result = !!(document.fullscreenEnabled || document.mozFullScreenEnabled || document.webkitFullscreenEnabled || document.msFullscreenEnabled);
+
+                        core.methods.log('nplModal.fullscreen.has_support()', {
+                            result: result
+                        });
+
+                        return result;
                     }
                 },
 
                 handle_keyboard_input: function(event) {
                     if (core.methods.is_open()) {
                         // escape key closes the modal
-                        if (event.which == 27) {
+                        if (event.which === 27) {
                             core.methods.close_modal();
                         }
                     }
@@ -599,6 +737,42 @@
 
                 is_open: function() {
                     return this._is_open;
+                },
+
+                log: function(message, table, level) {
+                    if (!core.debug) {
+                        return;
+                    }
+
+                    if (typeof level === 'undefined') {
+                        level = 1;
+                    }
+
+                    if (level > core.debug_level) {
+                        return;
+                    }
+
+                    if (typeof table === 'undefined') {
+                        console.log("NPL Debug:", message)
+                    } else {
+                        console.log("NPL Debug:", message, table);
+                    }
+
+                },
+
+                logging: {
+                    enable: function() {
+                        console.log("Enabling NextGen Pro Lightbox debugging");
+                        core.debug = true;
+                    },
+                    disable: function() {
+                        console.log("Disabling NextGen Pro Lightbox debugging");
+                        core.debug = false;
+                    },
+                    set_level: function(level) {
+                        console.log("Setting NextGen Pro Lightbox debug level to " + level);
+                        core.level = parseInt(level);
+                    }
                 },
 
                 fetch_images: {
@@ -610,54 +784,66 @@
                     is_cached: function(gallery_id, image_id) {
                         var found = false;
                         $.each(this.gallery_image_cache[gallery_id], function (ndx, image) {
-                            if (image_id == image.image_id) {
+                            if (image_id === image.image_id) {
                                 found = true;
                             }
                         });
+
+                        core.methods.log("nplModal.fetch_images.is_cached()", {
+                            gallery_id: gallery_id,
+                            image_id: image_id,
+                            gallery_cache: this.gallery_image_cache[gallery_id],
+                            found: found
+                        }, 4);
+
                         return found;
                     },
 
                     fetch_images: function(gallery_id, image_id) {
+                        core.methods.log('nplModal.fetch_images.fetch_images() beginning');
                         var self = this;
 
                         this.ajax_delay = core.methods.get_setting('ajax_delay', 1400);
 
-                        if (typeof this.gallery_image_cache[gallery_id] == 'undefined') {
+                        if (typeof this.gallery_image_cache[gallery_id] === 'undefined') {
                             this.gallery_image_cache[gallery_id] = [];
                         }
 
                         var gallery = core.methods.get_gallery_from_id(gallery_id);
-                        if (gallery !== null) {
-                            // the cache may not be filled thanks to a looping, async fetch
-                            if (this.gallery_image_cache[gallery_id].length > 0
-                            &&  this.gallery_image_cache[gallery_id].length == gallery.images_list_count) {
-                                return this.gallery_image_cache[gallery_id];
-                            }
 
-                            $.each(gallery.images_list, function(ndx, image) {
-                                if (!self.is_cached(gallery_id, image.image_id)) {
-                                    self.gallery_image_cache[gallery_id].push(image);
-                                }
-                            });
-
-                            if (this.gallery_image_cache[gallery_id].length < gallery.images_list_count) {
-                                this.fetch_images_from_page(gallery_id);
-                                if (!this.is_cached(gallery_id, image_id)) {
-                                    this.fetch_images_from_ajax(gallery_id, image_id);
-                                } else {
-                                    this.fetch_images_from_ajax(gallery_id);
-                                }
-                            }
-                        }
-                        else {
+                        if (gallery === null) {
                             // It's not a NextGen gallery, just read from the page
-                            this.fetch_images_from_page(gallery_id);
+                            return this.fetch_non_ngg_images(gallery_id);
                         }
 
-                        return this.gallery_image_cache[gallery_id];
+                        // Gallery is already cached - just trigger the ready event
+                        if (this.gallery_image_cache[gallery_id].length === gallery.images_list_count) {
+                            return $('#npl_content').trigger('npl_images_ready', [gallery_id]);
+                        }
+
+                        // Build the cache from the list 'localized' on the page
+                        $.each(gallery.images_list, function(ndx, image) {
+                            if (!self.is_cached(gallery_id, image.image_id)) {
+                                self.gallery_image_cache[gallery_id].push(image);
+                            }
+                        });
+
+                        // Again check if our cache is full
+                        if (this.gallery_image_cache[gallery_id].length === gallery.images_list_count) {
+                            return $('#npl_content').trigger('npl_images_ready', [gallery_id]);
+                        }
+
+                        // Not all images are on this page: fetch by XHR - which handles the ready event
+                        if (this.gallery_image_cache[gallery_id].length < gallery.images_list_count) {
+                            return this.fetch_images_from_ajax(gallery_id);
+                        }
                     },
 
-                    fetch_images_from_page: function (gallery_id) {
+                    fetch_non_ngg_images: function (gallery_id) {
+                        core.methods.log('nplModal.fetch_images.fetch_non_ngg_images() beginning', {
+                            gallery_id: gallery_id
+                        });
+
                         var self = this;
 
                         core.selector.each(function() {
@@ -676,7 +862,7 @@
                                 return true; // exclude images from other galleries
                             }
 
-                            if (core.methods.get_state().gallery_id == '!' && anchor.data('nplmodal-gallery-id')) {
+                            if (core.methods.get_state().gallery_id === '!' && anchor.data('nplmodal-gallery-id')) {
                                 return true; // when viewing non-nextgen images; exclude nextgen-images
                             }
 
@@ -684,16 +870,16 @@
                             var gallery_image = {};
                             var expr          = /\.(jpeg|jpg|gif|png|bmp)$/i;
 
-                            gallery_image.image = (anchor.data('fullsize') == undefined) ? anchor.attr('href') : anchor.data('fullsize');
+                            gallery_image.image = (anchor.data('fullsize') === undefined) ? anchor.attr('href') : anchor.data('fullsize');
 
-                            if (typeof gallery_image.image != 'undefined'
+                            if (typeof gallery_image.image !== 'undefined'
                             &&  !gallery_image.image.match(expr)
                             &&  image.attr('srcset')) {
                                 var sizes = parseSrcset(image.attr('srcset'));
                                 var largest_w = 0;
 
                                 _.each(sizes, function (row) {
-                                    if (typeof row.w != undefined && row.w > largest_w) {
+                                    if (typeof row.w !== undefined && row.w > largest_w) {
                                         largest_w = row.w;
                                         gallery_image.image = row.url;
                                     }
@@ -706,7 +892,7 @@
                             }
 
                             // When in doubt we id images by their href
-                            gallery_image.image_id = (anchor.data('image-id') == undefined) ? gallery_image.image : anchor.data('image-id');
+                            gallery_image.image_id = (anchor.data('image-id') === undefined) ? gallery_image.image : anchor.data('image-id');
 
                             // no need to continue
                             if (self.is_cached(gallery_id, gallery_image.image_id)) {
@@ -733,60 +919,18 @@
 
                             self.gallery_image_cache[gallery_id].push(gallery_image);
                         });
+
+                        core.methods.log('nplModal.fetch_images.fetch_non_ngg_images() result', {
+                            result: self.gallery_image_cache[gallery_id]
+                        });
+
+                        $('#npl_content').trigger('npl_images_ready', [gallery_id])
                     },
 
-                    get_ajax_info: function(gallery_id) {
-                        if (typeof(this.ajax_info[gallery_id]) == 'undefined') {
-                            this.ajax_info[gallery_id] = {
-                                current: 0,
-                                page: 1
-                            };
-                        }
-
-                        return this.ajax_info[gallery_id];
-                    },
-
-                    increment_ajax_page: function(gallery_id) {
-                        var info = this.get_ajax_info(gallery_id);
-                        info.page++;
-                        this.update_ajax_info(gallery_id, info);
-                    },
-
-                    decrement_ajax_current: function(gallery_id) {
-                        var info = this.get_ajax_info(gallery_id);
-                        info.current--;
-                        this.update_ajax_info(gallery_id, info);
-                    },
-
-                    increment_ajax_current: function(gallery_id) {
-                        var info = this.get_ajax_info(gallery_id);
-                        info.current++;
-                        this.update_ajax_info(gallery_id, info);
-                    },
-
-                    update_ajax_info: function(gallery_id, info) {
-                        this.ajax_info[gallery_id] = info;
-                    },
-
-                    fetch_images_from_ajax: function(gallery_id, image_id) {
-                        if (!core.methods.is_open()) {
-                            return;
-                        }
-
-                        // This must be done early to prevent more than one request being made
-                        this.increment_ajax_current(gallery_id);
-
+                    create_deferred_ajax: function(gallery_id, gallery, page) {
                         var self = this;
-                        var async = (typeof image_id == 'undefined' || typeof image_id == 'boolean');
-                        var content = $('#npl_content');
-
-                        var original_gallery = core.methods.get_gallery_from_id(gallery_id);
-                        var gallery = $.extend({}, original_gallery);
-                        delete gallery.images_list;
-                        delete gallery.display_settings;
-
-                        $.ajax({
-                            async: async,
+                        return $.ajax({
+                            async: true,
                             url: core.options.ajax_url,
                             method: 'POST',
                             data: {
@@ -794,110 +938,56 @@
                                 gallery: gallery,
                                 action: 'pro_lightbox_load_images',
                                 lang: core.methods.get_setting('lang', null),
-                                page: self.get_ajax_info(gallery_id).page
+                                page: page
                             },
                             dataType: 'json',
                             success: function(data) {
-                                if (async) {
-                                    if (!core.methods.is_open()) {
-                                        return;
-                                    }
-                                    $.each(data, function (ndx, newimage) {
-                                        if (!self.is_cached(gallery_id, newimage.image_id)) {
-                                            var galleria = content.data('galleria');
-                                            content.trigger('npl.newimage', {image: newimage});
-                                            self.gallery_image_cache[gallery_id].push(newimage);
-                                            galleria.push(newimage);
-                                            // the user has requested an image not on this page; once the ajax request has
-                                            // loaded the image the user wants we ask that Galleria show it right away.
-                                            // We use setTimeout() here because Galleria requires a minor pause after .push()
-                                            if (newimage.image_id == core.state.image_id) {
-                                                var ndxtoshow = self.gallery_image_cache[gallery_id].length - 1;
-                                                setTimeout(function() {
-                                                    galleria.show(ndxtoshow);
-                                                }, 20);
-                                            }
-                                        }
-                                    });
-
-                                    // (possibly) start the whole procedure over again
-                                    self.decrement_ajax_current(gallery_id);
-                                    self.set_fetch_interval(gallery_id);
-
-                                } else if (!async) {
-                                    $.each(data, function(ndx, newimage) {
-                                        $('#npl_content').trigger('npl.newimage', {image: newimage});
+                                core.methods.log('nplModal.fetch_images.create_deferred_ajax() response', {
+                                    response: data
+                                });
+                                $.each(data, function(ndx, newimage) {
+                                    if (!self.is_cached(gallery_id, newimage.image_id)) {
                                         self.gallery_image_cache[gallery_id].push(newimage);
-                                    });
-
-                                    self.decrement_ajax_current(gallery_id);
-                                    if (!self.is_cached(gallery_id, image_id)) {
-                                        // we haven't loaded the requested image id yet, keep making more
-                                        // syncronous requests until we've pulled it from the server
-                                        self.increment_ajax_page(gallery_id);
-                                        self.fetch_images_from_ajax(gallery_id, image_id);
-                                    } else {
-                                        // Let the synchronous requests end; begin async polling for more at a reduced speed
-                                        self.set_fetch_interval(gallery_id);
                                     }
-                                }
+                                });
                             }
+                        });
+                    },
+
+                    fetch_images_from_ajax: function(gallery_id, image_id) {
+                        if (!core.methods.is_open()) {
+                            return;
+                        }
+
+                        core.methods.log('nplModal.fetch_images.fetch_images_from_ajax()', {
+                            gallery_id: gallery_id,
+                            image_id: image_id
+                        });
+
+                        var self = this;
+                        var original_gallery = core.methods.get_gallery_from_id(gallery_id);
+                        var gallery = $.extend({}, original_gallery);
+                        delete gallery.images_list;
+                        delete gallery.display_settings;
+
+                        var defers = [];
+                        for (i = 0; i <= Math.ceil(gallery.images_list_count / core.methods.get_setting('localize_limit')); i++) {
+                            defers.push(core.methods.fetch_images.create_deferred_ajax(gallery_id, gallery, i));
+                        }
+
+                        $.when.apply($, defers).then(function() {
+                            $('#npl_content').trigger('npl_images_ready', [gallery_id]);
                         });
 
                         return self.gallery_image_cache[gallery_id];
-                    },
-
-                    /**
-                     * Assigns an interval timer to this.ajax_interval controlling how frequently we poll for new images
-                     *
-                     * @param gallery_id
-                     */
-                    set_fetch_interval: function(gallery_id) {
-                        if (!core.methods.is_open() || this.ajax_interval !== null) {
-                            return;
-                        }
-
-                        var self = this;
-                        this.ajax_interval = setInterval(function() {
-                            self.do_interval_fetch(gallery_id);
-                        }, this.ajax_delay);
-                    },
-
-                    /**
-                     * Determines if polling should continue and handles the interval check
-                     *
-                     * @param gallery_id
-                     */
-                    do_interval_fetch: function(gallery_id) {
-                        // no more than one request at a time
-                        if (this.get_ajax_info(gallery_id).current >= 1) {
-                            return;
-                        }
-
-                        // stop if the pro lightbox is closed
-                        if (!core.methods.is_open()
-                            ||  gallery_id !== core.methods.get_state().gallery_id) {
-                            clearInterval(this.ajax_interval);
-                            this.ajax_interval = null;
-                            return;
-                        }
-                        var gallery = core.methods.get_gallery_from_id(gallery_id);
-                        if (this.gallery_image_cache[gallery_id].length < gallery.images_list_count) {
-                            this.increment_ajax_page(gallery_id);
-                            this.fetch_images_from_ajax(gallery_id);
-                        } else {
-                            // the cache is full, this loop now may end
-                            clearInterval(this.ajax_interval);
-                            this.ajax_interval = null;
-                        }
                     }
                 },
 
                 get_gallery_from_id: function (gallery_id) {
-                    if ('undefined' == typeof window.galleries) { return null; }
+                    if ('undefined' === typeof window.galleries) { return null; }
                     var retval = null;
                     $.each(galleries, function(index, gallery) {
-                        if (gallery.ID == gallery_id) {
+                        if (gallery.ID === gallery_id) {
                             retval = gallery;
                         }
                     });
@@ -906,10 +996,10 @@
 
                 get_id_from_slug: function (slug) {
                     var id = slug;
-                    if ('undefined' == typeof window.galleries) { return id; }
+                    if ('undefined' === typeof window.galleries) { return id; }
 
                     $.each(galleries, function(index, gallery) {
-                        if (gallery.slug == slug) {
+                        if (gallery.slug === slug) {
                             id = gallery.ID;
                         }
                     });
@@ -919,13 +1009,22 @@
                 get_displayed_gallery_setting: function(gallery_id, name, def) {
                     var tmp = '';
                     var gallery = this.get_gallery_from_id(gallery_id);
-                    if (gallery && typeof gallery.display_settings[name] != 'undefined') {
+                    if (gallery && typeof gallery.display_settings[name] !== 'undefined') {
                         tmp = gallery.display_settings[name];
                     } else {
                         tmp = def;
                     }
-                    if (tmp == 1) tmp = true;
-                    if (tmp == 0) tmp = false;
+                    if (tmp === '1') tmp = true;
+                    if (tmp === '0') tmp = false;
+                    if (tmp === 1) tmp = true;
+                    if (tmp === 0) tmp = false;
+
+                    core.methods.log('nplModal.get_displayed_gallery_setting()', {
+                        gallery_id: gallery_id,
+                        name: name,
+                        result: tmp
+                    });
+
                     return tmp;
                 },
 
@@ -982,19 +1081,24 @@
                     },
 
                     front_page_pushstate: function(gallery_id, image_id) {
-                        if (!core.methods.get_setting('is_front_page') || gallery_id == undefined) {
+                        if (!core.methods.get_setting('is_front_page') || gallery_id === undefined) {
                             return false;
                         }
 
-                        if ('undefined' == typeof window.galleries) {
+                        if ('undefined' === typeof window.galleries) {
                             return false;
                         }
+
+                        core.methods.log("beginning nplModal.router.front_page_pushstate()", {
+                            gallery_id: gallery_id,
+                            image_id: image_id
+                        });
 
                         var url  = '';
                         var slug = gallery_id;
 
                         $.each(galleries, function(index, gallery) {
-                            if (gallery.ID == gallery_id && typeof gallery.wordpress_page_root !== 'undefined') {
+                            if (gallery.ID === gallery_id && typeof gallery.wordpress_page_root !== 'undefined') {
                                 url = gallery.wordpress_page_root;
                                 if (gallery.slug) {
                                     slug = gallery.slug;
@@ -1031,7 +1135,7 @@
             return obj;
         }
 
-        if (typeof param == 'undefined') {
+        if (typeof param === 'undefined') {
             return nplModalObj.core.init.apply(nplModalObj, {});
         } else if (typeof param === 'object') {
             return nplModalObj.core.init.apply(nplModalObj, param);

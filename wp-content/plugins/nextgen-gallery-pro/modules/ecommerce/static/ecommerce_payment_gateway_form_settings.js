@@ -21,7 +21,10 @@ jQuery(function($) {
         .nextgen_radio_toggle_tr('1', $('#tr_ecommerce_cheque_instructions'));
     $('#ecommerce_cheque_instructions').css({
         height: '150px',
-        width: '400px'
+        width: '400px',
+        color: '#777',
+        padding: '5px 8px',
+        margin: '0 0 -5px'
     });
 
     $('#tr_ecommerce_paypal_password input').attr('type', 'password');

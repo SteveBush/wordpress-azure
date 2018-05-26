@@ -24,7 +24,7 @@ class M_NextGen_Pro_Albums extends C_Base_Module
 			'photocrati-nextgen_pro_albums',
 			'NextGEN Pro Albums',
 			'Provides Photocrati styled albums for NextGEN Gallery',
-            '0.30',
+            '2.6.0',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',

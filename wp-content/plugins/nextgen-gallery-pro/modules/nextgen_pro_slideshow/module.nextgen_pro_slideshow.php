@@ -24,7 +24,7 @@ class M_NextGen_Pro_Slideshow extends C_Base_Module
 			'photocrati-nextgen_pro_slideshow',
 			'NextGen Pro Slideshow',
 			"Provides Photocrati's Slideshow Gallery Type",
-            '0.26',
+            '2.6.0',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',

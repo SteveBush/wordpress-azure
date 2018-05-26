@@ -19,7 +19,7 @@ class M_Photocrati_Test_Gateway extends C_Base_Module
             'photocrati-test_gateway',
             'Test gateway',
             'Provides a test payment gateway',
-            '0.16',
+            '2.6.0',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com'

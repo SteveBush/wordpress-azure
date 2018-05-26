@@ -55,8 +55,15 @@ class A_Galleria_Controller extends Mixin
     }
     function index_action($displayed_gallery, $return = FALSE)
     {
-        $params = array('theme' => $displayed_gallery->display_settings['theme'], 'displayed_gallery_id' => $displayed_gallery->id(), 'images' => $displayed_gallery->get_entities(), 'effect_code' => $this->object->get_effect_code($displayed_gallery), 'storage' => C_Gallery_Storage::get_instance());
+        $params = array(
+            'theme' => $displayed_gallery->display_settings['theme'],
+            'displayed_gallery_id' => $displayed_gallery->id(),
+            // do not remove: this is not used in the template but without it ecommerce triggers will not display
+            'images' => $displayed_gallery->get_entities(),
+            'effect_code' => $this->object->get_effect_code($displayed_gallery),
+            'storage' => C_Gallery_Storage::get_instance(),
+        );
         $params = $this->object->prepare_display_parameters($displayed_gallery, $params);
-        return $this->object->render_view(NGG_PRO_GALLERIA . '#galleria', $params, $return);
+        return $this->object->render_partial(NGG_PRO_GALLERIA . '#galleria', $params, $return);
     }
 }

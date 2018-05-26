@@ -124,7 +124,7 @@ $currency = C_NextGen_Pro_Currencies::$currencies[C_NextGen_Settings::get_instan
 		<td colspan="4">
 			<input
 				type="button"
-				class="new_item"
+				class="new_item button-primary"
 				data-template-id="digital_download_template"
 				data-table-id="digital_downloads"
 				value="<?php echo esc_attr($i18n->add_another_item)?>"

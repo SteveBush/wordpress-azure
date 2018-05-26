@@ -208,6 +208,12 @@ class C_Coupon_Admin_Page extends C_NextGen_Admin_Page_Controller
      */
     function index_template()
     {
+        /* Use redesigned template if user has redesign version of NGG */
+        if (defined('NGG_PLUGIN_VERSION')) {
+            if (version_compare(NGG_PLUGIN_VERSION, '2.2.99') >= 0) {
+                return 'photocrati-coupons#edit_redesign';
+            }
+        }
         return 'photocrati-coupons#edit';
     }
     function is_coupon_edit_page()

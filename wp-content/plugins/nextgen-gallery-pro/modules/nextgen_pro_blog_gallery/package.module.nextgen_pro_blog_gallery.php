@@ -37,7 +37,7 @@ class A_NextGen_Pro_Blog_Controller extends Mixin
         $params = array('images' => $displayed_gallery->get_included_entities(), 'storage' => C_Gallery_Storage::get_instance(), 'effect_code' => $this->object->get_effect_code($displayed_gallery), 'id' => $id, 'image_size_name' => $image_size_name, 'image_display_size' => $displayed_gallery->display_settings['image_display_size'], 'border_size' => $displayed_gallery->display_settings['border_size']);
         $params = $this->object->prepare_display_parameters($displayed_gallery, $params);
         // Render view/template
-        return $this->render_view('photocrati-nextgen_pro_blog_gallery#nextgen_pro_blog', $params, $return);
+        return $this->render_partial('photocrati-nextgen_pro_blog_gallery#nextgen_pro_blog', $params, $return);
     }
 }
 /**

@@ -20,7 +20,7 @@ class M_NextGen_Pro_Sidescroll extends C_Base_Module
 			'photocrati-nextgen_pro_sidescroll',
 			'NextGEN Pro Sidescroll',
 			'Provides a horizontal scrolling gallery for NextGEN Gallery',
-            '0.11',
+            '2.6.0',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',

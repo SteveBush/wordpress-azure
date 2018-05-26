@@ -60,7 +60,7 @@ class A_NextGen_Pro_Thumbnail_Grid_Controller extends Mixin
         $params = $this->object->prepare_display_parameters($displayed_gallery, $params);
         // Render view/template. We remove whitespace from between HTML elements lest the browser think we want
         // a space character (&nbsp;) between each image-causing columns to appear between images
-        return preg_replace('~>\\s*\\n\\s*<~', '><', $this->render_view('photocrati-nextgen_pro_thumbnail_grid#nextgen_pro_thumbnail_grid', $params, $return));
+        return preg_replace('~>\\s*\\n\\s*<~', '><', $this->render_partial('photocrati-nextgen_pro_thumbnail_grid#nextgen_pro_thumbnail_grid', $params, $return));
     }
 }
 /**

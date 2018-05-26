@@ -364,7 +364,7 @@
                     // current img element
                     var cur_img = this;
 
-                    cur_img.src = $(cur_img).data('src');
+                    cur_img.src = $(cur_img).attr('src');
                     $(cur_img).attr('loaded', 'loading');
                 }); // each()
 

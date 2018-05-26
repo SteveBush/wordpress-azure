@@ -19,7 +19,7 @@ class M_Photocrati_cheque extends C_Base_Module
             'photocrati-cheque',
             'Pay by cheque',
             'Allows users to pay by mail with a cheque',
-            '0.14',
+            '2.6.0',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com'

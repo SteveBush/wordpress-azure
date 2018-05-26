@@ -59,8 +59,24 @@ jQuery(function($) {
         .nextgen_radio_toggle_tr('1', $('#tr_photocrati-nextgen_pro_lightbox_icon_background'))
         .nextgen_radio_toggle_tr('1', $('#tr_photocrati-nextgen_pro_lightbox_icon_background_rounded'));
 
+    // wpColorPicker doesn't make it easy to clear the value so we just trigger a click on the 'clear' button
+    var clear_wp_color = function(elements) {
+        $.each(elements, function(index, $el) {
+            $el.parent().siblings('input.wp-picker-clear').first().trigger('click');
+            $el.siblings('input.wp-picker-clear').first().trigger('click');
+        });
+    };
+
     $('select[name="photocrati-nextgen_pro_lightbox[style]"]').on('change', function() {
         var $this = $(this);
+
+        clear_wp_color([$('input[name="photocrati-nextgen_pro_lightbox[carousel_text_color]"]'),
+                        $('input[name="photocrati-nextgen_pro_lightbox[carousel_background_color]"]'),
+                        $('input[name="photocrati-nextgen_pro_lightbox[sidebar_background_color]"]'),
+                        $('input[name="photocrati-nextgen_pro_lightbox[icon_background]"]'),
+                        $('input[name="photocrati-nextgen_pro_lightbox[overlay_icon_color]"]'),
+                        $('input[name="photocrati-nextgen_pro_lightbox[sidebar_button_color]"]'),
+                        $('input[name="photocrati-nextgen_pro_lightbox[sidebar_button_background]"]')]);
 
         // TODO: make these dynamicly provided
         if ($this.val() == 'white.css' || $this.val() == 'white') {
@@ -68,17 +84,9 @@ jQuery(function($) {
             $('input[name="photocrati-nextgen_pro_lightbox[carousel_text_color]"]').wpColorPicker('color', '#7a7a7a');
             $('input[name="photocrati-nextgen_pro_lightbox[background_color]"]').wpColorPicker('color', '#ffffff');
         } else {
-            $('input[name="photocrati-nextgen_pro_lightbox[icon_color]"]').siblings().first().trigger('click');
-            $('input[name="photocrati-nextgen_pro_lightbox[carousel_text_color]"]').siblings().first().trigger('click');
-            $('input[name="photocrati-nextgen_pro_lightbox[background_color]"]').siblings().first().trigger('click');
+            clear_wp_color([$('input[name="photocrati-nextgen_pro_lightbox[icon_color]"]'),
+                            $('input[name="photocrati-nextgen_pro_lightbox[carousel_text_color]"]'),
+                            $('input[name="photocrati-nextgen_pro_lightbox[background_color]"]')]);
         }
-
-        $('input[name="photocrati-nextgen_pro_lightbox[carousel_text_color]"]').siblings().first().trigger('click');
-        $('input[name="photocrati-nextgen_pro_lightbox[carousel_background_color]"]').siblings().first().trigger('click');
-        $('input[name="photocrati-nextgen_pro_lightbox[sidebar_background_color]"]').siblings().first().trigger('click');
-        $('input[name="photocrati-nextgen_pro_lightbox[icon_background]"]').siblings().first().trigger('click');
-        $('input[name="photocrati-nextgen_pro_lightbox[overlay_icon_color]"]').siblings().first().trigger('click');
-        $('input[name="photocrati-nextgen_pro_lightbox[sidebar_button_color]"]').siblings().first().trigger('click');
-        $('input[name="photocrati-nextgen_pro_lightbox[sidebar_button_background]"]').siblings().first().trigger('click');
     });
 });

@@ -21,7 +21,7 @@ class M_NextGen_PictureFill extends C_Base_Module
 			'photocrati-nextgen_picturefill',
 			'Picturefill',
 			'Provides support for the picture element using the PictureFill polyfill library',
-			'1.0.1',
+			'2.6.0',
 			'Imagely',
 			'https://www.imagely.com',
 			$context
@@ -221,6 +221,7 @@ class M_NextGen_PictureFill extends C_Base_Module
 		}
 
 		// Create attribute strings
+		$attrs['src'] = $image_url;
 		$attrs['srcset'] = implode(", ", $srcsets);
 		$attr_str_array = array();
 		foreach ($attrs as $key => $value) {

@@ -1,6 +1,17 @@
 NextGEN Pro
 by Imagely
 
+= V2.6.0 - 05.16.2018 =
+* NEW:     Complete redesign of NextGEN Gallery backend interface
+* NEW:     Pro Lightbox option to disable carousel thumbnails
+* NEW:     Pro Lightbox uses Facebook JS SDK to generate share dialogs
+* Changed: Location of NextGen Pro Ecommerce in the main WordPress admin menu
+* Changed: Optimized Pro Lightbox for performance, especially mobile devices
+* Changed: Galleria.js upgraded to the latest version (1.5.7)
+* Fixed:   Gutenberg compatibility
+* Fixed:   Pro Lightbox sidebar overlay not being removed when comments are disabled / users must be registered
+* Fixed:   Pro Lightbox will no longer attempt to use synchronous XHR
+
 = V2.5.7 - 06.21.2017 =
 * NEW:       Added Dutch translations as provided by Frank Leenders
 * Changed:   Updated Pro Lightbox comment mechanism to use latest WP conventions

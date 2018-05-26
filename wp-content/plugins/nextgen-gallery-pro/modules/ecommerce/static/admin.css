@@ -51,16 +51,15 @@
     word-wrap: normal;
 }
 
-#manual_pricelist .title_column {
-    width: 200px;
+/* Manage Pricelist Page */
+
+#manual_pricelist .title_column,
+#digital_downloads .title_column {
+    width: 300px;
 }
 
 #manual_pricelist .price_column {
     width: 153px;
-}
-
-#digital_downloads .title_column {
-    width: 200px;
 }
 
 #digital_downloads .price_column {
@@ -82,4 +81,35 @@
 
 #ngg_page_content .title_empty {
     border: solid 1px red;
+}
+
+.ngg_manage_pricelist tfoot {
+    background-color: transparent !important;
+}
+
+/* Manage Orders Page */
+
+@media (max-width: 1110px) {
+    .post-type-ngg_order #ngg_page_content tr:not(.inline-edit-row):not(.no-items) td.column-primary~td:not(.check-column),
+    .post-type-ngg_order #ngg_page_content .wp-list-table th.column-primary~th {
+        padding: 10px;
+        display: table-cell;
+    }
+    .post-type-ngg_order #ngg_page_content .check-column,
+    .post-type-ngg_order #ngg_page_content .column-order_gateway,
+    .post-type-ngg_order #ngg_page_content .column-order_hash,
+    .post-type-ngg_order #ngg_page_content .column-order_coupon,
+    .post-type-ngg_order #ngg_page_content .wp-list-table tr:not(.inline-edit-row):not(.no-items) td:not(.column-primary)::before {
+        display:none !important;
+    }
+    .post-type-ngg_order #ngg_page_content .wp-list-table thead th.column-primary {
+        width: auto;
+    }
+
+}
+
+@media (max-width: 424px) {
+    .ngg-admin.post-type-ngg_order #ngg_page_content .column-order_status {
+        display:none !important;
+    }
 }
