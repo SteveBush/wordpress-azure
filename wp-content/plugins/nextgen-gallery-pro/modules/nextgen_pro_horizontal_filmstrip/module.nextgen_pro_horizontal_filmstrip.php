@@ -21,7 +21,7 @@ class M_NextGen_Pro_Horizontal_Filmstrip extends C_Base_Module
 			NGG_PRO_HORIZONTAL_FILMSTRIP,
 			'NextGEN Pro Horizontal Filmstrip',
 			"Provides Photocrati's Horizontal Filmstrip for NextGEN Gallery",
-            '0.27',
+            '2.6.0',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',

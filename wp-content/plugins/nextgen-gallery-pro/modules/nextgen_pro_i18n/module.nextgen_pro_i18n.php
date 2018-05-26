@@ -20,7 +20,7 @@ class M_NextGen_Pro_I18N extends C_Base_Module
             'photocrati-nextgen_pro_i18n',
             'Pro Internationalization',
             "Adds I18N resources and methods",
-            '0.15',
+            '2.6.0',
             'http://www.imagely.com/languages/',
             'Imagely',
             'https://www.imagely.com',

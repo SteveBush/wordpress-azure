@@ -204,7 +204,19 @@ class A_PayPal_Express_Checkout_Button extends Mixin
                     $item_number = 0;
                     $free_item_count = 0;
                     // Set up request data
-                    $data = array('RETURNURL' => $return_url, 'CANCELURL' => $cancel_url, 'CALLBACKTIMEOUT' => 6, 'NOSHIPPING' => 0, 'CALLBACKVERSION' => 61.0, 'PAYMENTREQUEST_0_NOTIFYURL' => $notify_url, 'PAYMENTREQUEST_0_PAYMENTREASON' => 'None', 'PAYMENTREQUEST_0_CURRENCYCODE' => $this->_get_paypal_currency_code(), 'PAYMENTREQUEST_0_CUSTOM' => $this->object->param('ship_to'), 'PAYMENTREQUEST_0_INVNUM' => $order->hash);
+                    $data = array(
+                        'RETURNURL' => $return_url,
+                        'CANCELURL' => $cancel_url,
+                        'CALLBACKTIMEOUT' => 6,
+                        'NOSHIPPING' => 0,
+                        # use 1 if the cart only contains digital downloads
+                        'CALLBACKVERSION' => 61.0,
+                        'PAYMENTREQUEST_0_NOTIFYURL' => $notify_url,
+                        'PAYMENTREQUEST_0_PAYMENTREASON' => 'None',
+                        'PAYMENTREQUEST_0_CURRENCYCODE' => $this->_get_paypal_currency_code(),
+                        'PAYMENTREQUEST_0_CUSTOM' => $this->object->param('ship_to'),
+                        'PAYMENTREQUEST_0_INVNUM' => $order->hash,
+                    );
                     if ($settings->paypal_page_style) {
                         $data['PAGESTYLE'] = $settings->paypal_page_style;
                     }

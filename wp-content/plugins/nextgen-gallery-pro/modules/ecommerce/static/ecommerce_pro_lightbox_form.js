@@ -6,7 +6,7 @@
     $header_row.detach();
     $option_row.detach();
 
-    $header_row.insertAfter('#tr_photocrati-nextgen_pro_lightbox_display_captions');
+    $header_row.insertAfter('#tr_photocrati-nextgen_pro_lightbox_enable_carousel');
     $option_row.insertAfter($header_row);
 
     var $context_tbody = $('select#lightbox_global').parents('tbody');

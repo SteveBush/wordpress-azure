@@ -263,28 +263,28 @@ div.nggpl-pricelist_source_accordion {
 
 /******* Lightbox 'white' variation ******/
 
-.nggpl-variant-white #ngg_add_to_cart_container h1,
-.nggpl-variant-white #ngg_add_to_cart_container h2,
-.nggpl-variant-white #ngg_add_to_cart_container h3,
-.nggpl-variant-white #ngg_add_to_cart_container h4,
-.nggpl-variant-white #ngg_add_to_cart_container h5,
-.nggpl-variant-white #ngg_add_to_cart_container h6 {
+#npl_wrapper.npl-variant-white #ngg_add_to_cart_container h1,
+#npl_wrapper.npl-variant-white #ngg_add_to_cart_container h2,
+#npl_wrapper.npl-variant-white #ngg_add_to_cart_container h3,
+#npl_wrapper.npl-variant-white #ngg_add_to_cart_container h4,
+#npl_wrapper.npl-variant-white #ngg_add_to_cart_container h5,
+#npl_wrapper.npl-variant-white #ngg_add_to_cart_container h6 {
     color: #7A7A7A;
 }
 
-.nggpl-variant-white #ngg_add_to_cart_container *,
-.nggpl-variant-white #ngg_add_to_cart_container a {
+#npl_wrapper.npl-variant-white #ngg_add_to_cart_container *,
+#npl_wrapper.npl-variant-white #ngg_add_to_cart_container a {
     color: #777777;
 }
 
-.nggpl-variant-white #ngg_add_to_cart_container #ngg_checkout_btn,
-.nggpl-variant-white #ngg_add_to_cart_container #ngg_update_cart_btn {
+#npl_wrapper.npl-variant-white #ngg_add_to_cart_container #ngg_checkout_btn,
+#npl_wrapper.npl-variant-white #ngg_add_to_cart_container #ngg_update_cart_btn {
     color: #FFFFFF;
     background-color: #777777;
 }
 
-.nggpl-variant-white #ngg_add_to_cart_container table input,
-.nggpl-variant-white #ngg_add_to_cart_container table textarea {
+#npl_wrapper.npl-variant-white #ngg_add_to_cart_container table input,
+#npl_wrapper.npl-variant-white #ngg_add_to_cart_container table textarea {
     color: #222;
     background-color: #f7f8f9;
 }

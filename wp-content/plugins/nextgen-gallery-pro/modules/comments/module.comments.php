@@ -25,7 +25,7 @@ class M_Photocrati_Comments extends C_Base_Module
             'photocrati-comments',
             'Comments',
             'AJAX operations for retrieving and creating comments on arbitrary items',
-            '0.23',
+            '2.6.0',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',

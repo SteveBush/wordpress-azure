@@ -23,7 +23,7 @@ class M_NextGen_Pro_Proofing extends C_Base_Module
             NGG_PRO_PROOFING,
             'NextGEN Pro Proofing',
             'Provides rating capabilities',
-            '0.18',
+            '2.6.0',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -82,10 +82,11 @@ class M_NextGen_Pro_Proofing extends C_Base_Module
         add_action('init', array($this, 'wp_init'));
         add_action('admin_init', array(&$this, 'register_forms'));
         add_action('add_meta_boxes', array($this, 'add_meta_box'));
+        add_action('current_screen', array($this, 'enqueue_backend_resources'));
         add_filter('the_posts', array($this, 'serve_proofing_page'));
         add_filter('ngg_pro_settings_reset_installers', array($this, 'return_own_installer'));
 
-        if (!empty($_GET['post_type']) && $_GET['post_type'] == 'nextgen_proof')
+        if (!empty($_GET['post_type']) && $_GET['post_type'] == 'nextgen_proof') 
             add_action('admin_head', array($this, 'hide_add_new_button'));
 
         // add additional columns to display the customer name
@@ -99,6 +100,15 @@ class M_NextGen_Pro_Proofing extends C_Base_Module
             add_filter('manage_edit-nextgen_proof_sortable_columns', array(&$this, 'proofing_columns'));
         }
     }
+
+    function enqueue_backend_resources()
+    {
+        $router = C_Router::get_instance();
+        $screen = get_current_screen();
+        if ( $screen->id == 'nextgen_proof' ) {
+            wp_enqueue_style( 'ngg_proofing_admin', $router->get_static_url('photocrati-nextgen_pro_proofing#admin.css'));
+        }
+    } 
 
     function proofing_columns($columns)
     {

@@ -1,3 +1,5 @@
+
+
 .entity_errors {
     background: #fff;
     border-left: 4px solid #dc3232;
@@ -22,17 +24,4 @@
 
 .entity_errors ul li {
     color: red;
-}
-
-#coupon_id_code {
-    text-transform: uppercase;
-}
-
-#coupon_id_code,
-#coupon_discount_type,
-#coupon_discount_amount,
-#coupon_date_start,
-#coupon_date_end {
-    width: 100px;
-    text-align: center;
 }

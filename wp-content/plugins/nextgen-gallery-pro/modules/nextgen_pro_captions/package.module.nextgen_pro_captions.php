@@ -21,6 +21,10 @@ class A_NextGen_Pro_Captions_Form extends Mixin
     {
         $this->call_parent('enqueue_static_resources');
         wp_enqueue_script('photocrati-nextgen_pro_captions_settings-js', $this->get_static_url('photocrati-nextgen_pro_captions#settings.js'), array('jquery.nextgen_radio_toggle'));
+        $atp = C_Attach_Controller::get_instance();
+        if ($atp != null && $atp->has_method('mark_script')) {
+            $atp->mark_script('photocrati-nextgen_pro_captions_settings-js');
+        }
     }
     function _render_nextgen_pro_captions_enabled_field($display_type)
     {

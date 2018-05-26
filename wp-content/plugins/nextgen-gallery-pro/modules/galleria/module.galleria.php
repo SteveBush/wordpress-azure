@@ -20,7 +20,7 @@ class M_Galleria extends C_Base_Module
             NGG_PRO_GALLERIA,
 			'Galleria',
 			'Provides support for displaying galleries using Galleria Themes',
-            '0.25',
+            '2.6.0',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -37,9 +37,9 @@ class M_Galleria extends C_Base_Module
 	{
 		wp_register_script(
 			'ngg_galleria',
-			C_Router::get_instance()->get_static_url(NGG_PRO_GALLERIA . '#galleria-1.5.5.js'),
+			C_Router::get_instance()->get_static_url(NGG_PRO_GALLERIA . '#galleria-1.5.7.js'),
 			array('jquery'),
-			'1.5.5'
+			'1.5.7'
 		);
 	}
 

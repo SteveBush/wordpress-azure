@@ -17,7 +17,7 @@ class M_NextGen_Pro_Settings extends C_Base_Module
             'photocrati-nextgen_pro_settings',
             'Pro Options',
             'Provides additional settings management features',
-            '0.3',
+            '2.6.0',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com'

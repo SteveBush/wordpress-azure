@@ -19,7 +19,7 @@ class M_PayPal_Express_Checkout extends C_Base_Module
 			'photocrati-paypal_express_checkout',
 			'PayPal Express Checkout',
 			'Provides integration with PayPal Express Checkout',
-			'0.16',
+			'2.6.0',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com'

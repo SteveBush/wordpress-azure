@@ -20,7 +20,7 @@ class M_PayPal_Standard extends C_Base_Module
             'photocrati-paypal_standard',
             'PayPal Standard',
             'Provides integration with PayPal Standard',
-            '0.16',
+            '2.6.0',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com'

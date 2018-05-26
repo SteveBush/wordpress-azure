@@ -7,7 +7,7 @@
         </td>
         <td>
             <input type="submit"
-                   class="button-secondary"
+                   class="button-primary"
                    data-confirm="<?php echo esc_attr($reset_non_ecommerce_confirmation); ?>"
                    data-proxy-value="reset_non_ecommerce_settings"
                    name="action_proxy"
@@ -23,7 +23,7 @@
         </td>
         <td>
             <input type="submit"
-                   class="button-secondary"
+                   class="button-primary"
                    data-confirm="<?php echo esc_attr($reset_ecommerce_confirmation); ?>"
                    data-proxy-value="reset_ecommerce_settings"
                    name="action_proxy"

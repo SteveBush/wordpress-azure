@@ -9,7 +9,7 @@
 define('NGG_PRO_LIGHTBOX', 'photocrati-nextgen_pro_lightbox');
 define('NGG_PRO_LIGHTBOX_TRIGGER', NGG_PRO_LIGHTBOX);
 define('NGG_PRO_LIGHTBOX_COMMENT_TRIGGER', 'photocrati-nextgen_pro_lightbox_comments');
-define('NGG_PRO_LIGHTBOX_VERSION', '0.63');
+define('NGG_PRO_LIGHTBOX_VERSION', '2.6.0');
 
 class M_NextGen_Pro_Lightbox extends C_Base_Module
 {
@@ -223,9 +223,9 @@ class C_NextGen_Pro_Lightbox_Installer
     function install_pro_lightbox_settings(C_Photocrati_Settings_Manager $settings, $reset = FALSE)
     {
         $defaults = array(
-            'background_color'          => 1,
+            'background_color'          => '#ffffff',
             'enable_routing'            => 1,
-            'icon_color'                => '',
+            'icon_color'                => '#7a7a7a',
             'icon_background'           => '',
             'icon_background_enabled'   => 0,
             'icon_background_rounded'   => 1,
@@ -234,9 +234,10 @@ class C_NextGen_Pro_Lightbox_Installer
             'sidebar_button_background' => '',
             'router_slug'               => 'gallery',
             'carousel_background_color' => '',
-            'carousel_text_color'       => '',
+            'carousel_text_color'       => '#7a7a7a',
             'enable_comments'           => 1,
             'enable_sharing'            => 1,
+            'enable_carousel'           => 'always',
             'enable_fullscreen'         => 0,
             'display_comments'          => 0,
             'display_captions'          => 0,

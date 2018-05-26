@@ -18,7 +18,7 @@ class M_NextGen_Pro_Coupons extends C_Base_Module
             NGG_PRO_COUPONS,
             'NextGEN Pro Coupons',
             'Provides coupons',
-            '0.12',
+            '2.6.0',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -49,6 +49,7 @@ class M_NextGen_Pro_Coupons extends C_Base_Module
 
         if (M_Attach_To_Post::is_atp_url() || is_admin())
             add_action('admin_init', array($this, 'register_forms'));
+
     }
 
     // Used to quickly determine how many orders have been placed with any given coupon
@@ -101,6 +102,7 @@ class M_NextGen_Pro_Coupons extends C_Base_Module
             'C_Coupon_Mapper'              => 'class.coupon_mapper.php'
         );
     }
+
 }
 
 class C_NextGen_Pro_Coupon_Installer extends AC_NextGen_Pro_Settings_Installer

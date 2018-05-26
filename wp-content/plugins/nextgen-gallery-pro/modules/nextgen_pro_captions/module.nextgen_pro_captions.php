@@ -19,7 +19,7 @@ class M_NextGen_Pro_Captions extends C_Base_Module
             'photocrati-nextgen_pro_captions',
             'NextGEN Pro Captions',
             "Provides image caption effects",
-            '0.16',
+            '2.6.0',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',

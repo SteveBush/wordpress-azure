@@ -1,6 +1,6 @@
 jQuery(function($) {
     if (typeof ngg_pro_proofing_i18n != 'undefined') {
-    $('#npl_content').on('npl.ready', function (e, data) {
+    $('#npl_content').on('npl_ready', function (e, data) {
         var methods = data.methods;
         var self = data.galleria_theme;
         methods.thumbnails.proofing = {
@@ -21,7 +21,7 @@ jQuery(function($) {
             events: {
                 bind: function() {
                     if (typeof ngg_image_proofing != 'undefined') {
-                        self.bind('npl.init', this.npl_init);
+                        self.bind('npl_init', this.npl_init);
                         self.bind('image', this.image);
                         methods.thumbnails.proofing.proofing_button.bind('click', this.button_clicked);
                     }

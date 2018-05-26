@@ -337,7 +337,7 @@ class Mixin_NextGen_Pro_Album_Controller extends Mixin
             $displayed_gallery->display_settings['original_album_id'] = 'a' . $displayed_gallery->container_ids[0];
             $displayed_gallery->display_settings['original_album_entities'] = $original_entities;
         }
-        return $this->render_view('photocrati-nextgen_pro_albums#index', $params, $return);
+        return $this->render_partial('photocrati-nextgen_pro_albums#index', $params, $return);
     }
     function _prepare_entities($displayed_gallery, $thumbnail_size_name)
     {
@@ -408,7 +408,8 @@ class Mixin_NextGen_Pro_Album_Controller extends Mixin
             if ($album_id = $this->param('album')) {
                 if (!is_numeric($album_id)) {
                     $mapper = C_Album_Mapper::get_instance();
-                    $result = array_pop($mapper->select()->where(array("slug = %s", $album_id))->limit(1)->run_query());
+                    $result = $mapper->select()->where(array("slug = %s", $album_id))->limit(1)->run_query();
+                    $result = array_pop($result);
                     $album_id = $result->{$result->id_field};
                 }
                 $original_entities = $displayed_gallery->get_albums();

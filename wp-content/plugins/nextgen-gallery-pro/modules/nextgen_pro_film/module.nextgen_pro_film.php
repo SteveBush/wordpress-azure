@@ -20,7 +20,7 @@ class M_NextGen_Pro_Film extends C_Base_Module
 			'photocrati-nextgen_pro_film',
 			'NextGEN Pro Film',
 			'Provides a film-like gallery for NextGEN Gallery',
-            '0.27',
+            '2.6.0',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
