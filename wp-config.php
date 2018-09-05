@@ -121,8 +121,6 @@ $table_prefix  = 'wp_';
  * Allow MultiSite Support
  *
  */
-//define('WP_HOME', 'http://family.bushchang.com');
-//define('WP_SITEURL', 'http://family.bushchang.com');
 
 define('WP_ALLOW_MULTISITE', true );
 define('MULTISITE', true);
