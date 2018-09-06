@@ -23,7 +23,7 @@ class M_NextGen_Pro_Proofing extends C_Base_Module
             NGG_PRO_PROOFING,
             'NextGEN Pro Proofing',
             'Provides rating capabilities',
-            '2.6.0',
+            '2.6.1',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -61,6 +61,7 @@ class M_NextGen_Pro_Proofing extends C_Base_Module
             $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Proofing_Form', NGG_PRO_BLOG_GALLERY);
             $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Proofing_Form', NGG_PRO_FILM);
             $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Proofing_Form', NGG_PRO_MOSAIC);
+            $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Proofing_Form', NGG_PRO_MASONRY);
 
             $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Proofing_Settings_Form', 'ngg-proofing');
         }

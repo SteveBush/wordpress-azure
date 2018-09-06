@@ -55,6 +55,7 @@
 
                 overlay.css({background: core.methods.get_setting('background_color')});
                 spinner.css({color: core.methods.get_setting('icon_color')});
+                s_overlay.css({color: core.methods.get_setting('icon_color')});
                 btn_close.css({color: core.methods.get_setting('overlay_icon_color')});
                 sidebar.css({background: core.methods.get_setting('sidebar_background_color')});
                 toggle.css({color: core.methods.get_setting('overlay_icon_color')});
@@ -113,12 +114,6 @@
                 if (core.methods.mobile.browser.ios()
                 ||  core.methods.mobile.browser.android()) {
                     wrapper.addClass('npl_mobile');
-                }
-
-                // The theme uses the same check and will *not* open the sidebar automatically at startup
-                // So hide the trigger icons lest users think they can actually use them
-                if (core.methods.mobile.browser.any()) {
-                    core.methods.mobile.hide_triggers();
                 }
             },
 
@@ -460,9 +455,9 @@
                         $('#npl_wrapper').addClass('nggpl-carousel-hidden');
                     }
 
-                    if (!core.methods.mobile.browser.any() && (sidebar
+                    if (sidebar
                     || (core.methods.get_setting('display_cart', false)     && core.methods.get_displayed_gallery_setting(gallery_id, 'is_ecommerce_enabled', false))
-                    || (core.methods.get_setting('display_comments', false) && core.methods.get_setting('enable_comments', false)))) {
+                    || (core.methods.get_setting('display_comments', false) && core.methods.get_setting('enable_comments', false))) {
                         $('#npl_wrapper').addClass('npl-sidebar-open npl-sidebar-overlay-open');
                     }
 
@@ -472,6 +467,10 @@
 
                     if (core.methods.get_setting('style')) {
                         $('#npl_wrapper').addClass('npl-variant-' + core.methods.get_setting('style'))
+                    }
+
+                    if (!core.methods.get_setting('display_carousel', true) || core.methods.mobile.browser.any()) {
+                        $('#npl_wrapper').addClass('npl-carousel-closed');
                     }
 
                     if (images.length >= thumbnails_limit) {
@@ -502,6 +501,9 @@
                         transitionSpeed:    (core.methods.get_setting('transition_speed', 0.4) * 1000),
                         nggSidebar:          sidebar
                     });
+
+                    // Set the background color right away, so that we don't have to wait for the theme init
+                    $('#npl_content .galleria-container').css({background: core.methods.get_setting('background_color')});
                 },
 
                 // When rotaning or opening the keyboard some mobile browsers increase the user zoom level beyond the default.
@@ -555,14 +557,6 @@
                         blackberry: function() {
                             return /(blackberry|RIM Tablet|BB10; )/i.test(navigator.userAgent);
                         }
-                    },
-                    hide_triggers: function() {
-                        $('.ngg-trigger').each(function() {
-                            var $this = $(this);
-                            if ($this.hasClass('fa-comment') || $this.hasClass('fa-shopping-cart')) {
-                                $this.hide();
-                            }
-                        });
                     }
                 },
 

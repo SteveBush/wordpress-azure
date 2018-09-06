@@ -1,6 +1,19 @@
 NextGEN Pro
 by Imagely
 
+= V2.6.3 - 07.24.2018 =
+* NEW:     Added French translations
+* NEW:     Added German translations
+* NEW:     Added Slovakian translations
+* NEW:     Browsers on mobile devices can now use the Pro Lightbox open-with-cart-sidebar and open-with-comments-sidebar features
+* NEW:     Pro Masonry displays can now have proofing enabled (requires hover captions, pro lightbox)
+* NEW:     Warn admins that Stripe requires TLS 1.2 and their system is affected
+* Changed: Plugin URL in nggallery-pro.php has been updated for accuracy
+* Fixed:   Hover captions compatibility with thickbox effect
+* Fixed:   Pro Lightbox image captions were sometimes floated when sharing icons were disabled
+* Fixed:   Pro Lightbox images were not correctly centered at startup under iOS
+* Fixed:   Pro Masonry displays included a single gallery-level trigger icon that should not have been included
+
 = V2.6.0 - 05.16.2018 =
 * NEW:     Complete redesign of NextGEN Gallery backend interface
 * NEW:     Pro Lightbox option to disable carousel thumbnails

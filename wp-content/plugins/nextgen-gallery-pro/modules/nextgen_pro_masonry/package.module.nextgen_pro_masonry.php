@@ -17,6 +17,9 @@ class A_NextGen_Pro_Masonry_Controller extends Mixin
     function index_action($displayed_gallery, $return = FALSE)
     {
         $images = $displayed_gallery->get_included_entities();
+        // This display type was never meant to work with NextGen's trigger icons but the setting was set to 'always' as
+        // a default value in the pro-masonry-mapper. Prevent users from getting an improperly rendered gallery trigger:
+        $displayed_gallery->display_settings['ngg_triggers_display'] = 'never';
         if (!$images) {
             return $this->object->render_partial("photocrati-nextgen_gallery_display#no_images_found", array(), $return);
         } else {
@@ -101,7 +104,6 @@ class A_NextGen_Pro_Masonry_Mapper extends Mixin
         if ($entity->name == NGG_PRO_MASONRY) {
             $this->object->_set_default_value($entity, 'settings', 'size', 180);
             $this->object->_set_default_value($entity, 'settings', 'padding', 10);
-            $this->object->_set_default_value($entity, 'settings', 'ngg_triggers_display', 'always');
             $this->_set_default_value($entity, 'settings', 'display_type_view', 'default');
         }
     }

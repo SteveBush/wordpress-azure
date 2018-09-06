@@ -144,7 +144,6 @@
 
 .galleria-theme-nextgen_pro_lightbox .galleria-info .galleria-image-share-icons {
     overflow: hidden;
-    padding: 12px 12px 12px 0;
 }
 
 #npl_wrapper.npl-info-open .galleria-info {
@@ -167,9 +166,9 @@
     overflow: hidden;
     text-align: left;
     justify-content: flex-start;
-    width: calc(100% - 190px);
     order: 1;
     align-self: center;
+    flex-grow: 1;
 }
 
 .galleria-theme-nextgen_pro_lightbox .galleria-info-description {
@@ -178,6 +177,7 @@
     font: 14px "Lato", sans-serif;
     text-align: left;
     order: 3;
+    width: 100%;
 }
 
 .galleria-theme-nextgen_pro_lightbox .galleria-image-nav {
@@ -414,7 +414,7 @@
     display: inline-block;
     text-align: center;
     margin: 0;
-    padding: 0;
+    padding: 12px 12px 12px 0;
 }
 
 #npl_wrapper .galleria-image-share-icons ul li {
@@ -434,7 +434,7 @@
 #npl_sidebar .nggpl-sidebar-thumbnail {
     display: none;
     text-align: center;
-    margin: 0 auto 20px auto
+    margin: 30px 0 35px;
 }
 
 #npl_sidebar .nggpl-sidebar-thumbnail img {

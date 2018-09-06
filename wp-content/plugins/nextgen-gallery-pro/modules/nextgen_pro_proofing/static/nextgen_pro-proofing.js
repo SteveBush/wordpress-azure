@@ -73,7 +73,7 @@
                 var imgcount = self.formatString.call(ngg_pro_proofing_i18n.image_list, proofed_list.length, proofed_list.length != 1 ? 's' : '');
                 var disabled = '';
                 if (proofed_list.length <= 0) {
-                    disabled = ' disabled="disabled" '
+                    disabled = ' disabled="disabled" ';
                 }
 
                 var tmp = '<div id="ngg-proofing-dialog-' + gallery_id + '" class="ngg-proofing-dialog" style="display:none;">';
