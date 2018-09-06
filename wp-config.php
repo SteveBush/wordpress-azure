@@ -122,8 +122,8 @@ $table_prefix  = 'wp_';
  *
  */
 
-define('WP_ALLOW_MULTISITE', false );
-define('MULTISITE', false);
+define('WP_ALLOW_MULTISITE', true );
+define('MULTISITE', true);
 define('SUBDOMAIN_INSTALL', true);
 //define('DOMAIN_CURRENT_SITE', 'family.bushchang.com');
 define('PATH_CURRENT_SITE', '/');
