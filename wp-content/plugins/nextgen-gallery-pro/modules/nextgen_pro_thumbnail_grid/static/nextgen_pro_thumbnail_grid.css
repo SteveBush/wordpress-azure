@@ -110,7 +110,7 @@
 @media (max-width: 500px) {
 	.nextgen_pro_thumbnail_grid.pro-thumbnail-caption-template .image-wrapper {
       width: 100% !important;
-      margin: 20px 0; !important;
+      margin: 20px 0 !important;
   	}
 }
 

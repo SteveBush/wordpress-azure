@@ -267,6 +267,7 @@
 
             $img.removeAttr('style');
 
+
             // because the blog gallery wrappers are wider than the image itself
             if (!$this.data('ngg-captions-nostylecopy')) {
                 $figure.css({'max-width': parseInt($img[0].getAttribute('width')) + 'px'});
@@ -296,6 +297,17 @@
         if (typeof $elements == 'undefined') {
             $elements = $('figcaption.ngg-figcaption h6, figcaption.ngg-figcaption .nggc-body');
         }
+
+        // This is a hack specific to thickbox, which insists on giving its class
+        // to the <img> element directly which doesn't work here
+        $('div.nextgen_pro_thumbnail_grid a').each(function() {
+            var $this = $(this);
+            var $img = $this.find('img');
+            if ($img.hasClass('thickbox')) {
+                $img.removeClass('thickbox');
+                $this.addClass('thickbox');
+            }
+        });
 
         // Concatenate our text so it won't overflow
         $elements.each(function() {

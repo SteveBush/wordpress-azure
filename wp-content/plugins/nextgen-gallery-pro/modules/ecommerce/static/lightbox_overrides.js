@@ -88,9 +88,8 @@ jQuery(function($) {
                         if (!methods.sidebars.cart._image_ran_once) {
                             // possibly display the cart sidebar at startup
                             // display_comments may attempt to load at the same time--skip if it is on
-                            if ((($.nplModal('get_state').sidebar && $.nplModal('get_state').sidebar == methods.sidebars.cart.get_type())
-                                || ($.nplModal('get_setting', 'display_cart', false) && !$.nplModal('get_setting', 'display_comments', false)))
-                            &&  !Galleria.TOUCH) {
+                            if (($.nplModal('get_state').sidebar && $.nplModal('get_state').sidebar == methods.sidebars.cart.get_type())
+                            ||  ($.nplModal('get_setting', 'display_cart', false) && !$.nplModal('get_setting', 'display_comments', false))) {
                                 methods.sidebar.open(methods.sidebars.cart.get_type());
                             }
                         } else if ($.nplModal('get_state').sidebar && $.nplModal('get_state').sidebar == methods.sidebars.cart.get_type()) {

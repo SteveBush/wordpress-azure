@@ -177,6 +177,7 @@ body.nextgen_pro_lightbox_open #npl_wrapper.npl_ie9_flex_hack.npl-sidebar-open #
     opacity: 0;
     transition: opacity 0.75s;
     display: none;
+    color: white;
 } 
 
 body.nextgen_pro_lightbox_open #npl_wrapper.npl_ie9_flex_hack {
@@ -184,7 +185,6 @@ body.nextgen_pro_lightbox_open #npl_wrapper.npl_ie9_flex_hack {
 }
 
 #npl_sidebar_overlay i {
-    color: white;
     margin: 0 auto;
     font-size: 86px;
 }
@@ -282,10 +282,12 @@ body.nextgen_pro_lightbox_open #npl_overlay.npl_ios_no_opacity {
         width: 100%;
         border-left: none;
     }
+    #npl_wrapper.npl-sidebar-open #npl_spinner_container {
+        display: none;
+    }
 
     /* Display the sidebar thumbnail now that the main content is hidden */
     #npl_sidebar .nggpl-sidebar-thumbnail {
-        display: block;
-        margin: 30px 0 35px;
+        display: block !important;
     }
 }

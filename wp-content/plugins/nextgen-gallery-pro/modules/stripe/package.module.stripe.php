@@ -102,3 +102,54 @@ class A_Stripe_Checkout_Button extends Mixin
         return $retval;
     }
 }
+class C_Stripe_TLS12_Check_Notification
+{
+    function is_renderable()
+    {
+        $settings = C_NextGen_Settings::get_instance();
+        // Only check if Stripe payment gateway is enabled
+        if (!$settings->ecommerce_stripe_enable) {
+            return FALSE;
+        }
+        // If we've already checked and are missing TLS 1.2 then just show the notification
+        if ($settings->ecommerce_stripe_tls12_missing) {
+            return TRUE;
+        }
+        // We've checked before and it wasn't missing then - don't show this notification and don't check again
+        if ($settings->ecommerce_stripe_tls12_checked) {
+            return FALSE;
+        }
+        // Load Stripe and run our test
+        if (!class_exists('Stripe')) {
+            include_once 'stripe-sdk/lib/Stripe.php';
+        }
+        Stripe::setApiKey("sk_test_BQokikJOvBiI2HlWgH4olfQ2");
+        Stripe::$apiBase = "https://api-tls12.stripe.com";
+        try {
+            $settings->ecommerce_stripe_tls12_checked = TRUE;
+            $settings->save();
+            Stripe_Charge::all();
+        } catch (Stripe_ApiConnectionError $e) {
+            $settings->ecommerce_stripe_tls12_missing = TRUE;
+            $settings->save();
+            return TRUE;
+        }
+        return FALSE;
+    }
+    function render()
+    {
+        return __('Stripe no longer supports API requests made with TLS 1.0. Please contact your systems administrator to enable TLS 1.2 support on your host.', 'nggallery');
+    }
+    function get_css_class()
+    {
+        return 'error';
+    }
+    function is_dismissable()
+    {
+        return TRUE;
+    }
+    function dismiss($code)
+    {
+        return array('handled' => TRUE);
+    }
+}

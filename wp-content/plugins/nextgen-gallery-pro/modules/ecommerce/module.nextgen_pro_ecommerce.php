@@ -31,7 +31,7 @@ class M_NextGen_Pro_Ecommerce extends C_Base_Module
             'photocrati-nextgen_pro_ecommerce',
             'Ecommerce',
             'Provides ecommerce capabilities for the NextGEN Pro Lightbox',
-            '2.6.0',
+            '2.6.1',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',

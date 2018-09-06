@@ -430,9 +430,8 @@
                                             }
                                         } else {
                                             // possibly display the comments sidebar at startup
-                                            if ((($.nplModal('get_state').sidebar && $.nplModal('get_state').sidebar === methods.sidebars.comments.get_type())
-                                                ||  $.nplModal('get_setting', 'display_comments'))
-                                            &&  !$.nplModal('mobile.browser.any')) {
+                                            if (($.nplModal('get_state').sidebar && $.nplModal('get_state').sidebar === methods.sidebars.comments.get_type())
+                                            ||  $.nplModal('get_setting', 'display_comments')) {
                                                 methods.sidebar.open(methods.sidebars.comments.get_type());
                                             }
                                         }
@@ -462,7 +461,7 @@
                     },
                     thumbnails: {
                         is_open: function() {
-                            return $('#npl_wrapper').hasClass('npl-carousel-closed');
+                            return !$('#npl_wrapper').hasClass('npl-carousel-closed');
                         },
                         toggle: function() {
                             $.nplModal('log', 'theme thumbnails.toggle()');
@@ -476,14 +475,14 @@
                         open: function() {
                             $.nplModal('log', 'theme thumbnails.open()');
 
-                            $('#npl_wrapper').addClass('npl-carousel-closed');
+                            $('#npl_wrapper').removeClass('npl-carousel-closed');
                             $('.galleria-dock-toggle-container i').toggleClass('fa-angle-up fa-angle-down');
                             $(window).trigger('resize');
                         },
                         close: function() {
                             $.nplModal('log', 'theme thumbnails.close()');
 
-                            $('#npl_wrapper').removeClass('npl-carousel-closed');
+                            $('#npl_wrapper').addClass('npl-carousel-closed');
                             $('.galleria-dock-toggle-container i').toggleClass('fa-angle-up fa-angle-down');
                             $(window).trigger('resize');
                         },
@@ -556,13 +555,6 @@
 
                                 self.$('thumbnails-container').css({background: $.nplModal('get_setting', 'carousel_background_color')});
 
-                                if (!$.nplModal('get_setting', 'display_carousel', true)
-                                ||  Galleria.IPHONE
-                                ||  Galleria.IPAD
-                                ||  navigator.userAgent.match('CriOS')) {
-                                    methods.thumbnails.toggle();
-                                }
-
                                 // create carousel next/prev links
                                 var next_thumbs_button = $('<i/>')
                                     .addClass('fa fa-angle-right')
@@ -581,6 +573,12 @@
                                     .css({background: $.nplModal('get_setting', 'carousel_background_color')});
                                 var dock_toggle_button = $('<i/>').addClass('fa fa-angle-down')
                                     .css({color: $.nplModal('get_setting', 'carousel_text_color')});
+
+                                // the container was marked hidden by the parent wrapper, adjust the angle-icon accordingly
+                                if (!methods.thumbnails.is_open()) {
+                                    dock_toggle_button.toggleClass('fa-angle-up fa-angle-down');
+                                }
+
                                 $(self._dom.stage).append(dock_toggle_button);
                                 self.append({'dock-toggle-container': dock_toggle_button});
                                 dock_toggle_container.click(self.proxy(function() {
@@ -859,8 +857,7 @@
                                 }
                                 if (methods.sidebar.is_open() && state.sidebar == null) {
                                     methods.sidebar.close();
-                                } else if (!$.nplModal('mobile.browser.any')
-                                       &&  !methods.sidebar.is_open()
+                                } else if (!methods.sidebar.is_open()
                                        &&  typeof state.sidebar !== 'undefined'
                                        &&  state.sidebar !== null) {
                                     methods.sidebar.open(state.sidebar);
@@ -944,7 +941,6 @@
                                 $.nplModal('log', 'theme galleria.events.npl_init()');
                                 // for some reason this isn't an option that can be passed at startup
                                 self.setPlaytime(($.nplModal('get_setting', 'slideshow_speed', 5) * 1000));
-                                self.$('container').css({background: $.nplModal('get_setting', 'background_color')});
 
                                 // Create next / back links
                                 var next_image_button = $('<i/>')

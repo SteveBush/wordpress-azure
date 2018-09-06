@@ -19,7 +19,7 @@ class M_Photocrati_Stripe extends C_Base_Module
 			'photocrati-stripe',
 			'Stripe',
 			'Provides integration with Stripe payment gateway',
-			'2.6.0',
+			'2.6.1',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com'
@@ -41,6 +41,13 @@ class M_Photocrati_Stripe extends C_Base_Module
     {
         add_action('init', array(&$this, 'route'));
         add_filter('ngg_pro_settings_reset_installers', array($this, 'return_own_installer'));
+
+        // Possibly warn users that TLS 1.2 is necessary for Stripe API calls
+        $notices = C_Admin_Notification_Manager::get_instance();
+        $notices->add(
+            'stripe_tls12_check',
+            new C_Stripe_TLS12_Check_Notification()
+        );
     }
 
     function route()
@@ -61,8 +68,9 @@ class M_Photocrati_Stripe extends C_Base_Module
 	function get_type_list()
 	{
         return array(
-            'A_Stripe_Checkout_Button' => 'adapter.stripe_checkout_button.php',
-            'A_Stripe_Checkout_Ajax'   => 'adapter.stripe_checkout_ajax.php'
+            'A_Stripe_Checkout_Button'			=> 'adapter.stripe_checkout_button.php',
+            'A_Stripe_Checkout_Ajax'			=> 'adapter.stripe_checkout_ajax.php',
+            'C_Stripe_TLS12_Check_Notification' => 'class.stripe_tls12_check_notification.php'
         );
 	}
 }
@@ -74,7 +82,9 @@ class C_Stripe_Installer extends AC_NextGen_Pro_Settings_Installer
         $this->set_defaults(array(
             'ecommerce_stripe_enable'      => '0',
             'ecommerce_stripe_key_public'  => '',
-            'ecommerce_stripe_key_private' => ''
+            'ecommerce_stripe_key_private' => '',
+            'ecommerce_stripe_tls12_checked' => FALSE,
+            'ecommerce_stripe_tls12_missing' => FALSE
         ));
 
         $this->set_groups(array('ecommerce'));

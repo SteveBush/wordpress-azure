@@ -5,8 +5,8 @@ if(preg_match('#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'])) { die('You 
 /*
  * Plugin Name: NextGEN Pro
  * Description: The complete "Pro" add-on for NextGEN Gallery. Enjoy ecommerce, beautiful new gallery displays, and a fullscreen, responsive Pro Lightbox with social sharing and commenting.
- * Version: 2.6.0
- * Plugin URI: http://www.imagely.com/wordpress-gallery-plugin
+ * Version: 2.6.3
+ * Plugin URI: http://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/
  * Author: Imagely
  * Author URI: https://www.imagely.com
  * License: GPLv2
@@ -37,7 +37,7 @@ class NextGEN_Gallery_Pro
 		    define('NGG_PRO_MODULE_URL', plugins_url(path_join(basename(dirname(__FILE__)), 'modules')));
 		    // NOTE: for legacy reasons we keep a definition of the old constant name as well, this might otherwise break when incorrect autoupdate modules are used
 		    define('NEXTGEN_GALLERY_PRO_MODULE_URL', NGG_PRO_MODULE_URL);
-		    define('NGG_PRO_PLUGIN_VERSION', '2.6.0');
+		    define('NGG_PRO_PLUGIN_VERSION', '2.6.3');
 
 			$ngg_activated 				= class_exists('C_NextGEN_Bootstrap');
 			$ngg_modules_initialized	= did_action('load_nextgen_gallery_modules');
