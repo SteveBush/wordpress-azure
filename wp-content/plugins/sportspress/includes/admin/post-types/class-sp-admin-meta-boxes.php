@@ -7,7 +7,7 @@
  * @author 		ThemeBoy
  * @category 	Admin
  * @package 	SportsPress/Admin/Meta_Boxes
- * @version		2.5.1
+ * @version		2.6.8
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -303,6 +303,9 @@ class SP_Admin_Meta_Boxes {
 
 		remove_meta_box( 'postimagediv', 'sp_performance', 'side' );
 		add_meta_box( 'postimagediv', __( 'Icon', 'sportspress' ), 'post_thumbnail_meta_box', 'sp_performance', 'side', 'low' );
+		
+		remove_meta_box( 'postimagediv', 'sp_statistic', 'side' );
+		add_meta_box( 'postimagediv', __( 'Icon', 'sportspress' ), 'post_thumbnail_meta_box', 'sp_statistic', 'side', 'low' );
 	}
 
 	/**

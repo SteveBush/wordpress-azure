@@ -5,7 +5,7 @@
  * @author 		ThemeBoy
  * @category 	Admin
  * @package 	SportsPress/Admin/Post_Types
- * @version		2.6
+ * @version		2.6.5
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -102,6 +102,11 @@ class SP_Admin_CPT_Event extends SP_Admin_CPT {
 
 			$team_names = array_unique( $team_names );
 
+			$reverse_teams = get_option( 'sportspress_event_reverse_teams', 'no' ) === 'yes' ? true : false;
+			if ( $reverse_teams ) {
+				$team_names = array_reverse( $team_names );
+			}
+
 			$data['post_title'] = implode( ' ' . get_option( 'sportspress_event_teams_delimiter', 'vs' ) . ' ', $team_names );
 
 		endif;
@@ -174,6 +179,10 @@ class SP_Admin_CPT_Event extends SP_Admin_CPT {
 				$teams = (array)get_post_meta( $post_id, 'sp_team', false );
 				$teams = array_filter( $teams );
 				$teams = array_unique( $teams );
+				$reverse_teams = get_option( 'sportspress_event_reverse_teams', 'no' ) === 'yes' ? true : false;
+				if ( $reverse_teams ) {
+					$teams = array_reverse( $teams , true );
+				}
 				if ( empty( $teams ) ):
 					echo '&mdash;';
 				else:

@@ -5,7 +5,7 @@
  * The SportsPress event class handles individual event data.
  *
  * @class 		SP_Event
- * @version		2.6
+ * @version		2.6.8
  * @package		SportsPress/Classes
  * @category	Class
  * @author 		ThemeBoy
@@ -569,6 +569,9 @@ class SP_Event extends SP_Custom_Post{
 				),
 			),
 		) );
+		if ( ! is_array( $duties ) ) {
+			return array();
+		}
 
 		if ( ! $include_empty && empty( $duties ) ) return null;
 
