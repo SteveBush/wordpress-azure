@@ -7,7 +7,7 @@
  * @author 		ThemeBoy
  * @category 	Core
  * @package 	SportsPress/Functions
- * @version		2.6.3
+ * @version   2.6.8
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -1460,6 +1460,28 @@ if ( !function_exists( 'sp_sort_table_teams' ) ) {
 
 		// Default sort by alphabetical
 		return strcmp( sp_array_value( $a, 'name', '' ), sp_array_value( $b, 'name', '' ) );
+	}
+}
+
+if ( ! function_exists( 'sp_sort_terms' ) ) {
+
+	/**
+	 * Sorts terms by `sp_order`.
+	 *
+	 * @param  int|object $a Term ID or term.
+	 * @param  int|object $b Term ID or term.
+	 * @return int    Sorting order.
+	 */
+	function sp_sort_terms( $a, $b ) {
+		if ( is_numeric( $a ) ) {
+			$a = intval( $a );
+			$a = get_term( $a );
+		}
+		if ( is_numeric( $b ) ) {
+			$b = intval( $b );
+			$b = get_term( $b );
+		}
+		return get_term_meta( $a->term_id, 'sp_order', true ) > get_term_meta( $b->term_id, 'sp_order', true );
 	}
 }
 

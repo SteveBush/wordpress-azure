@@ -4,7 +4,7 @@
  *
  * @author 		ThemeBoy
  * @package 	SportsPress/Templates
- * @version   2.6
+ * @version   2.6.5
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -15,6 +15,10 @@ if ( ! isset( $id ) )
 
 $teams = (array) get_post_meta( $id, 'sp_team' );
 $teams = array_filter( $teams, 'sp_filter_positive' );
+$reverse_teams = get_option( 'sportspress_event_reverse_teams', 'no' ) === 'yes' ? true : false;
+if ( $reverse_teams ) {
+	$teams = array_reverse( $teams );
+}
 
 if ( ! $teams ) return;
 

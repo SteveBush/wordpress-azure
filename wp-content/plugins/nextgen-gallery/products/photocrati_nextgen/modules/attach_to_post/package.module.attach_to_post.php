@@ -506,7 +506,7 @@ class Mixin_Attach_To_Post extends Mixin
         wp_enqueue_script('photocrati_ajax');
         // Enqueue logic for the Attach to Post interface as a whole
         wp_enqueue_script('ngg_attach_to_post_js', $this->get_static_url('photocrati-attach_to_post#attach_to_post.js'), FALSE, NGG_SCRIPT_VERSION);
-        wp_enqueue_style('ngg_attach_to_post', $this->get_static_url('photocrati-attach_to_post#attach_to_post.css'), FALSE, NGG_SCRIPT_VERSION);
+        wp_enqueue_style('ngg_attach_to_post', $this->get_static_url('photocrati-attach_to_post#attach_to_post.css'), FALSE, C_Component_Registry::get_instance()->get_module('photocrati-attach_to_post')->module_version);
         wp_dequeue_script('debug-bar-js');
         wp_dequeue_style('debug-bar-css');
         $this->enqueue_display_tab_js();

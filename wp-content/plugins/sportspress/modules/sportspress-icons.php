@@ -5,7 +5,7 @@ Plugin URI: http://themeboy.com/
 Description: Add vector performance icons to SportsPress.
 Author: ThemeBoy
 Author URI: http://themeboy.com/
-Version: 2.5.2
+Version: 2.6.8
 */
 
 // Exit if accessed directly
@@ -17,7 +17,7 @@ if ( ! class_exists( 'SportsPress_Icons' ) ) :
  * Main SportsPress Icons Class
  *
  * @class SportsPress_Icons
- * @version	2.5.2
+ * @version	2.6.8
  */
 class SportsPress_Icons {
 
@@ -41,6 +41,7 @@ class SportsPress_Icons {
 		add_filter( 'sportspress_event_performance_icons', array( $this, 'replace_icons' ), 10, 3 );
 		add_filter( 'admin_post_thumbnail_html', array( $this, 'admin_post_thumbnail_html' ), 10, 2 );
 		add_action( 'sportspress_process_sp_performance_meta', array( $this, 'save' ), 10, 2 );
+		add_action( 'sportspress_process_sp_statistic_meta', array( $this, 'save' ), 10, 2 );
 	}
 
 	/**
@@ -48,7 +49,7 @@ class SportsPress_Icons {
 	*/
 	private function define_constants() {
 		if ( !defined( 'SP_ICONS_VERSION' ) )
-			define( 'SP_ICONS_VERSION', '2.5.2' );
+			define( 'SP_ICONS_VERSION', '2.6.8' );
 
 		if ( !defined( 'SP_ICONS_URL' ) )
 			define( 'SP_ICONS_URL', plugin_dir_url( __FILE__ ) );
@@ -91,6 +92,12 @@ class SportsPress_Icons {
 			'racing-flag',
 			'shoe',
 			'card',
+			'league',
+			'shield',
+			'tshirt',
+			'whistle',
+			'time',
+			'friendly',
 			'sub',
 			'update',
 			'undo',
@@ -143,7 +150,7 @@ class SportsPress_Icons {
 
 		// Bypass if not performance post type
 		$post_type = get_post_type( $id );
-		if ( 'sp_performance' !== $post_type ) return $content;
+		if ( 'sp_performance' !== $post_type && 'sp_statistic' !== $post_type ) return $content;
 
 		// Detect if image uploaded
 		$is_uploaded = isset( $_POST['thumbnail_id'] );
