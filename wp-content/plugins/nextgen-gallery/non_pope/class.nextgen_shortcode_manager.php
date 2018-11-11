@@ -85,8 +85,9 @@ class C_NextGen_Shortcode_Manager
 
 	/**
 	 * We're parsing our own shortcodes because WP can't yet handle nested shortcodes
-	 * [ngg_images param="[slideshow]"]
-	 * @param $content
+	 * [ngg param="[slideshow]"]
+	 * @param string $content
+	 * @return string
 	 */
 	function fix_nested_shortcodes($content)
 	{

@@ -1,6 +1,7 @@
 <?php
 
 define('NGG_ATTACH_TO_POST_SLUG', 'nextgen-attach_to_post');
+define('NGG_ATTACH_TO_POST_VERSION', '3.0.0.5');
 
 class M_Attach_To_Post extends C_Base_Module
 {
@@ -25,7 +26,7 @@ class M_Attach_To_Post extends C_Base_Module
 			'photocrati-attach_to_post',
 			'Attach To Post',
 			'Provides the "Attach to Post" interface for displaying galleries and albums',
-			'3.0.3',
+			NGG_ATTACH_TO_POST_VERSION,
 			'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
 			'Imagely',
 			'https://www.imagely.com',
@@ -63,7 +64,6 @@ class M_Attach_To_Post extends C_Base_Module
 
         return $this->_event_publisher;
     }
-
 
 	/**
 	 * Registers requires the utilites that this module provides
@@ -110,7 +110,6 @@ class M_Attach_To_Post extends C_Base_Module
 		if (isset($_REQUEST[NGG_ATTACH_TO_POST_SLUG])) $retval = FALSE;
 		return $retval;
 	}
-
 
 	function _register_hooks()
 	{
@@ -170,7 +169,6 @@ class M_Attach_To_Post extends C_Base_Module
 	function enqueue_tinymce_plugin_css()
 	{
 		add_editor_style('https://fonts.googleapis.com/css?family=Lato');
-		add_editor_style(M_Gallery_Display::get_fontawesome_url());
 		add_editor_style(C_Router::get_instance()->get_static_url('photocrati-attach_to_post#ngg_attach_to_post_tinymce_plugin.css'));
 	}
 
@@ -178,7 +176,7 @@ class M_Attach_To_Post extends C_Base_Module
      * Prevents ATP preview image placeholders from being used as opengraph / twitter metadata
      *
      * @param string $image
-     * @return null
+     * @return null|string
      */
 	function hide_preview_image_from_yoast($image)
     {
@@ -235,9 +233,8 @@ class M_Attach_To_Post extends C_Base_Module
 	/**
 	 * In 2.0.66.X and earlier, ATP placeholder images used a different url than
 	 * what 2.0.69 uses. Therefore, we need to convert those
-	 * @param $content
-	 *
-	 * @return mixed
+	 * @param string $content
+	 * @return string
 	 */
 	function fix_preview_images($content)
 	{
@@ -295,6 +292,9 @@ class M_Attach_To_Post extends C_Base_Module
         }
     }
 
+	/**
+	 * @param C_Router $router
+	 */
     function define_routes($router)
     {
         $app = $router->create_app('/'.NGG_ATTACH_TO_POST_SLUG);
@@ -388,12 +388,21 @@ class M_Attach_To_Post extends C_Base_Module
 
 		elseif (isset($_REQUEST['attach_to_post']) OR
 		  (isset($_REQUEST['page']) && strpos($_REQUEST['page'], 'nggallery') !== FALSE)) {
-			wp_enqueue_script('iframely', $router->get_static_url('photocrati-attach_to_post#iframely.js'), FALSE, NGG_SCRIPT_VERSION);
-			wp_enqueue_style('iframely',  $router->get_static_url('photocrati-attach_to_post#iframely.css'), FALSE, NGG_SCRIPT_VERSION);
-			wp_enqueue_script('nextgen_admin_js_atp', $router->get_static_url('photocrati-nextgen_admin#nextgen_admin_page.js'), FALSE, NGG_SCRIPT_VERSION);
+			wp_enqueue_script(
+			    'iframely',
+                $router->get_static_url('photocrati-attach_to_post#iframely.js'),
+                array(),
+                NGG_SCRIPT_VERSION
+            );
+			wp_enqueue_style(
+			    'iframely',
+                $router->get_static_url('photocrati-attach_to_post#iframely.css'),
+                array(),
+                NGG_SCRIPT_VERSION
+            );
+			wp_enqueue_script('nextgen_admin_js');
 		}
 	}
-
 
 	/**
 	 * Enqueues resources needed by the TinyMCE editor
@@ -422,11 +431,10 @@ class M_Attach_To_Post extends C_Base_Module
         }
 	}
 
-
 	/**
 	 * Adds a TinyMCE button for the Attach To Post plugin
 	 * @param array $buttons
-	 * @returns array
+	 * @return array
 	 */
 	function add_attach_to_post_button($buttons)
 	{
@@ -438,7 +446,6 @@ class M_Attach_To_Post extends C_Base_Module
         return $buttons;
 	}
 
-
 	/**
 	 * Adds the Attach To Post TinyMCE plugin
 	 * @param array $plugins
@@ -447,12 +454,15 @@ class M_Attach_To_Post extends C_Base_Module
 	 */
 	function add_attach_to_post_tinymce_plugin($plugins)
 	{
-        $router = C_Router::get_instance();
+		$router = C_Router::get_instance();
 		wp_enqueue_script('photocrati_ajax');
-		$plugins[$this->attach_to_post_tinymce_plugin] = $router->get_static_url('photocrati-attach_to_post#ngg_attach_to_post_tinymce_plugin.js');
+		$plugins[$this->attach_to_post_tinymce_plugin] = add_query_arg(
+			'ver',
+			NGG_SCRIPT_VERSION,
+			$router->get_static_url('photocrati-attach_to_post#ngg_attach_to_post_tinymce_plugin.js')
+		);
 		return $plugins;
 	}
-
 
     /**
      * Adds the Attach To Post TinyMCE i18n strings
@@ -464,7 +474,6 @@ class M_Attach_To_Post extends C_Base_Module
         $mce_translation['ngg_attach_to_post.title'] = __('Attach NextGEN Gallery to Post', 'nggallery');
         return $mce_translation;
     }
-
 
 	/**
 	 * Notify frames that a new gallery has been created
@@ -518,6 +527,9 @@ class M_Attach_To_Post extends C_Base_Module
         $this->_get_frame_event_publisher()->add_event($event);
 	}
 
+	/**
+	 * @return array
+	 */
     function get_type_list()
     {
         return array(

@@ -5,7 +5,7 @@
  * The SportsPress modules class stores available modules.
  *
  * @class 		SP_Modules
- * @version		2.6
+ * @version		2.6.9
  * @package		SportsPress/Classes
  * @category	Class
  * @author 		ThemeBoy
@@ -56,6 +56,13 @@ class SP_Modules {
 					'icon' => 'sp-icon-statistics',
 					'link' => 'https://www.themeboy.com/sportspress-extensions/match-stats/',
 					'desc' => __( 'Display head-to-head team comparison charts in events.', 'sportspress' ),
+				),
+				'past_meetings' => array(
+					'label' => __( 'Past Meetings', 'sportspress' ),
+					'class' => 'SportsPress_Past_Meetings',
+					'icon' => 'sp-icon-history',
+					'link' => 'https://www.themeboy.com/sportspress-extensions/past-meetings/',
+					'desc' => __( 'Display previous events between teams in list or blocks layout.', 'sportspress' ),
 				),
 				'timelines' => array(
 					'label' => __( 'Timelines', 'sportspress' ),

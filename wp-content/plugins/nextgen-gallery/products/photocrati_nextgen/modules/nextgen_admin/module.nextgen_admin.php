@@ -26,7 +26,7 @@ class M_NextGen_Admin extends C_Base_Module
 			'photocrati-nextgen_admin',
 			'NextGEN Administration',
 			'Provides a framework for adding Administration pages',
-			'3.0.0',
+			'3.0.0.1',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
             'Imagely',
             'https://www.imagely.com'
@@ -116,7 +116,7 @@ class M_NextGen_Admin extends C_Base_Module
 				if (has_action($hook))
 					do_action($hook, $handle, $version);
 				else
-					wp_enqueue_script($handle, NULL, NULL, $version);
+					wp_enqueue_script($handle, '', array(), $version);
 
 			}
 
@@ -126,7 +126,7 @@ class M_NextGen_Admin extends C_Base_Module
 					if (has_action($hook))
 						do_action($hook, $handle, $version);
 					else
-						wp_enqueue_style($handle, NULL, NULL, $version);
+						wp_enqueue_style($handle, '', array(), $version);
 				}
 			}
 
@@ -174,8 +174,11 @@ class M_NextGen_Admin extends C_Base_Module
         add_action( 'all_admin_notices', array($this, 'custom_post_type_markup_top'));
         add_action( 'admin_footer', array($this, 'custom_post_type_markup_bottom'));
 
-		// Provides admin notices
-		$notices = C_Admin_Notification_Manager::get_instance();
+        // Requirements need to be registered with the notification manager *before* it's serve_ajax_request()
+        add_action('init', array(C_Admin_Requirements_Manager::get_instance(), 'create_notification'), -10);
+
+        // Provides admin notices
+        $notices = C_Admin_Notification_Manager::get_instance();
 		add_action('init', array($notices, 'serve_ajax_request'));
 		add_action('admin_footer', array($notices, 'enqueue_scripts'));
 		add_action('do_ngg_notices', array($notices, 'render'));
@@ -186,21 +189,19 @@ class M_NextGen_Admin extends C_Base_Module
             add_action('all_admin_notices', get_class().'::emit_do_notices_action');
         }
 
-        $notices = C_Admin_Notification_Manager::get_instance();
-
-        $php_id = 0;
-
         if (defined('PHP_VERSION_ID')) {
             $php_id = PHP_VERSION_ID;
         }
         else {
             $version = explode('.', PHP_VERSION);
-
             $php_id = ($version[0] * 10000 + $version[1] * 100 + $version[2]);
         }
 
         if ($php_id < 50300) {
-            $notices->add("ngg_php52_deprecation", array("message" => __('PHP 5.2 will be deprecated in a future version of NextGEN. Please upgrade your PHP installation to 5.3 or above.', 'nggallery')));
+            $notices->add(
+                "ngg_php52_deprecation",
+                array("message" => __('PHP 5.2 will be deprecated in a future version of NextGEN. Please upgrade your PHP installation to 5.3 or above.', 'nggallery'))
+            );
         }
 
         // Add review notices
@@ -296,48 +297,48 @@ class M_NextGen_Admin extends C_Base_Module
 	        'gritter',
 	        $router->get_static_url('photocrati-nextgen_admin#gritter/gritter.min.js'),
 	        array('jquery'),
-	        $this->module_version
+	        NGG_SCRIPT_VERSION
         );
         wp_register_style(
 	        'gritter',
 	        $router->get_static_url('photocrati-nextgen_admin#gritter/css/gritter.css'),
-	        FALSE,
-	        $this->module_version
+	        array(),
+	        NGG_SCRIPT_VERSION
         );
         wp_register_script(
 	        'ngg_progressbar',
 	        $router->get_static_url('photocrati-nextgen_admin#ngg_progressbar.js'),
 	        array('gritter'),
-	        $this->module_version
+	        NGG_SCRIPT_VERSION
         );
         wp_register_style(
 	        'ngg_progressbar',
 	        $router->get_static_url('photocrati-nextgen_admin#ngg_progressbar.css'),
 	        array('gritter'),
-	        $this->module_version
+	        NGG_SCRIPT_VERSION
         );
         wp_register_style(
 	        'ngg_select2',
 	        $router->get_static_url('photocrati-nextgen_admin#select2/select2.css'),
-	        FALSE,
-	        $this->module_version
+	        array(),
+	        NGG_SCRIPT_VERSION
         );
         wp_register_script(
 	        'ngg_select2',
 	        $router->get_static_url('photocrati-nextgen_admin#select2/select2.js'),
-	        FALSE,
-	        $this->module_version
+	        array(),
+	        NGG_SCRIPT_VERSION
         );
         wp_register_script(
             'jquery.nextgen_radio_toggle',
             $router->get_static_url('photocrati-nextgen_admin#jquery.nextgen_radio_toggle.js'),
             array('jquery'),
-	        $this->module_version
+	        NGG_SCRIPT_VERSION
         );
         wp_register_style(
 	        'ngg-jquery-ui',
 	        $router->get_static_url('photocrati-nextgen_admin#jquery-ui/jquery-ui-1.10.4.custom.css'),
-	        FALSE,
+	        array(),
 	        '1.10.4'
         );
         wp_register_script(
@@ -355,13 +356,13 @@ class M_NextGen_Admin extends C_Base_Module
             'nextgen_admin_css', 
             $router->get_static_url('photocrati-nextgen_admin#nextgen_admin_page.css'), 
             array('wp-color-picker'), 
-            $this->module_version
+            NGG_SCRIPT_VERSION
         );
         wp_register_script(
             'nextgen_admin_js',
             $router->get_static_url('photocrati-nextgen_admin#nextgen_admin_page.js'),
             array('wp-color-picker'),
-	        $this->module_version
+	        NGG_SCRIPT_VERSION
         );
 
         // Style the parent menu icons for NextGEN-related pages
@@ -555,18 +556,22 @@ class M_NextGen_Admin extends C_Base_Module
 		
 		global $ngg_fs;
 		// make sure we don't trigger the wizards if NGG Fremius is running or this is an AJAX request
-		if (isset($_REQUEST['ngg_dismiss_notice']) || (is_admin() && !M_Attach_To_Post::is_atp_url() && !isset($_REQUEST['attach_to_post']) && (!isset($ngg_fs) || !$ngg_fs->is_activation_mode()) && (!defined('DOING_AJAX') || !DOING_AJAX))) {
+		if (isset($_REQUEST['ngg_dismiss_notice']) || (is_admin() && !M_Attach_To_Post::is_atp_url() && !isset($_REQUEST['attach_to_post']) && (!isset($ngg_fs) || !$ngg_fs->is_activation_mode()) && (!defined('DOING_AJAX') || !DOING_AJAX)))
+		{
 			$wizards->set_active(true);
 		}
 		
 		// before adding notices or activating individual wizards, ensure wizards are globally enabled and no wizard is currently running already
-		if ($wizards->is_active() && $wizards->get_running_wizard() == null) {
+		if ($wizards->is_active() && $wizards->get_running_wizard() == null)
+		{
 			// add notice for gallery creation wizard
 			$wizard = $wizards->get_wizard('nextgen.beginner.gallery_creation_igw');
 			
-			if (!$wizard->is_completed() && !$wizard->is_cancelled()) {
+			if (!$wizard->is_completed() && !$wizard->is_cancelled())
+			{
 				$mapper = C_Gallery_Mapper::get_instance();
-				if ($mapper->count() == 0) {
+				if ($mapper->count() == 0)
+				{
 					$wizard->set_active(true);
 					$notices = C_Admin_Notification_Manager::get_instance();
 					$notices->add('ngg_wizard_' . $wizard->get_id(), array("message" => __('Thanks for installing NextGEN Gallery! Want help creating your first gallery?', 'nggallery') . ' <a data-ngg-wizard="' . $wizard->get_id() . '" class="ngg-wizard-invoker" href="' . esc_url(add_query_arg('ngg_wizard', $wizard->get_id())) . '">' . __('Launch the Gallery Wizard', 'nggallery') . '</a>. ' . __('If you close this message, you can also launch the Gallery Wizard at any time from the', 'nggallery') . ' <a href="' . esc_url(admin_url('admin.php?page=nextgen-gallery')) . '">' . __('NextGEN Overview page', 'nggallery') . '</a>.'));
@@ -580,15 +585,15 @@ class M_NextGen_Admin extends C_Base_Module
 	
 	function enqueue_wizard_components()
 	{
-    $router = C_Router::get_instance();
+        $router = C_Router::get_instance();
         
-		// Wizards related scripts/styles
-			wp_register_style(
-			'bootstrap-tooltip',
-			$router->get_static_url('photocrati-nextgen_admin#bootstrap/css/bootstrap-tooltip.css'),
-				FALSE,
-				NGG_SCRIPT_VERSION
-			);
+        // Wizards related scripts/styles
+        wp_register_style(
+            'bootstrap-tooltip',
+            $router->get_static_url('photocrati-nextgen_admin#bootstrap/css/bootstrap-tooltip.css'),
+            array(),
+            NGG_SCRIPT_VERSION
+        );
 		
 		wp_register_script(
 			'tourist',
@@ -634,10 +639,6 @@ class M_NextGen_Admin extends C_Base_Module
 		};
 	}
 
-	function initialize()
-	{
-	}
-
 	/**
 	 * Adds menu pages to manage NextGen Settings
 	 * @uses action: admin_menu
@@ -650,17 +651,18 @@ class M_NextGen_Admin extends C_Base_Module
     function get_type_list()
     {
         return array(
-            'A_Fs_Access_Page' => 'adapter.fs_access_page.php',
-            'A_MVC_Validation' => 'adapter.mvc_validation.php',
-            'C_Nextgen_Admin_Installer' => 'class.nextgen_admin_installer.php',
-            'A_Nextgen_Admin_Default_Pages' => 'adapter.nextgen_admin_default_pages.php',
-            'A_Nextgen_Settings_Routes' => 'adapter.nextgen_settings_routes.php',
-            'C_Form' => 'class.form.php',
-            'C_Form_Manager' => 'class.form_manager.php',
-            'C_Nextgen_Admin_Page_Controller' => 'class.nextgen_admin_page_controller.php',
-            'C_NextGen_Admin_Page_Manager' => 'class.nextgen_admin_page_manager.php',
-	        'C_Admin_Notification_Manager'  =>  'class.admin_notification_manager.php',
-            'C_NextGEN_Wizard_Manager' => 'class.nextgen_wizard_manager.php',
+	        'A_Fs_Access_Page'                => 'adapter.fs_access_page.php',
+	        'A_MVC_Validation'                => 'adapter.mvc_validation.php',
+	        'A_Nextgen_Admin_Default_Pages'   => 'adapter.nextgen_admin_default_pages.php',
+	        'A_Nextgen_Settings_Routes'       => 'adapter.nextgen_settings_routes.php',
+	        'C_Admin_Notification_Manager'    => 'class.admin_notification_manager.php',
+	        'C_Admin_Requirements_Manager'    => 'class.admin_requirements_manager.php',
+	        'C_Form'                          => 'class.form.php',
+	        'C_Form_Manager'                  => 'class.form_manager.php',
+	        'C_NextGEN_Wizard_Manager'        => 'class.nextgen_wizard_manager.php',
+	        'C_NextGen_Admin_Page_Manager'    => 'class.nextgen_admin_page_manager.php',
+	        'C_Nextgen_Admin_Installer'       => 'class.nextgen_admin_installer.php',
+	        'C_Nextgen_Admin_Page_Controller' => 'class.nextgen_admin_page_controller.php'
         );
     }
 }
@@ -732,4 +734,3 @@ class C_NextGen_Admin_Option_Handler
 }
 
 new M_NextGen_Admin();
-

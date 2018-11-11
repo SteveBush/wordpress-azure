@@ -557,6 +557,10 @@ table {
     font-size: 13px;
 }
 
+#save_displayed_gallery:disabled {
+	background: gray !important;
+}
+
 /* 3b. Display Tab: "Customize Display Settings" Subtab */
 
 #display_settings_tab #display_settings_form table tr td:first-child {
