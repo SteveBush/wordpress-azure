@@ -386,8 +386,11 @@ endif;
 if ( ! function_exists( 'rookie_customize_scripts' ) ):
 function rookie_customize_scripts() {
 	$screen = get_current_screen();
-	if ( 'customize' !== $screen->id ) return;
-	wp_enqueue_script( 'rookie-customize-panel', get_template_directory_uri() . '/js/customize-panel.js', array( 'jquery' ), '1.3.2', true );
+	if ( 'customize' == $screen->id ) {
+		wp_enqueue_script( 'rookie-customize-panel', get_template_directory_uri() . '/js/customize-panel.js', array( 'jquery' ), '1.3.2', true );
+	} elseif ( 'appearance_page_rookie' == $screen->id ) {
+		wp_enqueue_style( 'rookie-admin', get_template_directory_uri() . '/admin.css');
+	}
 }
 add_action( 'admin_enqueue_scripts', 'rookie_customize_scripts' );
 endif;
@@ -714,7 +717,8 @@ function rookie_custom_colors() {
 	.sp-view-all-link:hover,
 	.sp-template-event-calendar #prev a:hover,
 	.sp-template-event-calendar #next a:hover,
-	.single-sp_staff .entry-header .entry-title strong {
+	.single-sp_staff .entry-header .entry-title strong,
+	.sp-message {
 		color: <?php echo $colors['link']; ?>; }
 	cite:before,
 	button,
@@ -732,6 +736,8 @@ function rookie_custom_colors() {
 	.mega-slider__row--active,
 	.mega-slider__row--active:hover {
 		background: <?php echo $colors['link']; ?>; }
+	.sp-message {
+		border-color: <?php echo $colors['link']; ?>; }
 	caption,
 	.sp-table-caption,
 	.opta-widget-container h2 {
@@ -839,6 +845,10 @@ function rookie_custom_colors() {
 	</style>
 	<?php
 }
+endif;
+
+if ( is_admin() ):
+	require_once get_template_directory() . '/inc/admin.php';
 endif;
 
 /**

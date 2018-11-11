@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 1.5.3 =
+* Feature - Display match day indicators in event calendars.
+* Feature - Add welcome screen with theme overview and upgrade path.
+
 = 1.5.2 =
 * Tweak - Add bottom margin to event logos in archive.
 * Fix - Allow linking of events in archives.
