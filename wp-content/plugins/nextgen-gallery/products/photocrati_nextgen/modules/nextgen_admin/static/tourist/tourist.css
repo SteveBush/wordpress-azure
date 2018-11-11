@@ -47,6 +47,7 @@
     text-shadow: none;
     border: none;
     padding: 1px 20px;
+    float:right;
 }
 .tourist-popover .button-primary:hover {
     background-color: #A9C524;

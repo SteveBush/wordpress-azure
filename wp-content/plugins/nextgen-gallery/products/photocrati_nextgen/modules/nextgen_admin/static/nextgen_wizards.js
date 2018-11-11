@@ -212,7 +212,7 @@ if (typeof(NextGEN_Wizard_Manager) === 'undefined') {
     	Tourist.Tip.Base.prototype.nextButtonTemplate = '<a class="button-primary pull-right tour-next">Next step →</a>';
     	Tourist.Tip.Base.prototype.finalButtonTemplate = '<button class="button-primary pull-right tour-next">Finish up</button>';
 			// override close button template
-			Tourist.Tip.Base.prototype.closeButtonTemplate = '<a class="btn btn-close tour-close" href="#"><i class="icon icon-remove fa fa-close"></i></a>';
+			Tourist.Tip.Base.prototype.closeButtonTemplate = '<a class="btn btn-close tour-close" href="#"><i class="icon icon-remove far fa-window-close"></i></a>';
 			
 			// override Tourist's BootstrapTip logic to retrieve target bounds
 		  Tourist.Tip.BootstrapTip.prototype._getTargetBounds = function(target) {

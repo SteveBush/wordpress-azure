@@ -106,7 +106,7 @@ class M_NextGen_Basic_Singlepic extends C_Base_Module
             wp_enqueue_style(
                 'nextgen_basic_singlepic_style',
                 $router->get_static_url(NGG_BASIC_SINGLEPIC . '#nextgen_basic_singlepic.css'),
-                FALSE,
+                array(),
                 NGG_SCRIPT_VERSION
             );
         }
