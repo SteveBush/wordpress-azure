@@ -24,6 +24,7 @@ class A_PictureFill_Gallery_Storage extends Mixin
         $retval = $this->call_parent('generate_image_size', $image, $named_size, $params, $skip_defaults);
         // TODO: NGG should flush the displayed gallery cache after a user regenerates thumbnails
         // As of 2.0.78.5, it doesn't do this
+        // TODO: remove this. NextGen 3.0 is the current public release and C_Photocrati_Cache doesn't exist anymore.
         if (version_compare(NGG_PLUGIN_VERSION, '2.0.78.5', '<=')) {
             C_Photocrati_Cache::flush('displayed_gallery_rendering');
         }

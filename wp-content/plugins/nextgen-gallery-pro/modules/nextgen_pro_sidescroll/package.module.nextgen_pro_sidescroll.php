@@ -6,7 +6,7 @@ class A_NextGen_Pro_Sidescroll_Controller extends Mixin
         $this->call_parent('enqueue_frontend_resources', $displayed_gallery);
         /* Enqueue 5 dependences for portfolio.js */
         if (!wp_script_is('imagesloaded', 'registered')) {
-            wp_register_script('imagesloaded', $this->object->get_static_url(NGG_PRO_SIDESCROLL . '#imagesloaded.js'), array(), '3.2.0', 1);
+            wp_register_script('imagesloaded', $this->object->get_static_url(NGG_PRO_SIDESCROLL . '#imagesloaded.js'), array(), '3.2.0', TRUE);
         }
         wp_enqueue_script('underscore');
         wp_enqueue_script('jquery-easing', $this->object->get_static_url(NGG_PRO_SIDESCROLL . '#jquery.easing.1.3.js'), array('jquery'), '1.3', TRUE);
@@ -66,7 +66,7 @@ class A_NextGen_Pro_Sidescroll_Mapper extends Mixin
         $this->call_parent('set_defaults', $entity);
         if ($entity->name == NGG_PRO_SIDESCROLL) {
             $this->_set_default_value($entity, 'settings', 'height', 400);
+            $this->_set_default_value($entity, 'settings', 'display_type_view', 'default');
         }
-        $this->_set_default_value($entity, 'settings', 'display_type_view', 'default');
     }
 }

@@ -44,8 +44,7 @@ class A_NextGen_Pro_Masonry_Controller extends Mixin
         wp_enqueue_style('nextgen_pro_masonry_style', $this->get_static_url('photocrati-nextgen_pro_masonry#style.css'));
         // Wordpress prior to 3.9 included an older version of Masonry than we wanted.
         if ($wp_version >= 3.9) {
-            wp_enqueue_script('waitforimages', $this->object->get_static_url('photocrati-nextgen_basic_gallery#slideshow/jquery.waitforimages.js'), array('jquery'), NGG_SCRIPT_VERSION);
-            wp_enqueue_script('nextgen_pro_masonry_script', $this->get_static_url('photocrati-nextgen_pro_masonry#nextgen_pro_masonry.js'), array('jquery', 'masonry', 'waitforimages'));
+            wp_enqueue_script('nextgen_pro_masonry_script', $this->get_static_url('photocrati-nextgen_pro_masonry#nextgen_pro_masonry.js'), array('jquery', 'masonry', 'ngg_waitforimages'));
         } else {
             // When we began pro-masonry development Wordpress did not yet include Masonry; when they did include it
             // it was an older version than what NextGEN Pro had shipped with.

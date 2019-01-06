@@ -102,6 +102,40 @@ class A_Stripe_Checkout_Button extends Mixin
         return $retval;
     }
 }
+class A_Stripe_Checkout_Form extends Mixin
+{
+    function _get_field_names()
+    {
+        $fields = $this->call_parent('_get_field_names');
+        $fields[] = 'nextgen_pro_ecommerce_stripe_enable';
+        $fields[] = 'nextgen_pro_ecommerce_stripe_key_public';
+        $fields[] = 'nextgen_pro_ecommerce_stripe_key_private';
+        return $fields;
+    }
+    function enqueue_static_resources()
+    {
+        $this->call_parent('enqueue_static_resources');
+        wp_enqueue_script('ngg_pro_stripe_form', $this->get_static_url('photocrati-stripe#form.js'));
+    }
+    function _render_nextgen_pro_ecommerce_stripe_enable_field($model)
+    {
+        $model = new stdClass();
+        $model->name = 'ecommerce';
+        return $this->_render_radio_field($model, 'stripe_enable', __('Enable Stripe', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_stripe_enable, __('Not all currencies are supported by all payment gateways. Please be sure to confirm your desired currency is supported by Stripe', 'nextgen-gallery-pro'));
+    }
+    function _render_nextgen_pro_ecommerce_stripe_key_public_field($model)
+    {
+        $model = new stdClass();
+        $model->name = 'ecommerce';
+        return $this->_render_text_field($model, 'stripe_key_public', __('Public key', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_stripe_key_public, '', !C_NextGen_Settings::get_instance()->ecommerce_stripe_enable ? TRUE : FALSE);
+    }
+    function _render_nextgen_pro_ecommerce_stripe_key_private_field($model)
+    {
+        $model = new stdClass();
+        $model->name = 'ecommerce';
+        return $this->_render_text_field($model, 'stripe_key_private', __('Private key', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_stripe_key_private, '', !C_NextGen_Settings::get_instance()->ecommerce_stripe_enable ? TRUE : FALSE);
+    }
+}
 class C_Stripe_TLS12_Check_Notification
 {
     function is_renderable()
@@ -111,30 +145,11 @@ class C_Stripe_TLS12_Check_Notification
         if (!$settings->ecommerce_stripe_enable) {
             return FALSE;
         }
-        // If we've already checked and are missing TLS 1.2 then just show the notification
-        if ($settings->ecommerce_stripe_tls12_missing) {
-            return TRUE;
-        }
-        // We've checked before and it wasn't missing then - don't show this notification and don't check again
-        if ($settings->ecommerce_stripe_tls12_checked) {
+        // Determine if CURL supports TLS 1.2
+        if (defined('CURL_SSLVERSION_TLSv1_2')) {
             return FALSE;
         }
-        // Load Stripe and run our test
-        if (!class_exists('Stripe')) {
-            include_once 'stripe-sdk/lib/Stripe.php';
-        }
-        Stripe::setApiKey("sk_test_BQokikJOvBiI2HlWgH4olfQ2");
-        Stripe::$apiBase = "https://api-tls12.stripe.com";
-        try {
-            $settings->ecommerce_stripe_tls12_checked = TRUE;
-            $settings->save();
-            Stripe_Charge::all();
-        } catch (Stripe_ApiConnectionError $e) {
-            $settings->ecommerce_stripe_tls12_missing = TRUE;
-            $settings->save();
-            return TRUE;
-        }
-        return FALSE;
+        return TRUE;
     }
     function render()
     {

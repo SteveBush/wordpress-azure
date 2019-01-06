@@ -601,13 +601,30 @@
                 'blur .nggpl-quantity_field': 'quantity_lost_focus',
                 'focusout .nggpl-quantity_field': 'quantity_lost_focus',
                 'touchstart #ngg_update_cart_btn': 'update_cart',
-                'click #ngg_update_cart_btn': 'update_cart'
+                'click #ngg_update_cart_btn': 'update_cart',
+                'click .nggpl-quantity_field i': 'update_quantity'
             };
+        },
+
+        // Use -/+ buttons to adjust item quantity
+        update_quantity: function(e) {
+            var $target = $(e.currentTarget);
+            var $input = $target.siblings('input');
+            var step = $target.hasClass('fa-minus') ? -1 : 1;
+            var newvalue = parseInt($input.val(), 10) + step;
+            var min = parseInt($input.attr('min'), 10);
+            var max = parseInt($input.attr('max'), 10);
+            if (newvalue < min) { newvalue = min; }
+            if (newvalue > max) { newvalue = max; }
+            $input.val(newvalue);
         },
 
         quantity_lost_focus: function(event) {
             event.stopPropagation();
             event.preventDefault();
+
+            this.limit_quantity($(event.target));
+
             // iOS does not fire this event when the onscreen keyboard is finished
             $(window).trigger('resize');
             $('.galleria-sidebar-container').focus();
@@ -622,12 +639,34 @@
             this.update_cart_summary(true);
         },
 
+        // Ensures the min/max values are respected by browsers without input type=number limitations
+        limit_quantity: function($input) {
+            var min = parseInt($input.attr('min'), 10);
+            var max = parseInt($input.attr('max'), 10);
+            var curval = parseInt($input.val(), 10);
+            if (curval < min) { curval = min; }
+            if (curval > max) { curval = max; }
+            $input.val(curval);
+        },
+
         sanitize_quantity: function(e) {
             e.stopPropagation();
-            if (!(e.keyCode == 8 || e.keyCode == 37 || e.keyCode == 39 || e.keyCode == 9 || e.keyCode == 46 || (e.charCode >= 48 && e.charCode <= 57))) {
+
+            // Only allow the following keys to be used in our
+            // 8: backspace
+            // 9: tab
+            // 37: left arrow
+            // 39: right arrow
+            // 46: delete
+            // 48: 0
+            // 57: 9
+            if (!(e.keyCode === 8 || e.keyCode === 37 || e.keyCode === 39 || e.keyCode === 9 || e.keyCode === 46 || (e.charCode >= 48 && e.charCode <= 57))) {
                 e.preventDefault();
                 return false;
             }
+
+            this.limit_quantity($(e.target));
+
             return true;
         },
 
@@ -660,18 +699,13 @@
 
         update_cart_summary: function(animate){
             var $summary = this.$el.find('.nggpl-cart_summary');
-            $summary.find('.nggpl-cart_count').text(Ngg_Pro_Cart.get_instance().item_count() + ' items');
-            $summary.find('.nggpl-cart_total').html(sprintf(Ngg_Pro_Cart_Settings.currency_format, parseFloat(Ngg_Pro_Cart.get_instance().subtotal())));
+            $summary.find('.nggpl-cart_count')
+                    .text(Ngg_Pro_Cart.get_instance().item_count() + ' items');
+            $summary.find('.nggpl-cart_total')
+                    .html(sprintf(Ngg_Pro_Cart_Settings.currency_format, parseFloat(Ngg_Pro_Cart.get_instance().subtotal())));
+
             if (animate) {
-                var $notice = $('<div/>').text(ngg_cart_i18n.nggpl_cart_updated).css({
-                    'text-align': 'center',
-                    'font-size:': '13px',
-                    'color': 'green',
-                    'padding-top': '.5em'
-                });
-                $notice.hide();
-                $summary.append($notice);
-                $notice.fadeIn().delay(1000).fadeOut(500);
+                $('#nggpl-cart_updated_wrapper').animate({'opacity': 1}).delay(1000).animate({'opacity': 0});
             }
         },
 
@@ -720,11 +754,17 @@
 
                 // Render the tables
                 var tables = {};
-                this.$el.find('.nggpl-pricelist_source_accordion').accordion({heightStyle: 'content', beforeActivate: this.update_accordion_icons, create: this.update_accordion_icons}).find('.nggpl-source_contents').each(function(){
-                    var table = new Ngg_Pro_Cart.Views.Add_To_Cart.Items_Table({image_id: _this.image_id});
-                    $(this).empty().append(table.render());
-                    tables[$(this).attr('id')] = table;
-                });
+                this.$el.find('.nggpl-pricelist_source_accordion')
+                        .accordion({
+                            heightStyle: 'content',
+                            beforeActivate: this.update_accordion_icons,
+                            create: this.update_accordion_icons
+                        })
+                        .find('.nggpl-source_contents').each(function() {
+                            var table = new Ngg_Pro_Cart.Views.Add_To_Cart.Items_Table({image_id: _this.image_id});
+                            $(this).empty().append(table.render());
+                            tables[$(this).attr('id')] = table;
+                        });
 
                 // Fill the tables with items
                 var data = {
@@ -732,36 +772,38 @@
                     action: 'get_image_items',
                     cart:   Ngg_Pro_Cart.instance.to_json()
                 };
-                $.post(parent.photocrati_ajax.url, data, function(response){
-                    if (typeof(response) != 'object') response = JSON.parse(response);
+                $.post(parent.photocrati_ajax.url, data, function(response) {
+                    if (typeof(response) !== 'object') {
+                        response = JSON.parse(response);
+                    }
 
                     // Add items to each table
                     _.each(response, function(item){
                         tables[item.source].items.add(item);
                     }, _this);
 
-                    // Iterate through each table and hide/show based on
-                    // the number of items in the table
+                    // Iterate through each table and hide/show based on the number of items in the table
                     var i=0;
-                    var callback = function(i){
+                    var callback = function(i) {
                         _this.$el.find('.nggpl-pricelist_source_accordion h3:visible:first').click();
                     };
-                    _.each(tables, function(table){
+
+                    _.each(tables, function(table) {
                         i++;
                         if (table.items.length > 0) {
-                            if (i == _.size(tables))
+                            if (i == _.size(tables)) {
                                 table.$el.fadeIn(400, callback);
-                            else
+                            } else {
                                 table.$el.fadeIn(400);
-                        }
-
-                        // Find the header as well
-                        else {
+                            }
+                        } else {
+                            // Find the header as well
                             var tab_id = table.$el.parent().attr('id');
-                            if (i == _.size(tables))
-                                $('h3[aria-controls="'+tab_id+'"]').hide(400, callback);
-                            else
-                                $('h3[aria-controls="'+tab_id+'"]').hide(400);
+                            if (i == _.size(tables)) {
+                                $('h3[aria-controls="' + tab_id + '"]').hide(400, callback);
+                            } else {
+                                $('h3[aria-controls="' + tab_id + '"]').hide(400);
+                            }
                         }
                     });
 
@@ -769,12 +811,14 @@
                     if (response.length > 0) {
                         _this.$el.find('#nggpl-not_for_sale').hide();
                         _this.$el.find('#nggpl-items_for_sale').fadeIn().css('display', 'inline-block');
-                    }
-                    else {
+                    } else {
                         _this.$el.find('#nggpl-items_for_sale').fadeOut('fast', function(){
                             _this.$el.find('#nggpl-not_for_sale').show();
                         });
                     }
+
+                    // TODO: make this less of a hack
+                    $('#ngg_add_to_cart_container #ngg_digital_downloads .nggpl-quantity_field input').attr('max', '1');
 
                     if ($.nplModal('get_setting', 'sidebar_button_color')) {
                         _this.$el.find('#ngg_checkout_btn, #ngg_update_cart_btn').css({'color': $.nplModal('get_setting', 'sidebar_button_color')});
@@ -809,7 +853,10 @@
         },
 
         render_row: function(item){
-            var row = new Ngg_Pro_Cart.Views.Add_To_Cart.Item_Row({model: item, image_id: this.image_id});
+            var row = new Ngg_Pro_Cart.Views.Add_To_Cart.Item_Row({
+                model: item,
+                image_id: this.image_id
+            });
             this.$el.find('tbody').append(row.render());
         }
     });
@@ -821,12 +868,12 @@
             'updated_quantity input': 'update_quantity'
         },
 
-        initialize: function(params){
+        initialize: function(params) {
             this.image_id = params.image_id;
             this.model.on('change:quantity', this.update_subtotal, this);
         },
 
-        render: function(){
+        render: function() {
             this.$el.html(ngg_add_to_cart_templates.add_to_cart_item);
             this.$el.attr('data-item-id', this.model.id);
             this.$el.find('.nggpl-quantity_field input').val(this.model.get('quantity'));
@@ -838,14 +885,18 @@
 
         update_quantity: function(e) {
             var quantity = $(e.target).val();
-            if (isNaN(quantity)) quantity = 0;
-            else quantity = parseInt(quantity);
+            if (isNaN(quantity)) {
+                quantity = 0;
+            } else {
+                quantity = parseInt(quantity);
+            }
             this.model.set('quantity', quantity);
             Ngg_Pro_Cart.get_instance().update_quantity(this.image_id, this.model);
         },
 
-        update_subtotal: function(){
-            this.$el.find('.nggpl-total_field').html(sprintf(Ngg_Pro_Cart_Settings.currency_format, this.model.subtotal()));
+        update_subtotal: function() {
+            this.$el.find('.nggpl-total_field')
+                    .html(sprintf(Ngg_Pro_Cart_Settings.currency_format, this.model.subtotal()));
         }
     });
 

@@ -257,6 +257,11 @@ class Stripe_ApiRequestor
     $opts[CURLOPT_TIMEOUT] = 80;
     $opts[CURLOPT_RETURNTRANSFER] = true;
     $opts[CURLOPT_HTTPHEADER] = $headers;
+
+    // Modified by Imagely to force TLS 1.2
+    if (defined('CURL_SSLVERSION_TLSv1_2'))
+		$opts[CURLOPT_SSLVERSION] = CURL_SSLVERSION_TLSv1_2;
+
     if (!Stripe::$verifySslCerts)
       $opts[CURLOPT_SSL_VERIFYPEER] = false;
 

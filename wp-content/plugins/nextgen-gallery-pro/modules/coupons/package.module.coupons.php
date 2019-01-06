@@ -163,7 +163,7 @@ class C_Coupon extends C_DataMapper_Model
         }
         if ($this->discount_type == 'percent') {
             $total = bcmul(bcdiv($this->discount_amount, 100, intval($exponent) * 2), $total, intval($exponent) * 2);
-            $total = round($total, $exponent, $rounding);
+            $total = round($total, intval($exponent), $rounding);
         } else {
             if ($this->discount_type == 'flat') {
                 $total = bcsub($this->discount_amount, 0.0, $exponent);
@@ -178,6 +178,10 @@ class C_Coupon extends C_DataMapper_Model
 class C_Coupon_Admin_Page extends C_NextGen_Admin_Page_Controller
 {
     static $_instance = NULL;
+    /**
+     * @param bool|string $context
+     * @return C_Coupon_Admin_Page
+     */
     static function get_instance($context = FALSE)
     {
         if (!isset(self::$_instance)) {
@@ -380,6 +384,10 @@ class C_Coupon_Admin_Page extends C_NextGen_Admin_Page_Controller
 class C_Coupon_Mapper extends C_CustomPost_DataMapper_Driver
 {
     public static $_instances = array();
+    /**
+     * @param bool|string $context
+     * @return C_Coupon_Mapper
+     */
     static function get_instance($context = FALSE)
     {
         if (!isset(self::$_instances[$context])) {

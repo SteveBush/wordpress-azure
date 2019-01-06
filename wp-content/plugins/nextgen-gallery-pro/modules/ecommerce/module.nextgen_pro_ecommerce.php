@@ -31,7 +31,7 @@ class M_NextGen_Pro_Ecommerce extends C_Base_Module
             'photocrati-nextgen_pro_ecommerce',
             'Ecommerce',
             'Provides ecommerce capabilities for the NextGEN Pro Lightbox',
-            '2.6.1',
+            '2.6.7',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -72,31 +72,49 @@ class M_NextGen_Pro_Ecommerce extends C_Base_Module
             'shipping_method'   =>  NULL,
             'settings_field'    =>  'digital_download_settings'
         ));
+
+        if (class_exists('C_Admin_Requirements_Manager'))
+        {
+            C_Admin_Requirements_Manager::get_instance()->add(
+                'ecommerce_bcmath_requirement',
+                'phpext',
+                array($this, 'check_bcmath_requirement'),
+                array('message' => __('BC Math is strongly encouraged for accurate order taxes, shipping, and totals', 'nggallery'))
+            );
+        }
+    }
+
+    public function check_bcmath_requirement()
+    {
+        return extension_loaded('bcmath');
     }
 
     function _register_adapters()
     {
+        $registry = $this->get_registry();
         if (M_Attach_To_Post::is_atp_url() || is_admin())
         {
-            $this->get_registry()->add_adapter('I_Form', 'A_Manual_Pricelist_Form', NGG_PRO_MANUAL_PRICELIST_SOURCE);
-            $this->get_registry()->add_adapter('I_Form', 'A_Digital_Downloads_Form', NGG_PRO_DIGITAL_DOWNLOADS_SOURCE);
-            $this->get_registry()->add_adapter('I_Form', 'A_Ecommerce_Instructions_Form', NGG_PRO_ECOMMERCE_INSTRUCTIONS_FORM);
-            $this->get_registry()->add_adapter('I_Form', 'A_Ecommerce_Options_Form', NGG_PRO_ECOMMERCE_OPTIONS_FORM);
-            $this->get_registry()->add_adapter('I_Form', 'A_Payment_Gateway_Form', NGG_PRO_PAYMENT_PAYMENT_FORM);
-            $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Lightbox_Mail_Form', NGG_PRO_MAIL_FORM);
-            $this->get_registry()->add_adapter('I_NextGen_Admin_Page', 'A_Ecommerce_Options_Controller', NGG_PRO_ECOMMERCE_OPTIONS_PAGE);
-            $this->get_registry()->add_adapter('I_NextGen_Admin_Page', 'A_Ecommerce_Instructions_Controller', NGG_PRO_ECOMMERCE_INSTRUCTIONS_PAGE);
-            $this->get_registry()->add_adapter('I_Page_Manager',   'A_Ecommerce_Pages');
-            $this->get_registry()->add_adapter('I_Form', 'A_Ecommerce_Pro_Lightbox_Form', NGG_PRO_LIGHTBOX);
+            $registry->add_adapter('I_Form', 'A_Manual_Pricelist_Form', NGG_PRO_MANUAL_PRICELIST_SOURCE);
+            $registry->add_adapter('I_Form', 'A_Digital_Downloads_Form', NGG_PRO_DIGITAL_DOWNLOADS_SOURCE);
+            $registry->add_adapter('I_Form', 'A_Ecommerce_Instructions_Form', NGG_PRO_ECOMMERCE_INSTRUCTIONS_FORM);
+            $registry->add_adapter('I_Form', 'A_Ecommerce_Options_Form', NGG_PRO_ECOMMERCE_OPTIONS_FORM);
+            $registry->add_adapter('I_Form', 'A_Payment_Gateway_Form', NGG_PRO_PAYMENT_PAYMENT_FORM);
+            $registry->add_adapter('I_Form', 'A_NextGen_Pro_Lightbox_Mail_Form', NGG_PRO_MAIL_FORM);
+            $registry->add_adapter('I_NextGen_Admin_Page', 'A_Ecommerce_Options_Controller', NGG_PRO_ECOMMERCE_OPTIONS_PAGE);
+            $registry->add_adapter('I_NextGen_Admin_Page', 'A_Ecommerce_Instructions_Controller', NGG_PRO_ECOMMERCE_INSTRUCTIONS_PAGE);
+            $registry->add_adapter('I_Page_Manager', 'A_Ecommerce_Pages');
+            $registry->add_adapter('I_Form', 'A_Ecommerce_Pro_Lightbox_Form', NGG_PRO_LIGHTBOX);
         }
 
-        $this->get_registry()->add_adapter('I_Component_Factory', 'A_Ecommerce_Factory');
-        $this->get_registry()->add_adapter('I_Gallery_Mapper', 'A_Ecommerce_Gallery');
-        $this->get_registry()->add_adapter('I_Image_Mapper',   'A_Ecommerce_Image');
+        $registry->add_adapter('I_Component_Factory', 'A_Ecommerce_Factory');
+        $registry->add_adapter('I_Gallery_Mapper', 'A_Ecommerce_Gallery');
+        $registry->add_adapter('I_Image_Mapper',   'A_Ecommerce_Image');
+
+        $registry->add_adapter('I_Display_Type_Mapper', 'A_Ecommerce_Display_Type_Mapper');
 
         if (!is_admin()) {
-            $this->get_registry()->add_adapter('I_Ajax_Controller','A_Ecommerce_Ajax');
-            $this->get_registry()->add_adapter('I_Display_Type_Controller', 'A_NplModal_Ecommerce_Overrides');
+            $registry->add_adapter('I_Ajax_Controller','A_Ecommerce_Ajax');
+            $registry->add_adapter('I_Display_Type_Controller', 'A_NplModal_Ecommerce_Overrides');
         }
     }
 
@@ -1165,6 +1183,7 @@ class M_NextGen_Pro_Ecommerce extends C_Base_Module
     function get_type_list()
     {
         return array(
+            'A_Ecommerce_Display_Type_Mapper'       => 'adapter.ecommerce_display_type_mapper.php',
             'C_NextGen_Pro_Add_To_Cart'             =>  'class.nextgen_pro_add_to_cart.php',
             'A_Ecommerce_Pages'                     =>  'adapter.ecommerce_pages.php',
             'C_Digital_Downloads'                   =>  'class.digital_downloads.php',

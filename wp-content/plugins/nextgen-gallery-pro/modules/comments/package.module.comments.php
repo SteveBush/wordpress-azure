@@ -143,6 +143,10 @@ class C_Comment_Mapper extends C_CustomPost_DataMapper_Driver
     {
         parent::initialize('photocrati-comments');
     }
+    /**
+     * @param bool|string $context
+     * @return C_Comment_Mapper
+     */
     public static function get_instance($context = False)
     {
         if (!isset(self::$_instances[$context])) {

@@ -76,16 +76,15 @@
                 // Adjust the dimensions of the stage to fit captions
                 switch (options._nggCaptionClass) {
                     case 'caption_above_stage': {
-                        this.$('stage').css({
-                            top: parseInt(options._nggCaptionHeight)
-                                 + options.imageMargin});
+                        this.$('stage').css({ top: parseInt(options._nggCaptionHeight) + options.imageMargin });
                         break;
                     }
                     case 'caption_below_stage': {
-                        var bottomheight = parseInt(options._nggCaptionHeight)
-                            + (options._nggCaptionPadding)
-                            + options.imageMargin;
-                        this.$('stage').css({bottom: bottomheight});
+                        this.$('stage').css({
+                            bottom: parseInt(options._nggCaptionHeight)
+                                    + (options._nggCaptionPadding)
+                                    + options.imageMargin
+                        });
                         break;
                     }
                 }

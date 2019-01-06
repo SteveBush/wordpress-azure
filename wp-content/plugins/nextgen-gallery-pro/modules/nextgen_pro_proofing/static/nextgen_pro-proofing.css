@@ -118,6 +118,7 @@ body.ngg_proofing_form_open {
     margin: 0;
 }
 
+.ngg-proofing-dialog .ngg-form-entry-submit svg,
 .ngg-proofing-dialog .ngg-form-entry-submit i {
     margin: 0 0 0 8px;
 }
@@ -135,14 +136,17 @@ body.ngg_proofing_form_open {
     font-size: 18px;
 }
 
+.ngg-proofing-dialog .ngg-proofing-cancel svg,
 .ngg-proofing-dialog .ngg-proofing-cancel i {
     text-shadow: 0px 0px 10px rgba(150, 150, 150, 0.8);
 }
 
+.ngg-proofing-dialog .ngg-proofing-cancel svg.fa-times,
 .ngg-proofing-dialog .ngg-proofing-cancel i.fa-times {
     color: white;
 }
 
+.ngg-proofing-dialog .ngg-proofing-cancel svg.fa-circle,
 .ngg-proofing-dialog .ngg-proofing-cancel i.fa-circle {
     color: #000000;
 }

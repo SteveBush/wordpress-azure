@@ -63,7 +63,7 @@ class A_NextGen_Pro_Lightbox_Album_Form extends Mixin
     function enqueue_static_resources()
     {
         $this->call_parent('enqueue_static_resources');
-        wp_enqueue_script('nextgen_pro_lightbox_display_type_settings_js', $this->object->get_static_url('photocrati-nextgen_pro_lightbox#display_type_settings.js'), NGG_PRO_LIGHTBOX_VERSION, TRUE);
+        wp_enqueue_script('nextgen_pro_lightbox_display_type_settings_js', $this->object->get_static_url('photocrati-nextgen_pro_lightbox#display_type_settings.js'), array(), NGG_PRO_LIGHTBOX_VERSION, TRUE);
     }
     function _render_nextgen_pro_lightbox_open_gallery_in_lightbox_field($display_type)
     {
@@ -212,7 +212,7 @@ class A_NextGen_Pro_Lightbox_Form extends Mixin
      * Renders padding unit & width fields; a custom template is used over the NGG form
      * methods so that both fields can be inside the same tr/td pair.
      *
-     * @param stdObject $lightbox Lightbox class
+     * @param object $lightbox Lightbox class
      * @return string $html
      */
     function _render_nextgen_pro_lightbox_padding_field($lightbox)
@@ -476,7 +476,7 @@ class C_NextGen_Pro_Lightbox_Trigger extends C_Displayed_Gallery_Trigger
         }
         if ($enqueue !== FALSE) {
             if (!wp_style_is('ngg-trigger-buttons', 'registered')) {
-                wp_register_style('ngg-trigger-buttons', $router->get_static_url('photocrati-nextgen_pro_lightbox#trigger_buttons.css'), false);
+                wp_register_style('ngg-trigger-buttons', $router->get_static_url('photocrati-nextgen_pro_lightbox#trigger_buttons.css'), array(), NGG_PRO_LIGHTBOX_VERSION);
                 wp_enqueue_style('ngg-trigger-buttons');
             }
         }
@@ -487,8 +487,8 @@ class C_OpenGraph_Controller extends C_MVC_Controller
     static $_instances = array();
     /**
      * Returns an instance of the controller in a particular context
-     * @param bool $context
-     * @return mixed
+     * @param string|bool $context
+     * @return C_OpenGraph_Controller
      */
     static function get_instance($context = FALSE)
     {
@@ -556,6 +556,10 @@ class C_OpenGraph_Controller extends C_MVC_Controller
      */
     function get_querystring()
     {
-        return preg_replace("/uri=[^&]+&?/", '', $this->get_router()->get_querystring());
+        // The URI parameter is handled independently of this method
+        $mutation_one = preg_replace("/uri=[^&]+&?/", '', $this->get_router()->get_querystring());
+        // fbclid is provided by facebook and clutters our otherwise pretty url
+        $mutation_two = preg_replace("/fbclid=[^&]+&?/", '', $mutation_one);
+        return $mutation_two;
     }
 }

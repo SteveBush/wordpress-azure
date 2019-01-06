@@ -22,7 +22,7 @@ class M_NextGen_Pro_ImageBrowser extends C_Base_Module
 			'photocrati-nextgen_pro_imagebrowser',
 			'NextGEN Pro ImageBrowser',
 			'Provides the NextGEN Pro ImageBrowser Display Type',
-            '2.6.0',
+            '2.6.7',
 			'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
 			'Imagely',
 			'https://www.imagely.com'

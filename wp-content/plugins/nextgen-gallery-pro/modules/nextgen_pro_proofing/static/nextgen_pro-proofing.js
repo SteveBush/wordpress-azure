@@ -228,9 +228,17 @@
 
             $(function() {
                 $('body').append('<div id="ngg_proofing_overlay" style="display: none;"></div>');
-
-                // setup which images are active on this page
                 self.updateAllGalleries();
+            });
+
+            // Setup which images are active on this page
+            $(document).on('DOMContentLoaded', function() {
+                // FontAwesome 5.0 doesn't have an event we can listen to to detect our <i> triggers have been replaced
+                // with <svg> so we wait a fraction of a second for fontawesome.js to run
+                setTimeout(function() {
+                    self.updateAllGalleries();
+                }, 250);
+
             });
 
             $(document).on('ngg-captions-added', function() {

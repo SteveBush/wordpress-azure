@@ -71,7 +71,7 @@ class A_Free_Checkout_Button extends Mixin
     }
     function enqueue_free_checkout_resources()
     {
-        wp_enqueue_script('jquery-placeholder', $this->object->get_static_url('photocrati-nextgen_admin#jquery.placeholder.min.js'), 'jquery', FALSE, FALSE);
+        wp_enqueue_script('jquery-placeholder', $this->object->get_static_url('photocrati-nextgen_admin#jquery.placeholder.min.js'), array('jquery'), NGG_SCRIPT_VERSION, FALSE);
         wp_enqueue_script('ngg-free-checkout', $this->object->get_static_url('photocrati-free_gateway#button.js'), array('jquery-placeholder'));
         wp_enqueue_style('ngg-free-checkout', $this->object->get_static_url('photocrati-free_gateway#button.css'));
     }

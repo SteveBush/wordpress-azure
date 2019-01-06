@@ -10,6 +10,14 @@ define('NGG_PRO_PROOFING_TRIGGER', 'photocrati-proofing');
 
 class M_NextGen_Pro_Proofing extends C_Base_Module
 {
+    public static $display_types = array(
+        'photocrati-nextgen_basic_thumbnails',
+        'photocrati-nextgen_pro_thumbnail_grid',
+        'photocrati-nextgen_pro_blog_gallery',
+        'photocrati-nextgen_pro_film',
+        'photocrati-nextgen_pro_mosaic'
+    );
+
     function define($id = 'pope-module',
                     $name = 'Pope Module',
                     $description = '',
@@ -23,7 +31,7 @@ class M_NextGen_Pro_Proofing extends C_Base_Module
             NGG_PRO_PROOFING,
             'NextGEN Pro Proofing',
             'Provides rating capabilities',
-            '2.6.1',
+            '2.6.7',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -51,26 +59,25 @@ class M_NextGen_Pro_Proofing extends C_Base_Module
 
     function _register_adapters()
     {
-        $this->get_registry()->add_adapter('I_Component_Factory', 'A_NextGen_Pro_Proofing_Factory');
+        $registry = $this->get_registry();
+        $registry->add_adapter('I_Component_Factory', 'A_NextGen_Pro_Proofing_Factory');
+        $registry->add_adapter('I_Display_Type_Mapper', 'A_NextGen_Pro_Proofing_Display_Type_Mapper');
 
         if (M_Attach_To_Post::is_atp_url() || is_admin())
         {
             // add additional proofing options to these display types' settings
-            $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Proofing_Form', NGG_BASIC_THUMBNAILS);
-            $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Proofing_Form', NGG_PRO_THUMBNAIL_GRID);
-            $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Proofing_Form', NGG_PRO_BLOG_GALLERY);
-            $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Proofing_Form', NGG_PRO_FILM);
-            $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Proofing_Form', NGG_PRO_MOSAIC);
-            $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Proofing_Form', NGG_PRO_MASONRY);
+            foreach (self::$display_types as $display_type) {
+                $registry->add_adapter('I_Form', 'A_NextGen_Pro_Proofing_Form', $display_type);
+            }
 
-            $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Proofing_Settings_Form', 'ngg-proofing');
+            $registry->add_adapter('I_Form', 'A_NextGen_Pro_Proofing_Settings_Form', 'ngg-proofing');
         }
 
         if (!is_admin())
         {
-            $this->get_registry()->add_adapter('I_Display_Type_Controller', 'A_NextGen_Pro_Proofing_Trigger_Resources');
-            $this->get_registry()->add_adapter('I_Ajax_Controller', 'A_NextGen_Pro_Proofing_Ajax');
-            $this->get_registry()->add_adapter('I_MVC_View', 'A_NextGen_Pro_Proofing_Trigger_Element');
+            $registry->add_adapter('I_Display_Type_Controller', 'A_NextGen_Pro_Proofing_Trigger_Resources');
+            $registry->add_adapter('I_Ajax_Controller', 'A_NextGen_Pro_Proofing_Ajax');
+            $registry->add_adapter('I_MVC_View', 'A_NextGen_Pro_Proofing_Trigger_Element');
         }
     }
 
@@ -333,6 +340,7 @@ class M_NextGen_Pro_Proofing extends C_Base_Module
         return array(
             'C_NextGen_Pro_Proofing_Controller'        => 'class.nextgen_pro_proofing_controller.php',
             'C_NextGen_Pro_Proofing'                   => 'class.nextgen_pro_proofing.php',
+            'A_NextGen_Pro_Proofing_Display_Type_Mapper' => 'adapter.nextgen_pro_proofing_display_type_mapper.php',
             'A_NextGen_Pro_Proofing_Factory'           => 'adapter.nextgen_pro_proofing_factory.php',
             'C_NextGen_Pro_Proofing_Mapper'            => 'class.nextgen_pro_proofing_mapper.php',
             'C_NextGen_Pro_Proofing_Lightbox'          => 'class.nextgen_pro_proofing_lightbox.php',

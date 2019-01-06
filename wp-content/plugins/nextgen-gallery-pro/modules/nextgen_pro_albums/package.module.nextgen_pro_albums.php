@@ -26,8 +26,8 @@ class A_NextGen_Pro_Album_Child_Entities extends Mixin
      * Register each gallery belonging to the album that has just been rendered, so that when the MVC controller
      * system 'catches up' and runs $this->render_object() that method knows what galleries to inline as JS.
      *
-     * @param array $gallery
-     * @param $displayed_gallery
+     * @param array $galleries
+     * @param C_Displayed_Gallery $displayed_gallery
      * @return array mixed
      */
     function register_child_gallery($galleries, $displayed_gallery)
@@ -264,7 +264,7 @@ class A_NextGen_Pro_Album_Routes extends Mixin
             $app->rewrite("{*}{$slug}/album--{\\w}/gallery--{\\w}", "{1}{$slug}/{2}/{3}");
             $app->rewrite("{*}{$slug}/album--{\\w}/gallery--{\\w}/{*}", "{1}{$slug}/{2}/{3}/{4}");
         }
-        if ($do_rewrites) {
+        if (isset($app) && $do_rewrites) {
             $app->do_rewrites();
         }
         // Continue rendering
@@ -377,9 +377,9 @@ class Mixin_NextGen_Pro_Album_Controller extends Mixin
      * Creates a displayed gallery of a gallery belonging to an album. Shared by index_action() and cache_action() to
      * allow lightboxes to open album children directly.
      *
-     * @param $gallery
-     * @param $display_settings
-     * @return $gallery
+     * @param object $gallery
+     * @param array $display_settings
+     * @return C_Displayed_Gallery
      */
     function make_child_displayed_gallery($gallery, $display_settings)
     {

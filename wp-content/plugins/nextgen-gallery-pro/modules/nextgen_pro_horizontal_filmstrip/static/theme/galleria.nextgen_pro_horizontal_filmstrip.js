@@ -141,29 +141,24 @@
                 // Adjust the dimensions of the stage to fit captions
                 switch (options._nggCaptionClass) {
                     case 'caption_above_stage': {
-                        this.$('stage').css({
-                            top: parseInt(options._nggCaptionHeight)
-                                 + options.imageMargin});
+                        this.$('stage').css({ top: parseInt(options._nggCaptionHeight) + options.imageMargin });
                         break;
                     }
                     case 'caption_below_stage': {
-                        this.$('thumbnails-container').css(
-                            'bottom',
-                            (parseInt(options._nggCaptionHeight) + parseInt(options._nggCaptionPadding)) + 'px'
-                        );
-                        var bottomheight = parseInt(options._nggCaptionHeight)
-                            + (options._nggCaptionPadding * 2)
-                            + this.$('thumbnails-container').height()
-                            + options.imageMargin
-                            + 6;
-                        this.$('stage').css({bottom: bottomheight});
+                        this.$('thumbnails-container').css({
+                            bottom: (parseInt(options._nggCaptionHeight) + parseInt(options._nggCaptionPadding)) + 'px'
+                        });
+                        this.$('stage').css({
+                            bottom: parseInt(options._nggCaptionHeight)
+                                    + (options._nggCaptionPadding * 2)
+                                    + this.$('thumbnails-container').height()
+                                    + options.imageMargin
+                                    + 6
+                        });
                         break;
                     }
                     case 'caption_overlay_bottom': {
-                        this.$('info').css(
-                            'bottom',
-                            parseInt(this.$('stage').css('bottom'))
-                        );
+                        this.$('info').css({ bottom: parseInt(this.$('stage').css('bottom')) });
                         break;
                     }
                 }

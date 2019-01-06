@@ -407,12 +407,14 @@
                                     // Adds comment toolbar button
                                     var comment_button = $('<i/>')
                                         .addClass('nggpl-toolbar-button-comment fa fa-comment')
-                                        .attr({'title': $.nplModal('get_setting', 'i18n').toggle_social_sidebar})
-                                        .click(function(event) {
+                                        .attr({'title': $.nplModal('get_setting', 'i18n').toggle_social_sidebar});
+                                    methods.thumbnails.register_button(
+                                        comment_button,
+                                        function(event) {
                                             methods.sidebar.toggle(methods.sidebars.comments.get_type());
                                             event.preventDefault();
-                                        });
-                                    methods.thumbnails.register_button(comment_button);
+                                        }
+                                    );
                                 },
 
                                 _image_ran_once: false,
@@ -477,6 +479,7 @@
 
                             $('#npl_wrapper').removeClass('npl-carousel-closed');
                             $('.galleria-dock-toggle-container i').toggleClass('fa-angle-up fa-angle-down');
+                            $('.galleria-dock-toggle-container').find('[data-fa-i2svg]').toggleClass('fa-angle-up fa-angle-down');
                             $(window).trigger('resize');
                         },
                         close: function() {
@@ -484,6 +487,7 @@
 
                             $('#npl_wrapper').addClass('npl-carousel-closed');
                             $('.galleria-dock-toggle-container i').toggleClass('fa-angle-up fa-angle-down');
+                            $('.galleria-dock-toggle-container').find('[data-fa-i2svg]').toggleClass('fa-angle-up fa-angle-down');
                             $(window).trigger('resize');
                         },
                         adjust_container: function() {
@@ -500,19 +504,23 @@
                             }
                         },
                         _buttons: [],
-                        register_button: function(button) {
+                        register_button: function(button, callback) {
                             $.nplModal('log', 'theme thumbnails.register_button()', {
                                 button: button
                             });
 
                             var wrapper = $('<span class="nggpl-button nggpl-toolbar-button"/>');
                             if ($.nplModal('get_setting', 'icon_background_enabled', false)
-                                &&  $.nplModal('get_setting', 'icon_background_rounded', false)) {
+                            &&  $.nplModal('get_setting', 'icon_background_rounded', false)) {
                                 wrapper.addClass('nggpl-rounded');
                             }
                             wrapper.html(button);
                             this._buttons.push(wrapper);
                             $(self._dom.stage).append(wrapper);
+
+                            wrapper.on('click', function(event) {
+                                callback(event)
+                            });
                         },
                         get_registered_buttons: function() {
                             $.nplModal('log', 'theme thumbnails.get_registered_buttons', {
@@ -588,17 +596,20 @@
                                 // Add playback controls
                                 var play_button = $('<i/>')
                                     .addClass('nggpl-toolbar-button-play fa fa-play')
-                                    .attr({'title': $.nplModal('get_setting', 'i18n').play_pause})
-                                    .click(function(event) {
-                                        event.preventDefault();
-                                        self.playToggle();
-                                        $(this).toggleClass('fa-play');
-                                        $(this).toggleClass('fa-pause');
-                                    });
+                                    .attr({'title': $.nplModal('get_setting', 'i18n').play_pause});
                                 if (this._playing) {
                                     play_button.removeClass('fa-play').addClass('fa-pause');
                                 }
-                                methods.thumbnails.register_button(play_button);
+                                methods.thumbnails.register_button(
+                                    play_button,
+                                    function(event) {
+                                        event.preventDefault();
+                                        self.playToggle();
+                                        var $target = $(event.currentTarget);
+                                        $target.find('i').toggleClass('fa-play fa-pause');
+                                        $target.find('[data-fa-i2svg]').toggleClass('fa-play fa-pause');
+                                    }
+                                );
 
                                 // Add fullscreen and margin-less controls
                                 if ($.nplModal('get_setting', 'enable_fullscreen', false)
@@ -607,25 +618,30 @@
                                 {
                                     var fullscreen_button = $('<i/>')
                                         .addClass('nggpl-toolbar-button-fullscreen fa fa-arrows-alt')
-                                        .attr({'title': $.nplModal('get_setting', 'i18n').toggle_fullsize})
-                                        .click(function(event) {
+                                        .attr({'title': $.nplModal('get_setting', 'i18n').toggle_fullsize});
+                                    methods.thumbnails.register_button(
+                                        fullscreen_button,
+                                        function(event) {
                                             event.preventDefault();
                                             $.nplModal('fullscreen.toggle');
-                                            $(this).toggleClass('fa-arrows-alt');
-                                            $(this).toggleClass('fa-expand');
-                                        });
-                                    methods.thumbnails.register_button(fullscreen_button);
+                                            var $target = $(event.currentTarget);
+                                            $target.find('i').toggleClass('fa-arrows-alt fa-expand');
+                                            $target.find('[data-fa-i2svg]').toggleClass('fa-arrows-alt fa-expand');
+                                        }
+                                    );
                                 }
 
                                 // add info controls; handles animation of both the info & dock-toggle-container divs
                                 var info_button = $('<i/>')
                                     .addClass('nggpl-toolbar-button-info fa fa-info')
-                                    .attr({'title': $.nplModal('get_setting', 'i18n').toggle_image_info})
-                                    .click(self.proxy(function(event) {
+                                    .attr({'title': $.nplModal('get_setting', 'i18n').toggle_image_info});
+                                methods.thumbnails.register_button(
+                                    info_button,
+                                    function(event) {
                                         event.preventDefault();
                                         methods.info.toggle();
-                                    }));
-                                methods.thumbnails.register_button(info_button);
+                                    }
+                                );
                             },
                             npl_init_complete: function() {
                                 $.nplModal('log', 'theme thumbnails.events.npl_init_complete()');

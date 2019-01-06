@@ -122,12 +122,14 @@ jQuery(function($) {
                         // Add cart toolbar button
                         var cart_button = $('<i/>')
                             .addClass('nggpl-toolbar-button-cart fa fa-shopping-cart')
-                            .attr({'title': ngg_cart_i18n.nggpl_toggle_sidebar})
-                            .click(function(event) {
+                            .attr({'title': ngg_cart_i18n.nggpl_toggle_sidebar});
+                        methods.thumbnails.register_button(
+                            cart_button,
+                            function(event) {
                                 methods.sidebar.toggle(methods.sidebars.cart.get_type());
                                 event.preventDefault();
-                            });
-                        methods.thumbnails.register_button(cart_button);
+                            }
+                        );
                     }
                 },
 

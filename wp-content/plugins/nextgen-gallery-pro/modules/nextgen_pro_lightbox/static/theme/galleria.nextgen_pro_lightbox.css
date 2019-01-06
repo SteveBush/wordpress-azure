@@ -80,6 +80,7 @@
 .galleria-theme-nextgen_pro_lightbox .galleria-carousel .galleria-thumbnails-list {
     margin-right: 24px;
     padding-left: 1px;
+    direction: ltr;
 }
 
 .galleria-theme-nextgen_pro_lightbox .galleria-image-protection {
@@ -201,6 +202,8 @@
     z-index: 3;
 }
 
+.galleria-theme-nextgen_pro_lightbox .galleria-image-nav-left svg,
+.galleria-theme-nextgen_pro_lightbox .galleria-image-nav-right svg,
 .galleria-theme-nextgen_pro_lightbox .galleria-image-nav-left i,
 .galleria-theme-nextgen_pro_lightbox .galleria-image-nav-right i {
     font-size: 70px;
@@ -236,6 +239,8 @@
     margin-top: 7px;
 }
 
+.galleria-theme-nextgen_pro_lightbox .galleria-thumb-nav-left svg,
+.galleria-theme-nextgen_pro_lightbox .galleria-thumb-nav-right svg,
 .galleria-theme-nextgen_pro_lightbox .galleria-thumb-nav-left i,
 .galleria-theme-nextgen_pro_lightbox .galleria-thumb-nav-right i {
     margin-left: 7px;
@@ -247,6 +252,8 @@
     color: white;
 }
 
+.galleria-theme-nextgen_pro_lightbox .galleria-thumb-nav-left svg:hover,
+.galleria-theme-nextgen_pro_lightbox .galleria-thumb-nav-right svg:hover
 .galleria-theme-nextgen_pro_lightbox .galleria-thumb-nav-left i:hover,
 .galleria-theme-nextgen_pro_lightbox .galleria-thumb-nav-right i:hover {
     filter: alpha(opacity=70);
@@ -329,6 +336,7 @@
     font-weight: bold;
 }
 
+.galleria-theme-nextgen_pro_lightbox .galleria-nextgen-buttons svg,
 .galleria-theme-nextgen_pro_lightbox .galleria-nextgen-buttons i {
     float: left;
     font-size: 20px;
@@ -340,6 +348,7 @@
     height: 20px;
 }
 
+.galleria-theme-nextgen_pro_lightbox .galleria-nextgen-buttons svg:hover,
 .galleria-theme-nextgen_pro_lightbox .galleria-nextgen-buttons i:hover {
     cursor: pointer;
     filter: alpha(opacity=70);
@@ -347,12 +356,14 @@
 }
 
 /* these icons aren't centered and need a little tweaking */
+.galleria-theme-nextgen_pro_lightbox .galleria-nextgen-buttons .nggpl-rounded svg.nggpl-toolbar-button-play:before,
 .galleria-theme-nextgen_pro_lightbox .galleria-nextgen-buttons .nggpl-rounded i.nggpl-toolbar-button-play:before {
     position: absolute;
     top: 10px;
     left: 14px;
 }
 
+.galleria-theme-nextgen_pro_lightbox .galleria-nextgen-buttons .nggpl-rounded svg.nggpl-toolbar-button-comment:before,
 .galleria-theme-nextgen_pro_lightbox .galleria-nextgen-buttons .nggpl-rounded i.nggpl-toolbar-button-comment:before {
     position: absolute;
     top: 8px;
@@ -383,6 +394,7 @@
     top: -39px;
 }
 
+.galleria-theme-nextgen_pro_lightbox.touch .galleria-dock-toggle-container svg,
 .galleria-theme-nextgen_pro_lightbox.touch .galleria-dock-toggle-container i {
     margin-bottom: 5px;
     position: absolute;
@@ -426,6 +438,7 @@
     color: #bebebe;
 }
 
+#npl_wrapper .galleria-image-share-icons ul li a svg,
 #npl_wrapper .galleria-image-share-icons ul li a i {
     font-size: 32px;
     margin: 0 5px 0 5px;
@@ -620,18 +633,22 @@ ul.nggpl-commentlist ol {
     list-style-type: none;
 }
 
+.nggpl-comment-tweet-button svg:hover,
 .nggpl-comment-tweet-button i:hover {
     color: #4099FF;
 }
 
+.nggpl-comment-facebook-button svg:hover,
 .nggpl-comment-facebook-button i:hover {
     color: #3B5998;
 }
 
+.nggpl-comment-pinterest-button svg:hover,
 .nggpl-comment-pinterest-button i:hover {
     color: #cb2027;
 }
 
+.nggpl-comment-googlep-button svg:hover,
 .nggpl-comment-googlep-button i:hover {
     color: #dd4b39;
 }
@@ -708,6 +725,7 @@ ul.nggpl-commentlist ol {
     color: #7a7a7a;
 }
 
+.nggpl-toolbar-button svg,
 .nggpl-toolbar-button i {
     width: 20px;
 }
@@ -718,6 +736,7 @@ ul.nggpl-commentlist ol {
     border-radius: 80px;
 }
 
+.nggpl-toolbar-button.nggpl-rounded svg,
 .nggpl-toolbar-button.nggpl-rounded i {
     width: 26px;
     padding-left: 7px;
@@ -773,6 +792,10 @@ ul.nggpl-commentlist ol {
 #npl_wrapper.npl-variant-white .galleria-dock-toggle-container,
 #npl_wrapper.npl-variant-white .comments-area,
 #npl_wrapper.npl-variant-white .galleria-nextgen-buttons,
+#npl_wrapper.npl-variant-white .galleria-thumb-nav-left svg,
+#npl_wrapper.npl-variant-white .galleria-thumb-nav-right svg,
+#npl_wrapper.npl-variant-white .galleria-image-nav-left svg,
+#npl_wrapper.npl-variant-white .galleria-image-nav-right svg,
 #npl_wrapper.npl-variant-white .galleria-thumb-nav-left i,
 #npl_wrapper.npl-variant-white .galleria-thumb-nav-right i,
 #npl_wrapper.npl-variant-white .galleria-image-nav-left i,

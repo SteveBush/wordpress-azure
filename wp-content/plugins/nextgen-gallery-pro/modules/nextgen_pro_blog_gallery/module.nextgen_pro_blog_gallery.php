@@ -20,7 +20,7 @@ class M_NextGen_Pro_Blog_Gallery extends C_Base_Module
             NGG_PRO_BLOG_GALLERY,
             'NextGEN Pro Blog Gallery',
             "Provides Photocrati's Blog Style gallery type for NextGEN Gallery",
-            '2.6.0',
+            '2.6.7',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',

@@ -146,7 +146,7 @@ class A_PayPal_Express_Checkout_Button extends Mixin
                         }
                         $order_mapper->save($order);
                     } else {
-                        throw new E_NggProPaymentExpressError(sprintf(_("Order #%d could not be updated. Invalid order.", $order->ID)));
+                        throw new E_NggProPaymentExpressError(sprintf(__("Order #%d could not be updated. Invalid order.", $order->ID)));
                     }
                 } else {
                     throw new E_NggProPaymentExpressError(sprintf(__("Could not find order reference #%s"), $response['invnum']));
@@ -222,7 +222,7 @@ class A_PayPal_Express_Checkout_Button extends Mixin
                     }
                     // Add items to PayPal cart
                     foreach ($cart->get_items() as $item) {
-                        $item_subtotal = round(doubleval(bcmul(intval($item->quantity), $item->price, intval($currency['exponent']) * 2)), $currency['exponent'], PHP_ROUND_HALF_UP);
+                        $item_subtotal = round(doubleval(bcmul(intval($item->quantity), $item->price, intval($currency['exponent']) * 2)), intval($currency['exponent']), PHP_ROUND_HALF_UP);
                         if ($item_subtotal > 0) {
                             $image = $item->image;
                             $image_id = $image->{$image->id_field};
@@ -275,5 +275,68 @@ class A_PayPal_Express_Checkout_Button extends Mixin
             }
         }
         return $response;
+    }
+}
+class A_PayPal_Express_Checkout_Form extends Mixin
+{
+    function _get_field_names()
+    {
+        $fields = $this->call_parent('_get_field_names');
+        $fields[] = 'nextgen_pro_ecommerce_paypal_enable';
+        $fields[] = 'nextgen_pro_ecommerce_paypal_sandbox';
+        $fields[] = 'nextgen_pro_ecommerce_paypal_email';
+        $fields[] = 'nextgen_pro_ecommerce_paypal_username';
+        $fields[] = 'nextgen_pro_ecommerce_paypal_password';
+        $fields[] = 'nextgen_pro_ecommerce_paypal_signature';
+        return $fields;
+    }
+    function enqueue_static_resources()
+    {
+        $this->call_parent('enqueue_static_resources');
+        wp_enqueue_script('ngg_pro_paypal_express_form', $this->get_static_url('photocrati-paypal_express_checkout#form.js'));
+    }
+    function _render_nextgen_pro_ecommerce_paypal_enable_field($model)
+    {
+        $model = new stdClass();
+        $model->name = 'ecommerce';
+        return $this->_render_radio_field($model, 'paypal_enable', __('Enable PayPal Express Checkout', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_paypal_enable, __('Not all currencies are supported by all payment gateways. Please be sure to confirm your desired currency is supported by PayPal', 'nextgen-gallery-pro'));
+    }
+    function _render_nextgen_pro_ecommerce_paypal_sandbox_field($model)
+    {
+        $model = new stdClass();
+        $model->name = 'ecommerce';
+        return $this->_render_radio_field($model, 'paypal_sandbox', __('Use sandbox?', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_paypal_sandbox, __('If enabled transactions will use testing servers on which no currency is actually moved', 'nextgen-gallery-pro'), !C_NextGen_Settings::get_instance()->ecommerce_paypal_enable ? TRUE : FALSE);
+    }
+    function _render_nextgen_pro_ecommerce_paypal_email_field($model)
+    {
+        $model = new stdClass();
+        $model->name = 'ecommerce';
+        return $this->_render_text_field($model, 'paypal_email', __('Email', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_paypal_email, '', !C_NextGen_Settings::get_instance()->ecommerce_paypal_enable ? TRUE : FALSE);
+    }
+    function _render_nextgen_pro_ecommerce_paypal_username_field($model)
+    {
+        $model = new stdClass();
+        $model->name = 'ecommerce';
+        return $this->_render_text_field($model, 'paypal_username', __('API Username', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_paypal_username, '', !C_NextGen_Settings::get_instance()->ecommerce_paypal_enable ? TRUE : FALSE);
+    }
+    function _render_nextgen_pro_ecommerce_paypal_password_field($model)
+    {
+        $model = new stdClass();
+        $model->name = 'ecommerce';
+        return $this->_render_text_field($model, 'paypal_password', __('API Password', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_paypal_password, '', !C_NextGen_Settings::get_instance()->ecommerce_paypal_enable ? TRUE : FALSE);
+    }
+    function _render_nextgen_pro_ecommerce_paypal_signature_field($model)
+    {
+        $model = new stdClass();
+        $model->name = 'ecommerce';
+        return $this->_render_text_field(
+            $model,
+            'paypal_signature',
+            __('API Signature', 'nextgen-gallery-pro'),
+            C_NextGen_Settings::get_instance()->ecommerce_paypal_signature,
+            '',
+            // Tooltip text
+            !C_NextGen_Settings::get_instance()->ecommerce_paypal_enable ? TRUE : FALSE
+        );
     }
 }

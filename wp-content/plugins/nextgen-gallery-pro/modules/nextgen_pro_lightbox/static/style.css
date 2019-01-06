@@ -35,6 +35,12 @@
     overflow: hidden;
 }
 
+/* Prevent iOS from highlighting everything touched */
+body.nextgen_pro_lightbox_open {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-touch-callout: none;
+}
+
 body.nextgen_pro_lightbox_open #npl_wrapper {
     display: flex;
 }
@@ -110,6 +116,7 @@ body.nextgen_pro_lightbox_open #npl_wrapper.npl_ie9_flex_hack {
     display: block !important;
 }
 
+#npl_wrapper.npl_ie9_flex_hack #npl_spinner_container svg,
 #npl_wrapper.npl_ie9_flex_hack #npl_spinner_container i {
     position: relative;
     top: calc(50% - 43px);
@@ -184,11 +191,13 @@ body.nextgen_pro_lightbox_open #npl_wrapper.npl_ie9_flex_hack {
     display: block;
 }
 
+#npl_sidebar_overlay svg,
 #npl_sidebar_overlay i {
     margin: 0 auto;
     font-size: 86px;
 }
 
+#npl_wrapper.npl_ie9_flex_hack #npl_sidebar_overlay svg,
 #npl_wrapper.npl_ie9_flex_hack #npl_sidebar_overlay i {
     position: absolute;
     top: calc(50% - 43px);

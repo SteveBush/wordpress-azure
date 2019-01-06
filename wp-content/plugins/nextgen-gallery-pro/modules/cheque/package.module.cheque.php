@@ -62,7 +62,7 @@ class A_Cheque_Checkout_Button extends Mixin
     }
     function enqueue_cheque_checkout_resources()
     {
-        wp_enqueue_script('jquery-placeholder', $this->object->get_static_url('photocrati-nextgen_admin#jquery.placeholder.min.js'), 'jquery', FALSE, FALSE);
+        wp_enqueue_script('jquery-placeholder', $this->object->get_static_url('photocrati-nextgen_admin#jquery.placeholder.min.js'), array('jquery'), NGG_SCRIPT_VERSION, FALSE);
         wp_enqueue_script('cheque-checkout', $this->object->get_static_url('photocrati-cheque#button.js'), array('jquery-placeholder'));
         wp_enqueue_style('cheque-checkout', $this->object->get_static_url('photocrati-cheque#button.css'));
     }
@@ -86,5 +86,33 @@ class A_Cheque_Checkout_Button extends Mixin
     function _render_cheque_checkout_button()
     {
         return $this->render_partial('photocrati-cheque#button', array('countries' => C_NextGen_Pro_Currencies::$countries, 'i18n' => $this->get_i18n_strings()), TRUE);
+    }
+}
+class A_Cheque_Checkout_Form extends Mixin
+{
+    function _get_field_names()
+    {
+        $fields = $this->call_parent('_get_field_names');
+        $fields[] = 'nextgen_pro_ecommerce_cheque_enable';
+        $fields[] = 'nextgen_pro_ecommerce_cheque_instructions';
+        return $fields;
+    }
+    function enqueue_static_resources()
+    {
+        $this->call_parent('enqueue_static_resources');
+        wp_enqueue_script('ngg_pro_cheque_form_js', $this->get_static_url('photocrati-cheque#form.js'));
+        wp_enqueue_style('ngg_pro_cheque_form_css', $this->get_static_url('photocrati-cheque#form.css'));
+    }
+    function _render_nextgen_pro_ecommerce_cheque_enable_field($model)
+    {
+        $model = new stdClass();
+        $model->name = 'ecommerce';
+        return $this->_render_radio_field($model, 'cheque_enable', __('Enable Checks', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_cheque_enable);
+    }
+    function _render_nextgen_pro_ecommerce_cheque_instructions_field($model)
+    {
+        $model = new stdClass();
+        $model->name = 'ecommerce';
+        return $this->_render_textarea_field($model, 'cheque_instructions', __('Instructions', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_cheque_instructions, __('Use this to inform users how to pay and where they should send their payment', 'nextgen-gallery-pro'), !C_NextGen_Settings::get_instance()->ecommerce_cheque_enable ? TRUE : FALSE);
     }
 }

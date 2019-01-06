@@ -94,6 +94,22 @@ class A_NextGen_Pro_Proofing_Ajax extends Mixin
         return $valid_request;
     }
 }
+/**
+ * Sets default values for added proofing settings
+ *
+ * @mixin C_Display_Type_Mapper
+ * @adapts I_Display_Type_Mapper
+ */
+class A_NextGen_Pro_Proofing_Display_Type_Mapper extends Mixin
+{
+    function set_defaults($entity)
+    {
+        $this->call_parent('set_defaults', $entity);
+        if (!empty($entity->name) && in_array($entity->name, M_NextGen_Pro_Proofing::$display_types)) {
+            $this->object->_set_default_value($entity, 'settings', 'ngg_proofing_display', FALSE);
+        }
+    }
+}
 class A_NextGen_Pro_Proofing_Factory extends Mixin
 {
     function nextgen_proof($properties = array(), $mapper = FALSE, $context = FALSE)
@@ -267,7 +283,7 @@ class A_NextGen_Pro_Proofing_Trigger_Resources extends Mixin
         $retval = FALSE;
         if (!$this->run_once && !empty($displayed_gallery) && !empty($displayed_gallery->display_settings['ngg_proofing_display'])) {
             $router = C_Component_Registry::get_instance()->get_utility('I_Router');
-            wp_enqueue_script('jquery-placeholder', $router->get_static_url('photocrati-nextgen_admin#jquery.placeholder.min.js'), 'jquery', FALSE, FALSE);
+            wp_enqueue_script('jquery-placeholder', $router->get_static_url('photocrati-nextgen_admin#jquery.placeholder.min.js'), array('jquery'), FALSE, FALSE);
             wp_enqueue_script('ngg-pro-proofing-script', $router->get_static_url('photocrati-nextgen_pro_proofing#nextgen_pro-proofing.js'), array('jquery', 'underscore', 'jquery-placeholder', 'nextgen_pro_captions-js'), FALSE, FALSE);
             wp_localize_script('ngg-pro-proofing-script', 'ngg_pro_proofing_i18n', array('image_list' => __('Submitting {0} image{1}', 'nextgen-gallery-pro'), 'submit_cancel' => __('Cancel', 'nextgen-gallery-pro'), 'submit_button' => __('Send', 'nextgen-gallery-pro'), 'submit_message' => __('Submitting...', 'nextgen-gallery-pro'), 'example_name' => __('Name', 'nextgen-gallery-pro'), 'example_email' => __('Email', 'nextgen-gallery-pro'), 'nggpl_title' => __('Proof image?', 'nextgen-gallery-pro')));
             $deps = false;
@@ -298,6 +314,9 @@ class C_NextGen_Pro_Proofing extends C_DataMapper_Model
 class C_NextGen_Pro_Proofing_Controller extends C_MVC_Controller
 {
     static $instance = NULL;
+    /**
+     * @return C_NextGen_Pro_Proofing_Controller
+     */
     static function get_instance()
     {
         if (!self::$instance) {
@@ -365,6 +384,10 @@ class C_NextGen_Pro_Proofing_Lightbox
 class C_NextGen_Pro_Proofing_Mapper extends C_CustomPost_DataMapper_Driver
 {
     public static $_instances = array();
+    /**
+     * @param bool|string $context
+     * @return C_NextGen_Pro_Proofing_Mapper
+     */
     public static function get_instance($context = FALSE)
     {
         if (!isset(self::$_instances[$context])) {

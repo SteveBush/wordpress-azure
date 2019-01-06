@@ -14,6 +14,9 @@
             echo $source;
         } ?>
     </div>
+    <div id='nggpl-cart_updated_wrapper'>
+        <?php print $i18n->nggpl_cart_updated; ?>
+    </div>
     <input class='nggpl-button' type='button' id='ngg_update_cart_btn' value='<?php echo esc_attr($i18n->update_cart); ?>'/>
     <input class='nggpl-button' type='button' id='ngg_checkout_btn' value='<?php echo esc_attr($i18n->checkout); ?>'/>
 </div>

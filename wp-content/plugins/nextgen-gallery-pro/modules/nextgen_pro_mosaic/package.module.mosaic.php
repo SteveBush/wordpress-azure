@@ -19,10 +19,9 @@ class A_Mosaic_Controller extends Mixin
         $this->call_parent('enqueue_frontend_resources', $displayed_gallery);
         $this->object->enqueue_ngg_styles();
         M_Galleria::enqueue_entities($displayed_gallery, 0, $size_name);
-        wp_enqueue_style('ngg_pro_mosaic_style', $this->object->get_static_url(NGG_PRO_MOSAIC . '#style.css'), NGG_PRO_MOSAIC_VERSION);
+        wp_enqueue_style('ngg_pro_mosaic_style', $this->object->get_static_url(NGG_PRO_MOSAIC . '#style.css'), array(), NGG_PRO_MOSAIC_VERSION);
         wp_enqueue_script('ngg_pro_mosaic_base', $this->object->get_static_url(NGG_PRO_MOSAIC . '#justified-gallery-3.6.js'), array('jquery'), NGG_PRO_MOSAIC_VERSION, TRUE);
-        wp_enqueue_script('waitforimages', $this->object->get_static_url('photocrati-nextgen_basic_gallery#slideshow/jquery.waitforimages.js'), array('jquery'), NGG_SCRIPT_VERSION);
-        wp_enqueue_script('ngg_pro_mosaic_script', $this->object->get_static_url(NGG_PRO_MOSAIC . '#mosaic_init.js'), array('ngg_pro_mosaic_base', 'underscore', 'waitforimages'), NGG_PRO_MOSAIC_VERSION, TRUE);
+        wp_enqueue_script('ngg_pro_mosaic_script', $this->object->get_static_url(NGG_PRO_MOSAIC . '#mosaic_init.js'), array('ngg_pro_mosaic_base', 'underscore', 'ngg_waitforimages'), NGG_PRO_MOSAIC_VERSION, TRUE);
         $this->object->_add_script_data('ngg_common', 'galleries.gallery_' . $displayed_gallery->id() . '.mosaic_effect_code', $this->object->get_effect_code($displayed_gallery), FALSE);
     }
 }

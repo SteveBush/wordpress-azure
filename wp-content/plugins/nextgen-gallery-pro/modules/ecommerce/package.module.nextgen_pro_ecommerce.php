@@ -211,6 +211,20 @@ class A_Ecommerce_Ajax extends Mixin
         return $retval;
     }
 }
+/**
+ * Sets default values for added ecommerce settings
+ *
+ * @mixin C_Display_Type_Mapper
+ * @adapts I_Display_Type_Mapper
+ */
+class A_Ecommerce_Display_Type_Mapper extends Mixin
+{
+    function set_defaults($entity)
+    {
+        $this->call_parent('set_defaults', $entity);
+        $this->object->_set_default_value($entity, 'settings', 'is_ecommerce_enabled', FALSE);
+    }
+}
 class A_Ecommerce_Factory extends Mixin
 {
     function ngg_pricelist($properties = array(), $mapper = FALSE, $context = FALSE)
@@ -712,32 +726,19 @@ class A_Payment_Gateway_Form extends Mixin
     {
         return $this->get_page_heading();
     }
+    /**
+     * @return string
+     */
     function get_page_heading()
     {
         return __('Payment Gateway', 'nextgen-gallery-pro');
     }
     /**
-     * These should be moved to their appropriate module
      * @return array
      */
     function _get_field_names()
     {
-        return array(
-            'nextgen_pro_ecommerce_test_gateway_enable',
-            'nextgen_pro_ecommerce_cheque_enable',
-            'nextgen_pro_ecommerce_cheque_instructions',
-            'nextgen_pro_ecommerce_stripe_enable',
-            // 'nextgen_pro_ecommerce_stripe_currencies_supported',
-            'nextgen_pro_ecommerce_stripe_key_public',
-            'nextgen_pro_ecommerce_stripe_key_private',
-            'nextgen_pro_ecommerce_paypal_enable',
-            // 'nextgen_pro_ecommerce_paypal_currencies_supported',
-            'nextgen_pro_ecommerce_paypal_sandbox',
-            'nextgen_pro_ecommerce_paypal_email',
-            'nextgen_pro_ecommerce_paypal_username',
-            'nextgen_pro_ecommerce_paypal_password',
-            'nextgen_pro_ecommerce_paypal_signature',
-        );
+        return array();
     }
     function save_action()
     {
@@ -749,119 +750,6 @@ class A_Payment_Gateway_Form extends Mixin
     function enqueue_static_resources()
     {
         wp_enqueue_script('photocrati-nextgen_pro_ecommerce_payment_gateway-settings-js', $this->get_static_url('photocrati-nextgen_pro_ecommerce#ecommerce_payment_gateway_form_settings.js'), array('jquery.nextgen_radio_toggle'));
-    }
-    function _render_nextgen_pro_ecommerce_stripe_enable_field($model)
-    {
-        $model = new stdClass();
-        $model->name = 'ecommerce';
-        return $this->_render_radio_field($model, 'stripe_enable', __('Enable Stripe', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_stripe_enable, __('Not all currencies are supported by all payment gateways. Please be sure to confirm your desired currency is supported by Stripe', 'nextgen-gallery-pro'));
-    }
-    /**
-     * Displays a warning if the user has chosen a currency not available to Stripe.
-     *
-     * See: https://support.stripe.com/questions/which-currencies-does-stripe-support
-     * @param $model
-     * @return string
-     */
-    function _render_nextgen_pro_ecommerce_stripe_currencies_supported_field($model)
-    {
-        $settings = C_NextGen_Settings::get_instance();
-        $currency = C_NextGen_Pro_Currencies::$currencies[$settings->ecommerce_currency];
-        $supported = array('AED', 'AFN', 'ALL', 'AMD', 'ANG', 'AOA', 'ARS', 'AUD', 'AWG', 'AZN', 'BAM', 'BBD', 'BDT', 'BGN', 'BIF', 'BMD', 'BND', 'BOB', 'BRL', 'BSD', 'BWP', 'BZD', 'CAD', 'CDF', 'CHF', 'CLP', 'CNY', 'COP', 'CRC', 'CVE', 'CZK', 'DJF', 'DKK', 'DOP', 'DZD', 'EEK', 'EGP', 'ETB', 'EUR', 'FJD', 'FKP', 'GBP', 'GEL', 'GIP', 'GMD', 'GNF', 'GTQ', 'GYD', 'HKD', 'HNL', 'HRK', 'HTG', 'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JMD', 'JPY', 'KES', 'KGS', 'KHR', 'KMF', 'KRW', 'KYD', 'KZT', 'LAK', 'LBP', 'LKR', 'LRD', 'LSL', 'LTL', 'LVL', 'MAD', 'MDL', 'MGA', 'MKD', 'MNT', 'MOP', 'MRO', 'MUR', 'MVR', 'MWK', 'MXN', 'MYR', 'MZN', 'NAD', 'NGN', 'NIO', 'NOK', 'NPR', 'NZD', 'PAB', 'PEN', 'PGK', 'PHP', 'PKR', 'PLN', 'PYG', 'QAR', 'RON', 'RSD', 'RUB', 'RWF', 'SAR', 'SBD', 'SCR', 'SEK', 'SGD', 'SHP', 'SLL', 'SOS', 'SRD', 'STD', 'SVC', 'SZL', 'THB', 'TJS', 'TOP', 'TRY', 'TTD', 'TWD', 'TZS', 'UAH', 'UGX', 'USD', 'UYU', 'UZS', 'VEF', 'VND', 'VUV', 'WST', 'XAF', 'XCD', 'XOF', 'XPF', 'YER', 'ZAR', 'ZMW');
-        if (!in_array($currency['code'], $supported)) {
-            $message = __('Stripe does not support your currently chosen currency', 'nextgen-gallery-pro');
-            return "<tr id='tr_ecommerce_stripe_currencies_supported'><td colspan='2'>{$message}</td></tr>";
-        }
-    }
-    function _render_nextgen_pro_ecommerce_stripe_sandbox_field($model)
-    {
-        $model = new stdClass();
-        $model->name = 'ecommerce';
-        return $this->_render_radio_field($model, 'stripe_sandbox', __('Use sandbox', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_stripe_sandbox, __('If enabled transactions will use testing servers on which no currency is actually moved', 'nextgen-gallery-pro'), !C_NextGen_Settings::get_instance()->ecommerce_stripe_enable ? TRUE : FALSE);
-    }
-    function _render_nextgen_pro_ecommerce_stripe_key_public_field($model)
-    {
-        $model = new stdClass();
-        $model->name = 'ecommerce';
-        return $this->_render_text_field($model, 'stripe_key_public', __('Public key', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_stripe_key_public, '', !C_NextGen_Settings::get_instance()->ecommerce_stripe_enable ? TRUE : FALSE);
-    }
-    function _render_nextgen_pro_ecommerce_stripe_key_private_field($model)
-    {
-        $model = new stdClass();
-        $model->name = 'ecommerce';
-        return $this->_render_text_field($model, 'stripe_key_private', __('Private key', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_stripe_key_private, '', !C_NextGen_Settings::get_instance()->ecommerce_stripe_enable ? TRUE : FALSE);
-    }
-    function _render_nextgen_pro_ecommerce_paypal_enable_field($model)
-    {
-        $model = new stdClass();
-        $model->name = 'ecommerce';
-        return $this->_render_radio_field($model, 'paypal_enable', __('Enable PayPal Express Checkout', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_paypal_enable, __('Not all currencies are supported by all payment gateways. Please be sure to confirm your desired currency is supported by PayPal', 'nextgen-gallery-pro'));
-    }
-    function _render_nextgen_pro_ecommerce_paypal_currencies_supported_field($model)
-    {
-        $settings = C_NextGen_Settings::get_instance();
-        $currency = C_NextGen_Pro_Currencies::$currencies[$settings->ecommerce_currency];
-        $supported = array('CAD', 'EUR', 'GBP', 'USD', 'JPY', 'AUD', 'NZD', 'CHF', 'HKD', 'SGD', 'SEK', 'DKK', 'PLN', 'NOK', 'HUF', 'CZK', 'ILS', 'MXN', 'BRL', 'MYR', 'PHP', 'TWD', 'THB', 'TRY', 'RUB');
-        if (!in_array($currency['code'], $supported)) {
-            $message = __('PayPal does not support your currently chosen currency', 'nextgen-gallery-pro');
-            return "<tr id='tr_ecommerce_paypal_currencies_supported'><td colspan='2'>{$message}</td></tr>";
-        }
-    }
-    function _render_nextgen_pro_ecommerce_paypal_sandbox_field($model)
-    {
-        $model = new stdClass();
-        $model->name = 'ecommerce';
-        return $this->_render_radio_field($model, 'paypal_sandbox', __('Use sandbox?', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_paypal_sandbox, __('If enabled transactions will use testing servers on which no currency is actually moved', 'nextgen-gallery-pro'), !C_NextGen_Settings::get_instance()->ecommerce_paypal_enable ? TRUE : FALSE);
-    }
-    function _render_nextgen_pro_ecommerce_paypal_email_field($model)
-    {
-        $model = new stdClass();
-        $model->name = 'ecommerce';
-        return $this->_render_text_field($model, 'paypal_email', __('Email', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_paypal_email, '', !C_NextGen_Settings::get_instance()->ecommerce_paypal_enable ? TRUE : FALSE);
-    }
-    function _render_nextgen_pro_ecommerce_paypal_username_field($model)
-    {
-        $model = new stdClass();
-        $model->name = 'ecommerce';
-        return $this->_render_text_field($model, 'paypal_username', __('API Username', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_paypal_username, '', !C_NextGen_Settings::get_instance()->ecommerce_paypal_enable ? TRUE : FALSE);
-    }
-    function _render_nextgen_pro_ecommerce_paypal_password_field($model)
-    {
-        $model = new stdClass();
-        $model->name = 'ecommerce';
-        return $this->_render_text_field($model, 'paypal_password', __('API Password', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_paypal_password, '', !C_NextGen_Settings::get_instance()->ecommerce_paypal_enable ? TRUE : FALSE);
-    }
-    function _render_nextgen_pro_ecommerce_paypal_signature_field($model)
-    {
-        $model = new stdClass();
-        $model->name = 'ecommerce';
-        return $this->_render_text_field(
-            $model,
-            'paypal_signature',
-            __('API Signature', 'nextgen-gallery-pro'),
-            C_NextGen_Settings::get_instance()->ecommerce_paypal_signature,
-            '',
-            // Tooltip text
-            !C_NextGen_Settings::get_instance()->ecommerce_paypal_enable ? TRUE : FALSE
-        );
-    }
-    function _render_nextgen_pro_ecommerce_test_gateway_enable_field($model)
-    {
-        $model = new stdClass();
-        $model->name = 'ecommerce';
-        return $this->_render_radio_field($model, 'test_gateway_enable', __('Enable Testing Gateway', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_test_gateway_enable, __('Enables a gateway that does not collect payments and sends users directly to their order confirmation', 'nextgen-gallery-pro'));
-    }
-    function _render_nextgen_pro_ecommerce_cheque_enable_field($model)
-    {
-        $model = new stdClass();
-        $model->name = 'ecommerce';
-        return $this->_render_radio_field($model, 'cheque_enable', __('Enable Checks', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_cheque_enable);
-    }
-    function _render_nextgen_pro_ecommerce_cheque_instructions_field($model)
-    {
-        $model = new stdClass();
-        $model->name = 'ecommerce';
-        return $this->_render_textarea_field($model, 'cheque_instructions', __('Instructions', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_cheque_instructions, __('Use this to inform users how to pay and where they should send their payment', 'nextgen-gallery-pro'), !C_NextGen_Settings::get_instance()->ecommerce_cheque_enable ? TRUE : FALSE);
     }
 }
 /**
@@ -1015,6 +903,9 @@ class Mixin_Pro_Ecomm_Storage extends Mixin
 class C_Digital_Downloads extends C_MVC_Controller
 {
     static $instance = NULL;
+    /**
+     * @return C_Digital_Downloads
+     */
     static function get_instance()
     {
         if (!self::$instance) {
@@ -1265,6 +1156,10 @@ class C_Nextgen_Mail_Manager extends C_Component
         $this->implement('I_Nextgen_Mail_Manager');
         $this->add_mixin('Mixin_Nextgen_Mail_Manager');
     }
+    /**
+     * @param bool|string $context
+     * @return C_Nextgen_Mail_Manager
+     */
     static function get_instance($context = False)
     {
         if (!isset(self::$_instances[$context])) {
@@ -1720,6 +1615,10 @@ class C_NextGen_Pro_Cart
         }
         return $retval;
     }
+    /**
+     * @param bool $use_home_country
+     * @return float
+     */
     function get_total($use_home_country = TRUE)
     {
         // Have we cached this?
@@ -1777,6 +1676,9 @@ class C_NextGen_Pro_Cart
 class C_NextGen_Pro_Checkout extends C_MVC_Controller
 {
     static $_instance = NULL;
+    /**
+     * @return C_NextGen_Pro_Checkout
+     */
     static function get_instance()
     {
         if (!self::$_instance) {
@@ -2180,6 +2082,9 @@ class C_NextGen_Pro_Order extends C_DataMapper_Model
 class C_NextGen_Pro_Order_Controller extends C_MVC_Controller
 {
     static $_instance = NULL;
+    /**
+     * @return C_NextGen_Pro_Order_Controller
+     */
     static function get_instance()
     {
         if (is_null(self::$_instance)) {
@@ -2213,6 +2118,9 @@ class C_NextGen_Pro_Order_Controller extends C_MVC_Controller
 class C_NextGen_Pro_Order_Verification extends C_MVC_Controller
 {
     static $_instance = NULL;
+    /**
+     * @return C_NextGen_Pro_Order_Verification
+     */
     static function get_instance()
     {
         if (!isset(self::$_instance)) {
@@ -2238,6 +2146,10 @@ class C_NextGen_Pro_Order_Verification extends C_MVC_Controller
 class C_Order_Mapper extends C_CustomPost_DataMapper_Driver
 {
     public static $_instances = array();
+    /**
+     * @param bool|string $context
+     * @return C_Order_Mapper
+     */
     public static function get_instance($context = FALSE)
     {
         if (!isset(self::$_instances[$context])) {
@@ -2447,9 +2359,9 @@ class C_Pricelist_Item extends C_DataMapper_Model
     }
     /**
      * Initializes a display type with properties
-     * @param FALSE|C_Display_Type_Mapper $mapper
-     * @param array|stdClass|C_Display_Type $properties
-     * @param FALSE|string|array $context
+     * @param false|C_Display_Type_Mapper $mapper
+     * @param array|object|C_Display_Type $properties
+     * @param false|string|array $context
      */
     function initialize($properties = array(), $mapper = FALSE, $context = FALSE)
     {
@@ -2472,6 +2384,10 @@ class C_Pricelist_Item extends C_DataMapper_Model
 class C_Pricelist_Item_Mapper extends C_CustomPost_DataMapper_Driver
 {
     public static $_instances = array();
+    /**
+     * @param bool|string $context
+     * @return C_Pricelist_Item_Mapper
+     */
     public static function get_instance($context = FALSE)
     {
         if (!isset(self::$_instances[$context])) {
@@ -2514,6 +2430,10 @@ class C_Pricelist_Item_Mapper extends C_CustomPost_DataMapper_Driver
 class C_Pricelist_Mapper extends C_CustomPost_DataMapper_Driver
 {
     public static $_instances = array();
+    /**
+     * @param bool|string $context
+     * @return C_Pricelist_Mapper
+     */
     static function get_instance($context = FALSE)
     {
         if (!isset(self::$_instances[$context])) {
@@ -2749,6 +2669,10 @@ class C_Pricelist_Source_Manager
 }
 class C_Pricelist_Source_Page extends C_NextGen_Admin_Page_Controller
 {
+    /**
+     * @param bool|string $context
+     * @return C_Pricelist_Source_Page
+     */
     static function &get_instance($context = FALSE)
     {
         if (!isset(self::$_instances[$context])) {
