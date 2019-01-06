@@ -23,7 +23,7 @@ class M_NextGen_Pro_Masonry extends C_Base_Module
             'photocrati-nextgen_pro_masonry',
             'NextGEN Pro Masonry',
             'Provides the NextGEN Pro Masonry Display Type',
-            '2.6.1',
+            '2.6.7',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com'

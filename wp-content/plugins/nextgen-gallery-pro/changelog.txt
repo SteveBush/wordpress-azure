@@ -1,6 +1,20 @@
 NextGEN Pro
 by Imagely
 
+= v2.6.8 - 12.13.2018 =
+* Fixed:   Images "shared" to Facebook will no longer be directed to the site frontpage when visited
+* Fixed:   Stripe TLS 1.2 warnings were displaying even though the system supported TLS 1.2+
+* Fixed:   Pro Lightbox was unable to open older, "preview image" based ATP galleries
+
+= v2.6.7 - 10.09.2018 =
+* Changed: Improved quantity selectors in the Pro Lightbox ecommerce sidebar
+* Changed: Numerous phpdoc entries have been corrected
+* Changed: Pro Lightbox 'cart updated' message was moved to avoid other elements being repositioned
+* Changed: Upgraded FontAwesome to version 5
+* Fixed:   Pro Imagebrowser navigation was positioned incorrectly with RTL languages
+* Fixed:   Pro Lightbox carousel was misstyled with RTL languages
+* Fixed:   Pro Lightbox was not honoring 'Apply to all images' lightbox setting
+
 = V2.6.3 - 07.24.2018 =
 * NEW:     Added French translations
 * NEW:     Added German translations

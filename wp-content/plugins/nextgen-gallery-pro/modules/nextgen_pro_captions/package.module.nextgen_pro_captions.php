@@ -1,5 +1,25 @@
 <?php
 /**
+ * Sets default values for added hover captions settings
+ *
+ * @mixin C_Display_Type_Mapper
+ * @adapts I_Display_Type_Mapper
+ */
+class A_NextGen_Pro_Captions_Display_Type_Mapper extends Mixin
+{
+    function set_defaults($entity)
+    {
+        $this->call_parent('set_defaults', $entity);
+        if (!empty($entity->name) && in_array($entity->name, M_NextGen_Pro_Captions::$display_types)) {
+            $this->object->_set_default_value($entity, 'settings', 'captions_enabled', FALSE);
+            $this->object->_set_default_value($entity, 'settings', 'captions_display_sharing', TRUE);
+            $this->object->_set_default_value($entity, 'settings', 'captions_display_title', TRUE);
+            $this->object->_set_default_value($entity, 'settings', 'captions_display_description', TRUE);
+            $this->object->_set_default_value($entity, 'settings', 'captions_animation', 'slideup');
+        }
+    }
+}
+/**
  * Class A_NextGen_Pro_Captions_Form
  * @mixin C_Form
  * @adapts I_Form using "photocrati-nextgen_pro_thumbnail_grid", photocrati-nextgen_pro_masonry",

@@ -172,6 +172,10 @@ class C_Image_Protection_Manager extends C_Component
         $this->implement('I_Image_Protection_Manager');
         $this->add_mixin('Mixin_Image_Protection_Manager');
     }
+    /**
+     * @param bool|string $context
+     * @return C_Image_Protection_Manager
+     */
     static function get_instance($context = False)
     {
         if (!isset(self::$_instances[$context])) {

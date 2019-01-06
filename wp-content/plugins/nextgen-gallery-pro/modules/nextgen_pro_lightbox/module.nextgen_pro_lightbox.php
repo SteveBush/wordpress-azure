@@ -9,7 +9,7 @@
 define('NGG_PRO_LIGHTBOX', 'photocrati-nextgen_pro_lightbox');
 define('NGG_PRO_LIGHTBOX_TRIGGER', NGG_PRO_LIGHTBOX);
 define('NGG_PRO_LIGHTBOX_COMMENT_TRIGGER', 'photocrati-nextgen_pro_lightbox_comments');
-define('NGG_PRO_LIGHTBOX_VERSION', '2.6.1');
+define('NGG_PRO_LIGHTBOX_VERSION', '2.6.8');
 
 class M_NextGen_Pro_Lightbox extends C_Base_Module
 {

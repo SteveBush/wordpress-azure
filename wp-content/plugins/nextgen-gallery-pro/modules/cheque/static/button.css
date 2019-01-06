@@ -142,6 +142,7 @@ html.cheque_form_open {
     padding-right: 40px !important;
 }
 
+#ngg_cheque_buttons a svg,
 #ngg_cheque_buttons a i {
     padding: 0 0 0 8px;
 }
@@ -154,14 +155,17 @@ html.cheque_form_open {
     font-size: 18px;
 }
 
+#ngg_cheque_button_cancel svg,
 #ngg_cheque_button_cancel i {
     text-shadow: 0px 0px 10px rgba(150, 150, 150, 0.8);
 }
 
+#ngg_cheque_button_cancel svg.fa-times,
 #ngg_cheque_button_cancel i.fa-times {
     color: white;
 }
 
+#ngg_cheque_button_cancel svg.fa-circle,
 #ngg_cheque_button_cancel i.fa-circle {
     color: #000000;
 }

@@ -264,20 +264,35 @@
                     };
 
                     // Determine if we should show the comment sidebar
-                    if ($el.data('nplmodal-show-comments'))
+                    if ($el.data('nplmodal-show-comments')) {
                         params.show_sidebar = '/comments';
+                    }
 
                     // Determine the gallery id
-                    if ($el.data('nplmodal-gallery-id'))
+                    if ($el.data('nplmodal-gallery-id')) {
                         params.gallery_id = $el.data('nplmodal-gallery-id');
+                    }
 
                     // Determine the image id
-                    if ($el.data('nplmodal-image-id'))
+                    if ($el.data('nplmodal-image-id')) {
                         params.image_id = parseInt($el.data('nplmodal-image-id'));
-                    else if ($el.data('image-id'))
+                    } else if ($el.data('image-id')) {
                         params.image_id = parseInt($el.data('image-id'));
-                    else if (params.gallery_id === '!')
-                        params.image_id = $el.attr('href');
+                    } else if (params.gallery_id === '!') {
+
+                        var $image = $el.find('img');
+                        params.image_id = $image.attr('src');
+                        if ($image.attr('srcset')) {
+                            var sizes = parseSrcset($image.attr('srcset'));
+                            var largest_w = 0;
+                            _.each(sizes, function (row) {
+                                if (typeof row.w !== undefined && row.w > largest_w) {
+                                    largest_w = row.w;
+                                    params.image_id = row.url;
+                                }
+                            });
+                        }
+                    }
 
                     // Determine the slug
                     if (params.gallery_id !== '!') {
@@ -414,6 +429,13 @@
                         // Mark the requested image as the one to show at startup
                         if (parseInt(core.state.image_id) === parseInt(element.image_id)) {
                             show_ndx = index;
+                        }
+
+                        // A WP media library or 'other' / non-nextgen image
+                        if (typeof core.state.image_id == 'string' && typeof element.image_id == 'string') {
+                            if (core.state.image_id === element.image_id) {
+                                show_ndx = index;
+                            }
                         }
 
                         // In case we're viewing a WP or non-NGG image
@@ -980,8 +1002,8 @@
                 get_gallery_from_id: function (gallery_id) {
                     if ('undefined' === typeof window.galleries) { return null; }
                     var retval = null;
-                    $.each(galleries, function(index, gallery) {
-                        if (gallery.ID === gallery_id) {
+                    $.each(window.galleries, function(index, gallery) {
+                        if (gallery.ID === gallery_id || gallery.ID === parseInt(gallery_id)) {
                             retval = gallery;
                         }
                     });
@@ -992,7 +1014,7 @@
                     var id = slug;
                     if ('undefined' === typeof window.galleries) { return id; }
 
-                    $.each(galleries, function(index, gallery) {
+                    $.each(window.galleries, function(index, gallery) {
                         if (gallery.slug === slug) {
                             id = gallery.ID;
                         }

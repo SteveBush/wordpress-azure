@@ -12,7 +12,7 @@ jQuery(function($) {
 
             get_active_color: function() {
                 var retval = '#ffff00';
-                if (typeof ngg_proofing_settings != 'undefined') {
+                if (typeof ngg_proofing_settings !== 'undefined') {
                     retval = ngg_proofing_settings.active_color;
                 }
                 return retval;
@@ -20,10 +20,9 @@ jQuery(function($) {
 
             events: {
                 bind: function() {
-                    if (typeof ngg_image_proofing != 'undefined') {
+                    if (typeof ngg_image_proofing !== 'undefined') {
                         self.bind('npl_init', this.npl_init);
                         self.bind('image', this.image);
-                        methods.thumbnails.proofing.proofing_button.bind('click', this.button_clicked);
                     }
                 },
 
@@ -31,26 +30,36 @@ jQuery(function($) {
                     return methods.galleria.get_displayed_gallery_setting('ngg_proofing_display', false);
                 },
 
+                is_image_proofed: function() {
+                    var image_id = methods.galleria.get_current_image_id();
+                    var gallery_id = $.nplModal('get_state').gallery_id;
+                    var proofed_list = ngg_image_proofing.getList(gallery_id);
+                    var index = proofed_list.indexOf(image_id.toString());
+
+                    return (index > -1);
+                },
+
                 image: function() {
                     if (methods.thumbnails.proofing.events.is_proofing_enabled()) {
-                        var image_id = methods.galleria.get_current_image_id();
-                        var gallery_id = $.nplModal('get_state').gallery_id;
-                        var proofed_list = ngg_image_proofing.getList(gallery_id);
-                        var index = proofed_list.indexOf(image_id.toString());
-
-                        if (index > -1) {
-                            methods.thumbnails.proofing.proofing_button.css({color: methods.thumbnails.proofing.get_active_color()});
+                        var btn = $('.galleria-nextgen-buttons .nggpl-toolbar-button-proofing');
+                        if (methods.thumbnails.proofing.events.is_image_proofed()) {
+                            btn.css({color: methods.thumbnails.proofing.get_active_color()});
                         } else {
                             // If there's no custom icon color then setting the color attribute to '' will not
                             // remove our above color attribute. Remove the style attribute entirely and reset
-                            methods.thumbnails.proofing.proofing_button.removeAttr('style');
+                            btn.removeAttr('style');
                         }
                     }
                 },
 
                 npl_init: function() {
                     if (methods.thumbnails.proofing.events.is_proofing_enabled()) {
-                        methods.thumbnails.register_button(methods.thumbnails.proofing.proofing_button);
+                        methods.thumbnails.register_button(
+                            methods.thumbnails.proofing.proofing_button,
+                            function(event) {
+                                methods.thumbnails.proofing.events.button_clicked(event);
+                            }
+                        );
                     }
                 },
 

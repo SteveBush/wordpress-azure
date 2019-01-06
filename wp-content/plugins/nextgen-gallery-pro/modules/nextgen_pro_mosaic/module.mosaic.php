@@ -3,7 +3,7 @@
 /* { Module: photocrati-nextgen_pro_mosaic } */
 
 define('NGG_PRO_MOSAIC', 'photocrati-nextgen_pro_mosaic');
-define('NGG_PRO_MOSAIC_VERSION', '2.6.0');
+define('NGG_PRO_MOSAIC_VERSION', '2.6.7');
 
 class M_NextGen_Pro_Mosaic extends C_Base_Module
 {

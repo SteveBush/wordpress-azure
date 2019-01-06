@@ -17,7 +17,7 @@ class M_Free_Gateway extends C_Base_Module
             'photocrati-free_gateway',
             'Free gateway',
             'Handles orders with a free total amount',
-            '2.6.0',
+            '2.6.7',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com'

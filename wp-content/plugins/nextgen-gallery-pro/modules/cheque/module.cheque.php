@@ -19,7 +19,7 @@ class M_Photocrati_cheque extends C_Base_Module
             'photocrati-cheque',
             'Pay by cheque',
             'Allows users to pay by mail with a cheque',
-            '2.6.0',
+            '2.6.7',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com'
@@ -34,6 +34,9 @@ class M_Photocrati_cheque extends C_Base_Module
         {
             $this->get_registry()->add_adapter('I_NextGen_Pro_Checkout', 'A_Cheque_Checkout_Button');
             $this->get_registry()->add_adapter('I_Ajax_Controller',      'A_Cheque_Checkout_Ajax');
+        }
+        else {
+            $this->get_registry()->add_adapter('I_Form', 'A_Cheque_Checkout_Form', NGG_PRO_PAYMENT_PAYMENT_FORM);
         }
 
     }
@@ -166,8 +169,9 @@ class M_Photocrati_cheque extends C_Base_Module
     function get_type_list()
     {
         return array(
+            'A_Cheque_Checkout_Ajax'   => 'adapter.cheque_checkout_ajax.php',
             'A_Cheque_Checkout_Button' => 'adapter.cheque_checkout_button.php',
-            'A_Cheque_Checkout_Ajax'   => 'adapter.cheque_checkout_ajax.php'
+            'A_Cheque_Checkout_Form'   => 'adapter.cheque_checkout_form.php'
         );
     }
 }

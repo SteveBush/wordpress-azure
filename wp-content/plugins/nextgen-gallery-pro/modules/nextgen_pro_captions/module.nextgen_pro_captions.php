@@ -6,6 +6,15 @@
  */
 class M_NextGen_Pro_Captions extends C_Base_Module
 {
+    public static $display_types = array(
+        'photocrati-nextgen_pro_masonry',
+        'photocrati-nextgen_pro_thumbnail_grid',
+        'photocrati-nextgen_pro_blog_gallery',
+        'photocrati-nextgen_pro_film',
+        'photocrati-nextgen_pro_mosaic',
+        'photocrati-nextgen_pro_sidescroll'
+    );
+
     function define($id = 'pope-module',
                     $name = 'Pope Module',
                     $description = '',
@@ -19,7 +28,7 @@ class M_NextGen_Pro_Captions extends C_Base_Module
             'photocrati-nextgen_pro_captions',
             'NextGEN Pro Captions',
             "Provides image caption effects",
-            '2.6.1',
+            '2.6.7',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
@@ -34,18 +43,18 @@ class M_NextGen_Pro_Captions extends C_Base_Module
 
     function _register_adapters()
     {
+        $registry = $this->get_registry();
         if (M_Attach_To_Post::is_atp_url() || is_admin())
         {
-            $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Captions_Form', NGG_PRO_MASONRY);
-            $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Captions_Form', NGG_PRO_THUMBNAIL_GRID);
-            $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Captions_Form', NGG_PRO_BLOG_GALLERY);
-            $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Captions_Form', NGG_PRO_FILM);
-            $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Captions_Form', NGG_PRO_MOSAIC);
-            $this->get_registry()->add_adapter('I_Form', 'A_NextGen_Pro_Captions_Form', NGG_PRO_SIDESCROLL);
+            foreach (self::$display_types as $display_type) {
+                $registry->add_adapter('I_Form', 'A_NextGen_Pro_Captions_Form', $display_type);
+            }
         }
 
         if (!is_admin())
-            $this->get_registry()->add_adapter('I_Display_Type_Controller', 'A_NextGen_Pro_Captions_Resources');
+            $registry->add_adapter('I_Display_Type_Controller', 'A_NextGen_Pro_Captions_Resources');
+
+        $registry->add_adapter('I_Display_Type_Mapper', 'A_NextGen_Pro_Captions_Display_Type_Mapper');
     }
 
     function register_captions()
@@ -81,8 +90,9 @@ class M_NextGen_Pro_Captions extends C_Base_Module
     function get_type_list()
     {
         return array(
-            'A_NextGen_Pro_Captions_Form'      => 'adapter.nextgen_pro_captions_form.php',
-            'A_NextGen_Pro_Captions_Resources' => 'adapter.nextgen_pro_captions_resources.php'
+            'A_NextGen_Pro_Captions_Form'                => 'adapter.nextgen_pro_captions_form.php',
+            'A_NextGen_Pro_Captions_Resources'           => 'adapter.nextgen_pro_captions_resources.php',
+            'A_NextGen_Pro_Captions_Display_Type_Mapper' => 'adapter.nextgen_pro_captions_display_type_mapper.php'
         );
     }
 }

@@ -17,12 +17,11 @@
     line-height: 1em;
     padding: 0;
     margin: 0;
-    border-collapse: separate;
-    border-spacing: 4px;
 }
 
+#ngg_add_to_cart_container th,
 #ngg_add_to_cart_container td {
-    padding: 3px 0 2px 0;
+    padding: 6px;
 }
 
 #ngg_add_to_cart_container input,
@@ -144,44 +143,89 @@ div.nggpl-pricelist_source_accordion {
 #ngg_add_to_cart_container table th {
     color: #777777;
     font-weight: normal;
-    padding: 0;
     margin: 0;
 }
 
 #ngg_add_to_cart_container .nggpl-quantity_field {
     box-sizing: border-box;
     white-space: nowrap;
-    padding-right: 2px;
+    text-align: center;
+    padding: 6px 0 6px 0;
 }
 
-#ngg_add_to_cart_container .nggpl-quantity_field input {
-    -moz-appearance: textfield;
+#ngg_add_to_cart_container .nggpl-quantity_field_wrapper {
+    display: flex;
+    align-items: center;
+    justify-items: center;
 }
 
-#ngg_add_to_cart_container .nggpl-quantity_field input:hover {
-    -moz-appearance: number-input;
+#npl_wrapper.npl_mobile #ngg_add_to_cart_container .nggpl-quantity_field i {
+    font-size: 1.75em;
+}
+
+#ngg_add_to_cart_container .nggpl-quantity_field i:hover {
+    cursor: pointer;
+}
+
+#ngg_add_to_cart_container .nggpl-quantity_field i {
+    color: white;
+    background-color: #1b1d1f;
+    padding: 10px 3px 8px 3px;
+    border: 1px solid #1b1d1f;
+    height: 32px;
+    line-height: 32px;
+    padding: 0 5px 0 5px;
+}
+
+#ngg_add_to_cart_container .nggpl-quantity_field i:first-of-type {
+    border-radius: 8px 0 0 8px;
+}
+
+#ngg_add_to_cart_container .nggpl-quantity_field i:last-of-type {
+    border-radius: 0 8px 8px 0;
 }
 
 #ngg_add_to_cart_container .nggpl-quantity_field input {
     box-sizing: border-box;
-    width: 98%;
+    width: 40px;
+    display: inline-block;
+    -moz-appearance: textfield;
+    text-align: center;
+    border: 1px solid #1b1d1f;
+    border-radius: 0;
+    height: 32px;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+}
+
+#npl_wrapper.npl_mobile #ngg_add_to_cart_container .nggpl-quantity_field input {
+    pointer-events: none;
+}
+
+#ngg_add_to_cart_container .nggpl-quantity_field input::-webkit-outer-spin-button,
+#ngg_add_to_cart_container .nggpl-quantity_field input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 #ngg_add_to_cart_container .nggpl-description_field {
     box-sizing: border-box;
-    width: 100%;
+    width: 50%;
     text-align: left;
-    padding-left: 4px;
-    padding-right: 4px;
+    word-break: break-all;
 }
 
 #ngg_add_to_cart_container .nggpl-price_field,
 #ngg_add_to_cart_container .nggpl-total_field {
     box-sizing: border-box;
     white-space: nowrap;
-    padding-left: 6px;
     text-align: right;
     word-break: break-all;
+}
+
+#npl_wrapper.npl_mobile #ngg_add_to_cart_container .nggpl-total_field {
+    display: none;
 }
 
 #ngg_add_to_cart_container table input {
@@ -192,6 +236,14 @@ div.nggpl-pricelist_source_accordion {
 
 #ngg_add_to_cart_container .ui-accordion-header-icon {
     margin-right: 5px;
+}
+
+#ngg_add_to_cart_container #nggpl-cart_updated_wrapper {
+    text-align: center;
+    font-size: 15px;
+    color: green;
+    padding: 1em;
+    opacity: 0;
 }
 
 #ngg_add_to_cart_container #ngg_checkout_btn,
@@ -240,6 +292,7 @@ div.nggpl-pricelist_source_accordion {
 #nggpl-items_for_sale {
     display: none;
     text-align: center;
+    width: 100%
 }
 
 #nggpl-items_for_sale th {
@@ -248,9 +301,6 @@ div.nggpl-pricelist_source_accordion {
 
 .nggpl-source_contents input {
     padding: 1px;
-}
-
-.nggpl-cart_summary {
 }
 
 .nggpl-source_contents:last-child {
@@ -286,5 +336,14 @@ div.nggpl-pricelist_source_accordion {
 #npl_wrapper.npl-variant-white #ngg_add_to_cart_container table input,
 #npl_wrapper.npl-variant-white #ngg_add_to_cart_container table textarea {
     color: #222;
+    background-color: #f7f8f9;
+}
+
+#npl_wrapper.npl-variant-white #ngg_add_to_cart_container .nggpl-quantity_field input {
+    border: 1px solid #f7f8f9;
+}
+
+#npl_wrapper.npl-variant-white #ngg_add_to_cart_container .nggpl-quantity_field i {
+    border: 1px solid #f7f8f9;
     background-color: #f7f8f9;
 }

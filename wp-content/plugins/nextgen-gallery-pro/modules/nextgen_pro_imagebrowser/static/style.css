@@ -108,6 +108,8 @@
 .ngg-imagebrowser-dark .ngg-imagebrowser-nav {
     text-align: center;
     padding: 20px 20px 5px;
+    /* prevent RTL languages from making prev/next appear as next/prev: */
+    direction: ltr;
 }
 
 .ngg-imagebrowser-simple .ngg-imagebrowser-nav .back,

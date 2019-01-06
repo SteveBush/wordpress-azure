@@ -18,7 +18,7 @@ class M_NextGen_Pro_Coupons extends C_Base_Module
             NGG_PRO_COUPONS,
             'NextGEN Pro Coupons',
             'Provides coupons',
-            '2.6.0',
+            '2.6.7',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
