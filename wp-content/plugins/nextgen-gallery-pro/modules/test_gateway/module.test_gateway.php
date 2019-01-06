@@ -19,7 +19,7 @@ class M_Photocrati_Test_Gateway extends C_Base_Module
             'photocrati-test_gateway',
             'Test gateway',
             'Provides a test payment gateway',
-            '2.6.0',
+            '2.6.7',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com'
@@ -40,6 +40,9 @@ class M_Photocrati_Test_Gateway extends C_Base_Module
             $this->get_registry()->add_adapter('I_NextGen_Pro_Checkout', 'A_Test_Gateway_Checkout_Button');
             $this->get_registry()->add_adapter('I_Ajax_Controller',      'A_Test_Gateway_Checkout_Ajax');
         }
+        else {
+            $this->get_registry()->add_adapter('I_Form', 'A_Test_Gateway_Checkout_Form', NGG_PRO_PAYMENT_PAYMENT_FORM);
+        }
 
     }
 
@@ -52,8 +55,9 @@ class M_Photocrati_Test_Gateway extends C_Base_Module
     function get_type_list()
     {
         return array(
+            'A_Test_Gateway_Checkout_Ajax'   => 'adapter.test_gateway_checkout_ajax.php',
             'A_Test_Gateway_Checkout_Button' => 'adapter.test_gateway_checkout_button.php',
-            'A_Test_Gateway_Checkout_Ajax'   => 'adapter.test_gateway_checkout_ajax.php'
+            'A_Test_Gateway_Checkout_Form'   => 'adapter.test_gateway_checkout_form.php'
         );
     }
 }

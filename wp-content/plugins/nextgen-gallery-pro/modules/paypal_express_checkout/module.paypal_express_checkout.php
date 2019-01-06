@@ -19,7 +19,7 @@ class M_PayPal_Express_Checkout extends C_Base_Module
 			'photocrati-paypal_express_checkout',
 			'PayPal Express Checkout',
 			'Provides integration with PayPal Express Checkout',
-			'2.6.0',
+			'2.6.7',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com'
@@ -35,6 +35,9 @@ class M_PayPal_Express_Checkout extends C_Base_Module
             $this->get_registry()->add_adapter('I_NextGen_Pro_Checkout', 'A_PayPal_Express_Checkout_Button');
             $this->get_registry()->add_adapter('I_Ajax_Controller',      'A_PayPal_Express_Checkout_Ajax');
         }
+        else {
+            $this->get_registry()->add_adapter('I_Form', 'A_PayPal_Express_Checkout_Form', NGG_PRO_PAYMENT_PAYMENT_FORM);
+        }
 
 	}
 
@@ -43,6 +46,26 @@ class M_PayPal_Express_Checkout extends C_Base_Module
 		add_action('init', array(&$this, 'process_paypal_responses'));
         add_filter('ngg_pro_settings_reset_installers', array($this, 'return_own_installer'));
 	}
+
+	function initialize()
+    {
+        parent::initialize();
+
+        if (class_exists('C_Admin_Requirements_Manager'))
+        {
+            C_Admin_Requirements_Manager::get_instance()->add(
+                'paypal_express_curl_requirement',
+                'phpext',
+                array($this, 'check_curl_requirement'),
+                array('message' => __('cURL is required for PayPal Express support to function', 'nggallery'))
+            );
+        }
+    }
+
+    public function check_curl_requirement()
+    {
+        return function_exists('curl_init');
+    }
 
 	function process_paypal_responses()
 	{
@@ -84,8 +107,9 @@ class M_PayPal_Express_Checkout extends C_Base_Module
 	function get_type_list()
 	{
         return array(
+            'A_PayPal_Express_Checkout_Ajax'   => 'adapter.paypal_express_checkout_ajax.php',
             'A_PayPal_Express_Checkout_Button' => 'adapter.paypal_express_checkout_button.php',
-            'A_PayPal_Express_Checkout_Ajax'   => 'adapter.paypal_express_checkout_ajax.php'
+            'A_PayPal_Express_Checkout_Form'   => 'adapter.paypal_express_checkout_form.php'
         );
 	}
 }

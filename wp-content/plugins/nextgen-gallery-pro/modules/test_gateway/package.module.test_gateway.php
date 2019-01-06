@@ -55,3 +55,23 @@ class A_Test_Gateway_Checkout_Button extends Mixin
         return $this->render_partial('photocrati-test_gateway#button', array('i18n' => $this->get_i18n_strings()), TRUE);
     }
 }
+class A_Test_Gateway_Checkout_Form extends Mixin
+{
+    function _get_field_names()
+    {
+        $fields = $this->call_parent('_get_field_names');
+        $fields[] = 'nextgen_pro_ecommerce_test_gateway_enable';
+        return $fields;
+    }
+    function enqueue_static_resources()
+    {
+        $this->call_parent('enqueue_static_resources');
+        wp_enqueue_script('ngg_pro_test_gateway_form', $this->get_static_url('photocrati-test_gateway#form.js'));
+    }
+    function _render_nextgen_pro_ecommerce_test_gateway_enable_field($model)
+    {
+        $model = new stdClass();
+        $model->name = 'ecommerce';
+        return $this->_render_radio_field($model, 'test_gateway_enable', __('Enable Testing Gateway', 'nextgen-gallery-pro'), C_NextGen_Settings::get_instance()->ecommerce_test_gateway_enable, __('Enables a gateway that does not collect payments and sends users directly to their order confirmation', 'nextgen-gallery-pro'));
+    }
+}

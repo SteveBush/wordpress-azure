@@ -21,7 +21,7 @@ class M_NextGen_PictureFill extends C_Base_Module
 			'photocrati-nextgen_picturefill',
 			'Picturefill',
 			'Provides support for the picture element using the PictureFill polyfill library',
-			'2.6.0',
+			'2.6.7',
 			'Imagely',
 			'https://www.imagely.com',
 			$context
@@ -68,10 +68,9 @@ class M_NextGen_PictureFill extends C_Base_Module
 	 * Return the named size for a retina-version of another named size. E.g. if the named size
 	 * that you provide is "thumbnails", this method will return the named size for the retina-version of
 	 * the thumbnail
-	 * @param $image
-	 * @param $original_named_size
-	 *
-	 * @return null
+	 * @param C_Image $image
+	 * @param string $original_named_size
+	 * @return string
 	 */
 	static function get_retina_named_size($image, $original_named_size)
 	{
@@ -160,7 +159,7 @@ class M_NextGen_PictureFill extends C_Base_Module
 
 		if ($image)
 		{
-			$parts = self::prepare_picture_element($image, $params_or_named_size, $attrs, $echo);
+			$parts = self::prepare_picture_element($image, $params_or_named_size, $attrs);
 			$retval = implode("\n", array(
 				'<picture>',
 				"\t",

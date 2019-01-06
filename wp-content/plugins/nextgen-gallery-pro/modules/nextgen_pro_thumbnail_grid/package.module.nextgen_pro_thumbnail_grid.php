@@ -6,6 +6,7 @@
  */
 class A_NextGen_Pro_Thumbnail_Grid_Controller extends Mixin
 {
+    // TODO: is this method necessary?
     function initialize()
     {
         parent::initialize();

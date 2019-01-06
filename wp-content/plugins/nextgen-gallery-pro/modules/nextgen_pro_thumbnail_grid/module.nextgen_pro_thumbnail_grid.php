@@ -23,7 +23,7 @@ class M_NextGen_Pro_Thumbnail_Grid extends C_Base_Module
 			NGG_PRO_THUMBNAIL_GRID,
 			'NextGen Pro Thumbnail Grid',
 			'Provides a thumbnail grid for NextGEN Pro',
-            '2.6.1',
+            '2.6.7',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-pro/',
             'Imagely',
             'https://www.imagely.com',
