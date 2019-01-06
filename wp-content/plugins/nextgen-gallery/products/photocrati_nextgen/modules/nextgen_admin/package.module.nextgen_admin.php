@@ -1427,6 +1427,14 @@ class C_NextGEN_Wizard
     {
         $this->set_step_property($step_id, 'target_wait', $wait);
     }
+    function get_step_optional($step_id)
+    {
+        return $this->get_step_property($step_id, 'optional');
+    }
+    function set_step_optional($step_id, $optional)
+    {
+        $this->set_step_property($step_id, 'optional', $optional);
+    }
     function get_step_lazy($step_id)
     {
         return $this->get_step_property($step_id, 'lazy');

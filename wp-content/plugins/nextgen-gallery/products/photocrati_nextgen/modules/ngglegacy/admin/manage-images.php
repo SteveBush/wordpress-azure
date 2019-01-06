@@ -332,7 +332,7 @@ jQuery(document).ready( function($) {
 		<form id="updategallery" class="nggform" method="POST" action="<?php echo $ngg->manage_page->base_page . '&amp;mode=edit&amp;s=' . get_search_query(); ?>" accept-charset="utf-8">
 		
 			<?php wp_nonce_field('ngg_updategallery') ?>
-			<input type="hidden" name="page" value="manage-images" />
+			<input type="hidden" name="nggpage" value="manage-images" />
 
 		<!-- form#updategallery continues below end of if statement -->
 
@@ -348,7 +348,7 @@ jQuery(document).ready( function($) {
 		<form id="updategallery" class="nggform" method="POST" action="<?php echo $ngg->manage_page->base_page . '&amp;mode=edit&amp;gid=' . $act_gid . '&amp;paged=' . esc_attr($_GET['paged']); ?>" accept-charset="utf-8">
 		
 			<?php wp_nonce_field('ngg_updategallery') ?>
-			<input type="hidden" name="page" value="manage-images" />
+			<input type="hidden" name="nggpage" value="manage-images" />
 
 			<?php if ( nggGallery::current_user_can( 'NextGEN Edit gallery options' )) : ?>
 
@@ -516,7 +516,7 @@ jQuery(document).ready( function($) {
 		<?php wp_nonce_field('ngg_thickbox_form') ?>
 		<input type="hidden" id="entertags_imagelist" name="TB_imagelist" value="" />
 		<input type="hidden" id="entertags_bulkaction" name="TB_bulkaction" value="" />
-		<input type="hidden" name="page" value="manage-images" />
+		<input type="hidden" name="nggpage" value="manage-images" />
 		<table width="100%" border="0" cellspacing="3" cellpadding="3" >
 		  	<tr>
 		    	<th><?php _e("Enter the tags",'nggallery'); ?> : <input name="taglist" type="text" style="width:90%" value="" /></th>
@@ -539,7 +539,7 @@ jQuery(document).ready( function($) {
 		<?php wp_nonce_field('ngg_thickbox_form') ?>
 		<input type="hidden" id="selectgallery_imagelist" name="TB_imagelist" value="" />
 		<input type="hidden" id="selectgallery_bulkaction" name="TB_bulkaction" value="" />
-		<input type="hidden" name="page" value="manage-images" />
+		<input type="hidden" name="nggpage" value="manage-images" />
 		<table width="100%" border="0" cellspacing="3" cellpadding="3" >
 		  	<tr>
 		    	<th>
@@ -575,7 +575,7 @@ jQuery(document).ready( function($) {
 		<?php wp_nonce_field('ngg_thickbox_form') ?>
 		<input type="hidden" id="resize_images_imagelist" name="TB_imagelist" value="" />
 		<input type="hidden" id="resize_images_bulkaction" name="TB_bulkaction" value="" />
-		<input type="hidden" name="page" value="manage-images" />
+		<input type="hidden" name="nggpage" value="manage-images" />
 		<table width="100%" border="0" cellspacing="3" cellpadding="3" >
 			<tr valign="top">
 				<td>
@@ -604,7 +604,7 @@ jQuery(document).ready( function($) {
 		<?php wp_nonce_field('ngg_thickbox_form') ?>
 		<input type="hidden" id="new_thumbnail_imagelist" name="TB_imagelist" value="" />
 		<input type="hidden" id="new_thumbnail_bulkaction" name="TB_bulkaction" value="" />
-		<input type="hidden" name="page" value="manage-images" />
+		<input type="hidden" name="nggpage" value="manage-images" />
     <table width="100%" border="0" cellspacing="3" cellpadding="3" >
 			<tr valign="top">
 				<th align="left"><?php _e('Width x height (in pixel)','nggallery') ?></th>

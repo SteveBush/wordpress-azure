@@ -1986,7 +1986,7 @@ class Mixin_Displayed_Gallery_Renderer extends Mixin
      */
     function is_rest_request()
     {
-        return strpos($_SERVER['REQUEST_URI'], 'wp-json') !== FALSE;
+        return defined('REST_REQUEST') || strpos($_SERVER['REQUEST_URI'], 'wp-json') !== FALSE;
     }
 }
 class C_Displayed_Gallery_Source_Manager

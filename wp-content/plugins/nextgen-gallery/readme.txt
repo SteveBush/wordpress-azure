@@ -2,8 +2,8 @@
 Contributors: photocrati, imagely
 Tags: wordpress gallery plugin, gallery, nextgen, nextgen gallery, photo gallery, image gallery, photography, slideshow, images, photo, photo album, watermark
 Requires at least: 4.0.0
-Stable tag: 3.0.16
-Tested up to: 4.9.8
+Stable tag: 3.1.4
+Tested up to: 5.0.2
 License: GPLv2
 
 The most popular WordPress gallery plugin and one of the most popular plugins of all time with over 23 million downloads.
@@ -182,6 +182,24 @@ For more information, feel free to visit the official website for the NextGEN Ga
 
 
 == Changelog ==
+
+= V3.1.4 - 12.21.2018 =
+* Fixed:   Visual shortcode not displaying in WP 5.0.2
+
+= V3.1.2 - 12.18.2018 =
+* Fixed:   Variable mismatch error when using central gallery management pages
+
+= V3.1.1 - 11.29.2018 =
+* Fixed:   Don't enqueue block editor assets on frontend.
+* Fixed:   Broken styling for column blocks
+
+= V3.1.0 - 11.28.2018 =
+* NEW:     Gutengerg block for NextGEN Gallery
+* Secured: Other options page
+* Updated: Freemius SDK
+* Fixed:   Getting started wizard compatible with Gutenberg
+* Fixed:   WPML redirects
+* Fixed:   Missing descriptions and tags when re-importing image metadata
 
 = V3.0.16 - 10.24.2018 =
 * Fixed    Fontawesome 4 compatibility

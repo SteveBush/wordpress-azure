@@ -4,7 +4,7 @@
  *
  * @author 		ThemeBoy
  * @package 	SportsPress/Templates
- * @version   2.6.9
+ * @version   2.6.12
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -51,7 +51,7 @@ extract( $defaults, EXTR_SKIP );
 $calendar = new SP_Calendar( $id );
 if ( $status != 'default' )
 	$calendar->status = $status;
-if ( $format != 'all' )
+if ( $format != 'default' )
 	$calendar->event_format = $format;
 if ( $date != 'default' )
 	$calendar->date = $date;
@@ -197,6 +197,7 @@ $identifier = uniqid( 'eventlist_' );
 
 					$teams = get_post_meta( $event->ID, 'sp_team' );
 					$video = get_post_meta( $event->ID, 'sp_video', true );
+					$status = get_post_meta( $event->ID, 'sp_status', true );
 
 					$main_results = apply_filters( 'sportspress_event_list_main_results', sp_get_main_results( $event ), $event->ID );
 
@@ -265,7 +266,7 @@ $identifier = uniqid( 'eventlist_' );
 								}
 
 								if ( 'combined' == $time_format && sp_column_active( $usecolumns, 'time' ) ) {
-									echo '<td class="data-time" data-label="'.__( 'Time/Results', 'sportspress' ).'">';
+									echo '<td class="data-time '.$status.'" data-label="'.__( 'Time/Results', 'sportspress' ).'">';
 									if ( $link_events ) echo '<a href="' . get_post_permalink( $event->ID, false, true ) . '" itemprop="url">';
 									if ( ! empty( $main_results ) ):
 										echo implode( ' - ', $main_results );
@@ -292,7 +293,7 @@ $identifier = uniqid( 'eventlist_' );
 								}
 
 								if ( in_array( $time_format, array( 'separate', 'time' ) ) && sp_column_active( $usecolumns, 'time' ) ) {
-									echo '<td class="data-time" data-label="'.__( 'Time', 'sportspress' ).'">';
+									echo '<td class="data-time '.$status.'" data-label="'.__( 'Time', 'sportspress' ).'">';
 									if ( $link_events ) echo '<a href="' . get_post_permalink( $event->ID, false, true ) . '" itemprop="url">';
 									echo '<date>&nbsp;' . get_post_time( 'H:i:s', false, $event ) . '</date>' . apply_filters( 'sportspress_event_time', sp_get_time( $event ), $event->ID );
 									if ( $link_events ) echo '</a>';
@@ -313,7 +314,7 @@ $identifier = uniqid( 'eventlist_' );
 								switch ( $time_format ) {
 									case 'separate':
 										if ( sp_column_active( $usecolumns, 'time' ) ) {
-											echo '<td class="data-time" data-label="'.__( 'Time', 'sportspress' ).'">';
+											echo '<td class="data-time '.$status.'" data-label="'.__( 'Time', 'sportspress' ).'">';
 											if ( $link_events ) echo '<a href="' . get_post_permalink( $event->ID, false, true ) . '" itemprop="url">';
 											echo '<date>&nbsp;' . get_post_time( 'H:i:s', false, $event ) . '</date>' . apply_filters( 'sportspress_event_time', sp_get_time( $event ), $event->ID );
 											if ( $link_events ) echo '</a>';
@@ -333,7 +334,7 @@ $identifier = uniqid( 'eventlist_' );
 										break;
 									case 'time':
 										if ( sp_column_active( $usecolumns, 'time' ) ) {
-											echo '<td class="data-time" data-label="'.__( 'Time', 'sportspress' ).'">';
+											echo '<td class="data-time '.$status.'" data-label="'.__( 'Time', 'sportspress' ).'">';
 											if ( $link_events ) echo '<a href="' . get_post_permalink( $event->ID, false, true ) . '" itemprop="url">';
 											echo '<date>&nbsp;' . get_post_time( 'H:i:s', false, $event ) . '</date>' . apply_filters( 'sportspress_event_time', sp_get_time( $event ), $event->ID );
 											if ( $link_events ) echo '</a>';
@@ -355,7 +356,7 @@ $identifier = uniqid( 'eventlist_' );
 										break;
 									default:
 										if ( sp_column_active( $usecolumns, 'time' ) ) {
-											echo '<td class="data-time" data-label="'.__( 'Time/Results', 'sportspress' ).'">';
+											echo '<td class="data-time '.$status.'" data-label="'.__( 'Time/Results', 'sportspress' ).'">';
 											if ( $link_events ) echo '<a href="' . get_post_permalink( $event->ID, false, true ) . '" itemprop="url">';
 											if ( ! empty( $main_results ) ):
 												echo implode( ' - ', $main_results );

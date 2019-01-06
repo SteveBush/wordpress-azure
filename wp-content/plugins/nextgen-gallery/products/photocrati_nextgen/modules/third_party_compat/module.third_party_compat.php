@@ -16,7 +16,7 @@ class M_Third_Party_Compat extends C_Base_Module
             'photocrati-third_party_compat',
             'Third Party Compatibility',
             "Adds Third party compatibility hacks, adjustments, and modifications",
-            '3.0.0.1',
+            '3.1.0',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
             'Imagely',
             'https://www.imagely.com'
@@ -108,8 +108,9 @@ class M_Third_Party_Compat extends C_Base_Module
 
         add_action('admin_init', array($this, 'excellent_themes_admin'), -10);
 
-        add_action('plugins_loaded', array(&$this, 'wpml'), PHP_INT_MAX);
-        add_action('plugins_loaded', array(&$this, 'wpml_translation_management'), PHP_INT_MAX);
+        add_action('plugins_loaded',     array($this, 'wpml'), PHP_INT_MAX);
+        add_action('plugins_loaded',     array($this, 'wpml_translation_management'), PHP_INT_MAX);
+        add_filter('wpml_is_redirected', array($this, 'wpml_is_redirected'), -10, 3);
 
         add_filter('headway_gzip', array(&$this, 'headway_gzip'), (PHP_INT_MAX - 1));
         add_filter('ckeditor_external_plugins', array(&$this, 'ckeditor_plugins'), 11);
@@ -319,6 +320,23 @@ class M_Third_Party_Compat extends C_Base_Module
             return FALSE;
         else
             return $term_id;
+    }
+
+    /**
+     * Prevent WPML's parse_query() from conflicting with NGG's pagination & router module controlled endpoints
+     *
+     * @param string $redirect What WPML is send to wp_safe_redirect()
+     * @param int $post_id
+     * @param WP_Query $q
+     * @return bool|string FALSE prevents a redirect from occurring
+     */
+    public function wpml_is_redirected($redirect, $post_id, $q)
+    {
+        $router = C_Router::get_instance();
+        if (!$router->serve_request() && $router->has_parameter_segments())
+            return false;
+        else
+            return $redirect;
     }
 
     /**
