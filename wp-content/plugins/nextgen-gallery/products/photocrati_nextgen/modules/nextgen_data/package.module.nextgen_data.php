@@ -239,14 +239,42 @@ class Mixin_Album_Mapper extends Mixin
 class C_Exif_Writer_Wrapper
 {
     // Because our C_Exif_Writer class relies on PEL (a library which uses namespaces) we wrap
-    // its use through this method which performs a PHP version check before loading the class file
+    // its use through these methods which performs a PHP version check before loading the class file
+    /**
+     * @param $old_file
+     * @param $new_file
+     * @throws \lsolesen\pel\PelIfdException
+     * @throws \lsolesen\pel\PelInvalidArgumentException
+     * @throws \lsolesen\pel\PelInvalidDataException
+     * @throws \lsolesen\pel\PelJpegInvalidMarkerException
+     */
     public static function copy_metadata($old_file, $new_file)
     {
         if (!M_NextGen_Data::check_pel_min_php_requirement()) {
             return;
         }
+        self::load_pel();
+        return @C_Exif_Writer::copy_metadata($old_file, $new_file);
+    }
+    public static function read_metadata($filename)
+    {
+        if (!M_NextGen_Data::check_pel_min_php_requirement()) {
+            return array();
+        }
+        self::load_pel();
+        return @C_Exif_Writer::read_metadata($filename);
+    }
+    public static function write_metadata($filename, $metadata)
+    {
+        if (!M_NextGen_Data::check_pel_min_php_requirement()) {
+            return;
+        }
+        self::load_pel();
+        return @C_Exif_Writer::write_metadata($filename, $metadata);
+    }
+    public static function load_pel()
+    {
         require_once __DIR__ . DIRECTORY_SEPARATOR . 'pel-0.9.6' . DIRECTORY_SEPARATOR . 'class.exif_writer.php';
-        @C_Exif_Writer::copy_metadata($old_file, $new_file);
     }
 }
 class Mixin_NextGen_Gallery_Validation
@@ -1882,8 +1910,9 @@ class Mixin_GalleryStorage_Driver_Base extends Mixin
                     $thumbnail->format = strtoupper($format_list[$clone_format]);
                 }
                 $thumbnail = apply_filters('ngg_before_save_thumbnail', $thumbnail);
+                $exif_iptc = @C_Exif_Writer_Wrapper::read_metadata($image_path);
                 $thumbnail->save($destpath, $quality);
-                @C_Exif_Writer_Wrapper::copy_metadata($image_path, $destpath);
+                @C_Exif_Writer_Wrapper::write_metadata($destpath, $exif_iptc);
             }
         }
         return $thumbnail;
@@ -2087,12 +2116,9 @@ class Mixin_Gallery_Image_Mapper extends Mixin
             $image = $image_or_id;
         }
         // Reset all image details that would have normally been imported
-        $image->alttext = '';
-        $image->description = '';
         if (is_array($image->meta_data)) {
             unset($image->meta_data['saved']);
         }
-        wp_delete_object_term_relationships($image->{$image->id_field}, 'ngg_tag');
         nggAdmin::import_MetaData($image);
         return $this->object->save($image);
     }
@@ -2880,7 +2906,7 @@ class C_NextGen_Metadata extends C_Component
                     $meta['author'] = $this->utf8_encode($exif['Author']);
                 }
                 if (!empty($exif['Keywords'])) {
-                    $meta['tags'] = $this->utf8_encode($exif['Keywords']);
+                    $meta['keywords'] = $this->utf8_encode($exif['Keywords']);
                 }
                 if (!empty($exif['Subject'])) {
                     $meta['subject'] = $this->utf8_encode($exif['Subject']);
@@ -4189,14 +4215,15 @@ class C_NggLegacy_Thumbnail
             $this->errmsg = 'File is not readable';
             $this->error = true;
         }
+        $image_size = null;
         //if there are no errors, determine the file format
         if ($this->error == false) {
             //	        set_time_limit(30);
             @ini_set('memory_limit', -1);
-            $data = @getimagesize($this->fileName);
-            if (isset($data) && is_array($data)) {
+            $image_size = @getimagesize($this->fileName);
+            if (isset($image_size) && is_array($image_size)) {
                 $extensions = array('1' => 'GIF', '2' => 'JPG', '3' => 'PNG');
-                $extension = array_key_exists($data[2], $extensions) ? $extensions[$data[2]] : '';
+                $extension = array_key_exists($image_size[2], $extensions) ? $extensions[$image_size[2]] : '';
                 if ($extension) {
                     $this->format = $extension;
                 } else {
@@ -4249,8 +4276,7 @@ class C_NggLegacy_Thumbnail
                 $this->errmsg = sprintf(__('Create Image failed. %1$s', 'nggallery'), $img_err);
                 $this->error = true;
             } else {
-                $size = GetImageSize($this->fileName);
-                $this->currentDimensions = array('width' => $size[0], 'height' => $size[1]);
+                $this->currentDimensions = array('width' => $image_size[0], 'height' => $image_size[1]);
                 $this->newImage = $this->oldImage;
             }
         }
@@ -4264,53 +4290,79 @@ class C_NggLegacy_Thumbnail
     /**
      * Calculate the memory limit
      * @param string $filename
+     *
      */
     function checkMemoryForImage($filename)
     {
-        if (function_exists('memory_get_usage') && ini_get('memory_limit')) {
-            $imageInfo = getimagesize($filename);
+        $imageInfo = getimagesize($filename);
+        switch ($this->format) {
+            case 'GIF':
+                // measured factor 1 is better
+                $CHANNEL = 1;
+                break;
+            case 'JPG':
+                $CHANNEL = $imageInfo['channels'];
+                break;
+            case 'PNG':
+                // didn't get the channel for png
+                $CHANNEL = 3;
+                break;
+        }
+        $bits = !empty($imageInfo['bits']) ? $imageInfo['bits'] : 32;
+        // imgInfo[bits] is not always available
+        return $this->checkMemoryForData($imageInfo[0], $imageInfo[1], $CHANNEL, $bits);
+    }
+    function checkMemoryForData($width, $height, $channels = null, $bits = null)
+    {
+        $imageInfo = getimagesize($this->fileName);
+        if ($channels == null) {
             switch ($this->format) {
                 case 'GIF':
                     // measured factor 1 is better
-                    $CHANNEL = 1;
+                    $channels = 1;
                     break;
                 case 'JPG':
-                    $CHANNEL = $imageInfo['channels'];
+                    $channels = $imageInfo['channels'];
                     break;
                 case 'PNG':
                     // didn't get the channel for png
-                    $CHANNEL = 3;
+                    $channels = 3;
                     break;
             }
+        }
+        if ($bits == null) {
+            $bits = !empty($imageInfo['bits']) ? $imageInfo['bits'] : 32;
+        }
+        // imgInfo[bits] is not always available
+        if (function_exists('memory_get_usage') && ini_get('memory_limit')) {
             $MB = 1048576;
             // number of bytes in 1M
             $K64 = 65536;
             // number of bytes in 64K
             $TWEAKFACTOR = 1.68;
             // Or whatever works for you
-            $bits = !empty($imageInfo['bits']) ? $imageInfo['bits'] : 32;
-            // imgInfo[bits] is not always available
-            $memoryNeeded = round(($imageInfo[0] * $imageInfo[1] * $bits * $CHANNEL / 8 + $K64) * $TWEAKFACTOR);
+            $memoryNeeded = round((doubleval($width * $height * $bits * $channels) / 8 + $K64) * $TWEAKFACTOR);
             $memoryNeeded = memory_get_usage() + $memoryNeeded;
             // get memory limit
             $memory_limit = ini_get('memory_limit');
             // PHP docs : Note that to have no memory limit, set this directive to -1.
             if ($memory_limit == -1) {
-                return;
+                return true;
             }
             // Just check megabyte limits, not higher
             if (strtolower(substr($memory_limit, -1)) == 'm') {
                 if ($memory_limit != '') {
-                    $memory_limit = substr($memory_limit, 0, -1) * 1024 * 1024;
+                    $memory_limit = intval(substr($memory_limit, 0, -1)) * 1024 * 1024;
                 }
                 if ($memoryNeeded > $memory_limit) {
                     $memoryNeeded = round($memoryNeeded / 1024 / 1024, 2);
                     $this->errmsg = 'Exceed Memory limit. Require : ' . $memoryNeeded . " MByte";
                     $this->error = true;
+                    return false;
                 }
             }
         }
-        return;
+        return true;
     }
     function __destruct()
     {
@@ -4389,10 +4441,13 @@ class C_NggLegacy_Thumbnail
      * @param int $height
      * @return array
      */
-    function calcPercent($width, $height)
+    function calcPercent($width, $height, $percent = -1)
     {
-        $newWidth = $width * $this->percent / 100;
-        $newHeight = $height * $this->percent / 100;
+        if ($percent == -1) {
+            $percent = $this->percent;
+        }
+        $newWidth = $width * $percent / 100;
+        $newHeight = $height * $percent / 100;
         return array('newWidth' => intval($newWidth), 'newHeight' => intval($newHeight));
     }
     /**
@@ -4452,6 +4507,9 @@ class C_NggLegacy_Thumbnail
      */
     function resizeFix($Width = 0, $Height = 0, $deprecated = 3)
     {
+        if (!$this->checkMemoryForData($Width, $Height)) {
+            return;
+        }
         $this->newWidth = $Width;
         $this->newHeight = $Height;
         if (function_exists("ImageCreateTrueColor")) {
@@ -4475,9 +4533,16 @@ class C_NggLegacy_Thumbnail
      */
     function resize($maxWidth = 0, $maxHeight = 0, $deprecated = 3)
     {
+        if (!$this->checkMemoryForData($maxWidth, $maxHeight)) {
+            return;
+        }
         $this->maxWidth = $maxWidth;
         $this->maxHeight = $maxHeight;
         $this->calcImageSize($this->currentDimensions['width'], $this->currentDimensions['height']);
+        if ($this->workingImage != null && $this->workingImage != $this->oldImage) {
+            ImageDestroy($this->workingImage);
+            $this->workingImage = null;
+        }
         if (function_exists("ImageCreateTrueColor")) {
             $this->workingImage = ImageCreateTrueColor($this->newDimensions['newWidth'], $this->newDimensions['newHeight']);
         } else {
@@ -4485,6 +4550,7 @@ class C_NggLegacy_Thumbnail
         }
         //		ImageCopyResampled(
         $this->imagecopyresampled($this->workingImage, $this->oldImage, 0, 0, 0, 0, $this->newDimensions['newWidth'], $this->newDimensions['newHeight'], $this->currentDimensions['width'], $this->currentDimensions['height']);
+        ImageDestroy($this->oldImage);
         $this->oldImage = $this->workingImage;
         $this->newImage = $this->workingImage;
         $this->currentDimensions['width'] = $this->newDimensions['newWidth'];
@@ -4497,6 +4563,10 @@ class C_NggLegacy_Thumbnail
      */
     function resizePercent($percent = 0)
     {
+        $dims = $this->calcPercent($this->currentDimensions['width'], $this->currentDimensions['height'], $percent);
+        if (!$this->checkMemoryForData($dims['newWidth'], $dims['newHeight'])) {
+            return;
+        }
         $this->percent = $percent;
         $this->calcImageSizePercent($this->currentDimensions['width'], $this->currentDimensions['height']);
         if (function_exists("ImageCreateTrueColor")) {
@@ -4525,6 +4595,10 @@ class C_NggLegacy_Thumbnail
         }
         $cropX = intval(($this->currentDimensions['width'] - $cropSize) / 2);
         $cropY = intval(($this->currentDimensions['height'] - $cropSize) / 2);
+        if ($this->workingImage != null && $this->workingImage != $this->oldImage) {
+            ImageDestroy($this->workingImage);
+            $this->workingImage = null;
+        }
         if (function_exists("ImageCreateTrueColor")) {
             $this->workingImage = ImageCreateTrueColor($cropSize, $cropSize);
         } else {
@@ -4546,6 +4620,9 @@ class C_NggLegacy_Thumbnail
      */
     function crop($startX, $startY, $width, $height)
     {
+        if (!$this->checkMemoryForData($width, $height)) {
+            return;
+        }
         //make sure the cropped area is not greater than the size of the image
         if ($width > $this->currentDimensions['width']) {
             $width = $this->currentDimensions['width'];
@@ -4566,12 +4643,17 @@ class C_NggLegacy_Thumbnail
         if ($startY < 0) {
             $startY = 0;
         }
+        if ($this->workingImage != null && $this->workingImage != $this->oldImage) {
+            ImageDestroy($this->workingImage);
+            $this->workingImage = null;
+        }
         if (function_exists("ImageCreateTrueColor")) {
             $this->workingImage = ImageCreateTrueColor($width, $height);
         } else {
             $this->workingImage = ImageCreate($width, $height);
         }
         $this->imagecopyresampled($this->workingImage, $this->oldImage, 0, 0, $startX, $startY, $width, $height, $width, $height);
+        ImageDestroy($this->oldImage);
         $this->oldImage = $this->workingImage;
         $this->newImage = $this->workingImage;
         $this->currentDimensions['width'] = $width;

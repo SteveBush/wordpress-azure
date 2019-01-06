@@ -31,13 +31,13 @@ class nggManageGallery {
             }
         }
         // Should be only called via manage galleries overview
-		if ( isset($_POST['page']) && $_POST['page'] == 'manage-galleries' )
+		if ( isset($_POST['nggpage']) && $_POST['nggpage'] == 'manage-galleries' )
 			$this->post_processor_galleries();
 		// Should be only called via a edit single gallery page
-		if ( isset($_POST['page']) && $_POST['page'] == 'manage-images' )
+		if ( isset($_POST['nggpage']) && $_POST['nggpage'] == 'manage-images' )
 			$this->post_processor_images();
 		// Should be called via a publish dialog
-		if ( isset($_POST['page']) && $_POST['page'] == 'publish-post' )
+		if ( isset($_POST['nggpage']) && $_POST['nggpage'] == 'publish-post' )
 			$this->publish_post();
 
 		//Look for other POST process

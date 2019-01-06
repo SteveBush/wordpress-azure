@@ -169,7 +169,7 @@ class nggMeta{
                 if (!empty($exif['Author']))
                     $meta['author'] = $this->utf8_encode($exif['Author']);
                 if (!empty($exif['Keywords']))
-                    $meta['tags'] = $this->utf8_encode($exif['Keywords']);
+                    $meta['keywords'] = $this->utf8_encode($exif['Keywords']);
                 if (!empty($exif['Subject']))
                     $meta['subject'] = $this->utf8_encode($exif['Subject']);
                 if (!empty($exif['Comments']))

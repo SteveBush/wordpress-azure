@@ -73,7 +73,7 @@ class C_Photocrati_Resource_Manager
 
 	function is_rest_request()
 	{
-		return strpos($_SERVER['REQUEST_URI'], 'wp-json') !== FALSE;
+		return defined('REST_REQUEST') || strpos($_SERVER['REQUEST_URI'], 'wp-json') !== FALSE;
 	}
 
 	/**

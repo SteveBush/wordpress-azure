@@ -5,7 +5,7 @@
  * The SportsPress event class handles individual event data.
  *
  * @class 		SP_Event
- * @version		2.6.9
+ * @version		2.6.12
  * @package		SportsPress/Classes
  * @category	Class
  * @author 		ThemeBoy
@@ -49,10 +49,6 @@ class SP_Event extends SP_Custom_Post{
 
 		// Get results for all teams
 		$data = sp_array_combine( $teams, $results, true );
-		
-		if ( 'yes' === get_option( 'sportspress_event_reverse_teams', 'no' ) ) {
-			$data = array_reverse( $data, true );
-		}
 
 		if ( $admin ):
 			return array( $columns, $usecolumns, $data );

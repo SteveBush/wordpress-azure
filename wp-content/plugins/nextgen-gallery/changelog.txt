@@ -1,6 +1,24 @@
 NextGEN Gallery
 by Imagely
 
+= V3.1.4 - 12.21.2018 =
+* Fixed:   Visual shortcode not displaying in WP 5.0.2
+
+= V3.1.2 - 12.18.2018 =
+* Fixed:   Variable mismatch error when using central gallery management pages
+
+= V3.1.1 - 11.29.2018 =
+* Fixed:   Don't enqueue block editor assets on frontend.
+* Fixed:   Broken styling for column blocks
+
+= V3.1.0 - 11.28.2018 =
+* NEW:     Gutengerg block for NextGEN Gallery
+* Secured: Other options page
+* Updated: Freemius SDK
+* Fixed:   Getting started wizard compatible with Gutenberg
+* Fixed:   WPML redirects
+* Fixed:   Missing descriptions and tags when re-importing image metadata
+
 = V3.0.16 - 10.24.2018 =
 * Fixed    Fontawesome 4 compatibility
 

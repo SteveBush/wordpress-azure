@@ -1477,7 +1477,13 @@ jQuery(function($){
 
         clicked: function(){
             this.set_display_settings();
-            insert_into_editor(this.displayed_gallery.to_shortcode(), (this.displayed_gallery.id ? this.displayed_gallery.id : igw_data.shortcode_ref));
+            var shortcode = this.displayed_gallery.to_shortcode();
+            insert_into_editor(shortcode, (this.displayed_gallery.id ? this.displayed_gallery.id : igw_data.shortcode_ref));
+            var editor = null
+            if ((editor = location.toString().match(/editor=([^\&]+)/)) && editor.length >= 2) {
+                top.tinyMCE.editors[editor[1]].fire('ngg-inserted', {shortcode: shortcode})
+            }
+            
             close_attach_to_post_window();
         },
 

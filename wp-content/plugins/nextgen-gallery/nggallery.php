@@ -4,7 +4,7 @@ if(preg_match('#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'])) { die('You 
 /**
  * Plugin Name: NextGEN Gallery
  * Description: The most popular gallery plugin for WordPress and one of the most popular plugins of all time with over 23 million downloads.
- * Version: 3.0.16
+ * Version: 3.1.4
  * Author: Imagely
  * Plugin URI: https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/
  * Author URI: https://www.imagely.com
@@ -618,13 +618,24 @@ class C_NextGEN_Bootstrap
 		$router = C_Router::get_instance();
 
 		// Set context to path if subdirectory install
-		$parts = parse_url($router->get_base_url(FALSE));
-		if (isset($parts['path'])) {
-			$parts = explode('/index.php', $parts['path']);
-			$router->context = array_shift($parts);
-		}
+		$parts     = parse_url($router->get_base_url(FALSE));
+		$siteparts = parse_url(get_option('siteurl'));
 
-		// Provide a means for modules/third-parties to configure routes
+        if (isset($parts['path']) && isset($siteparts['path']))
+        {
+            if (strpos($parts['path'], '/index.php') === FALSE)
+            {
+                $router->context = $siteparts['path'];
+            }
+            else {
+                $new_parts = explode('/index.php', $parts['path']);
+                if (!empty($new_parts[0]) && $new_parts[0] == $siteparts['path']) {
+                    $router->context = array_shift($new_parts);
+                }
+            }
+        }
+
+        // Provide a means for modules/third-parties to configure routes
 		do_action_ref_array('ngg_routes', array(&$router));
 
 		// Serve the routes
@@ -660,10 +671,10 @@ class C_NextGEN_Bootstrap
 		define('NGG_TESTS_DIR',   implode(DIRECTORY_SEPARATOR, array(rtrim(NGG_PLUGIN_DIR, "/\\"), 'tests')));
 		define('NGG_PRODUCT_DIR', implode(DIRECTORY_SEPARATOR, array(rtrim(NGG_PLUGIN_DIR, "/\\"), 'products')));
 		define('NGG_MODULE_DIR', implode(DIRECTORY_SEPARATOR, array(rtrim(NGG_PRODUCT_DIR, "/\\"), 'photocrati_nextgen', 'modules')));
-		define('NGG_PRODUCT_URL', path_join(str_replace("\\", '/', NGG_PLUGIN_URL), 'products'));
+		define('NGG_PRODUCT_URL', path_join(str_replace("\\" , '/', NGG_PLUGIN_URL), 'products'));
 		define('NGG_MODULE_URL', path_join(str_replace("\\", '/', NGG_PRODUCT_URL), 'photocrati_nextgen/modules'));
 		define('NGG_PLUGIN_STARTED_AT', microtime());
-		define('NGG_PLUGIN_VERSION', '3.0.16');
+		define('NGG_PLUGIN_VERSION', '3.1.4');
 
 		if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG)
 			define('NGG_SCRIPT_VERSION', (string)mt_rand(0, mt_getrandmax()));
@@ -918,7 +929,7 @@ function ngg_fs_custom_connect_message(
 	$freemius_link
 ) {
 	return sprintf(
-		__fs( 'hey-x' ) . '<br>' .
+		__( 'Hey %s, ', 'nggallery' ) . '<br>' .
 		__( 'Allow %6$s to collect some usage data with %5$s to make the plugin even more awesome. If you skip this, that\'s okay! %2$s will still work just fine.', 'nggallery' ),
 		$user_first_name,
 		'<b>' . __('NextGEN Gallery', 'nggallery') . '</b>',
