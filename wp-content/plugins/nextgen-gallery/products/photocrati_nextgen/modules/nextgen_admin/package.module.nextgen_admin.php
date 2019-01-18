@@ -955,7 +955,6 @@ class Mixin_NextGen_Admin_Page_Instance_Methods extends Mixin
         $this->object->enqueue_jquery_ui_theme();
         wp_enqueue_script('photocrati_ajax');
         wp_enqueue_script('jquery-ui-accordion');
-        wp_enqueue_script('nextgen_display_settings_page_placeholder_stub', $this->get_static_url('photocrati-nextgen_admin#jquery.placeholder.min.js'), array('jquery'), NGG_SCRIPT_VERSION, TRUE);
         wp_enqueue_style('imagely-admin-font', 'https://fonts.googleapis.com/css?family=Lato:300,400,700,900', array(), NGG_SCRIPT_VERSION);
         if (method_exists('M_Gallery_Display', 'enqueue_fontawesome')) {
             M_Gallery_Display::enqueue_fontawesome();

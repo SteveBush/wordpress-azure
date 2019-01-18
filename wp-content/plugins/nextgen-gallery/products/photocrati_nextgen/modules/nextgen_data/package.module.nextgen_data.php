@@ -243,19 +243,20 @@ class C_Exif_Writer_Wrapper
     /**
      * @param $old_file
      * @param $new_file
-     * @throws \lsolesen\pel\PelIfdException
-     * @throws \lsolesen\pel\PelInvalidArgumentException
-     * @throws \lsolesen\pel\PelInvalidDataException
-     * @throws \lsolesen\pel\PelJpegInvalidMarkerException
+     * @return bool|int
      */
     public static function copy_metadata($old_file, $new_file)
     {
         if (!M_NextGen_Data::check_pel_min_php_requirement()) {
-            return;
+            return FALSE;
         }
         self::load_pel();
         return @C_Exif_Writer::copy_metadata($old_file, $new_file);
     }
+    /**
+     * @param $filename
+     * @return array|null
+     */
     public static function read_metadata($filename)
     {
         if (!M_NextGen_Data::check_pel_min_php_requirement()) {
@@ -264,10 +265,15 @@ class C_Exif_Writer_Wrapper
         self::load_pel();
         return @C_Exif_Writer::read_metadata($filename);
     }
+    /**
+     * @param $filename
+     * @param $metadata
+     * @return bool|int
+     */
     public static function write_metadata($filename, $metadata)
     {
         if (!M_NextGen_Data::check_pel_min_php_requirement()) {
-            return;
+            return FALSE;
         }
         self::load_pel();
         return @C_Exif_Writer::write_metadata($filename, $metadata);
@@ -1337,7 +1343,16 @@ class Mixin_GalleryStorage_Driver_Base extends Mixin
                 // Save the image
                 $image_id = $this->object->_image_mapper->save($image);
                 if (!$image_id) {
-                    throw new E_InvalidEntityException();
+                    $exception = '';
+                    foreach ($image->get_errors() as $field => $errors) {
+                        foreach ($errors as $error) {
+                            if (!empty($exception)) {
+                                $exception .= "<br/>";
+                            }
+                            $exception .= __(sprintf("Error while uploading %s: %s", $filename, $error), 'nextgen-gallery');
+                        }
+                    }
+                    throw new E_UploadException($exception);
                 }
                 if ($settings->imgBackup) {
                     $this->object->backup_image($image);
@@ -1973,6 +1988,7 @@ class Mixin_NextGen_Gallery_Image_Validation extends Mixin
         $this->validates_numericality_of('galleryid');
         $this->validates_numericality_of($this->id());
         $this->validates_numericality_of('sortorder');
+        $this->validates_length_of('filename', 185, '<=', __('Image filenames may not be longer than 185 characters in length', 'nextgen-gallery'));
         return $this->object->is_valid();
     }
 }
@@ -2431,7 +2447,7 @@ class C_Image_Wrapper
                 }
                 if (!$w || !$h) {
                     if (is_string($this->_orig_image->meta_data)) {
-                        $this->_orig_image = C_Image_Mapper::get_instance()->unserialize($this->_orig_image->meta_data);
+                        $this->_orig_image = C_NextGen_Serializable::unserialize($this->_orig_image->meta_data);
                     }
                     if (!isset($this->_orig_image->meta_data['thumbnail'])) {
                         $storage = $this->get_storage();
@@ -3801,94 +3817,114 @@ class Mixin_NggLegacy_GalleryStorage_Driver extends Mixin
         }
         return $retval;
     }
-    function set_post_thumbnail($post, $image)
+    /**
+     * Determines if the given NGG image id has been uploaded to the media library
+     * 
+     * @param integer $imageId
+     * @retval FALSE|int attachment_id
+     */
+    function is_in_media_library($imageId)
     {
-        $attachment_id = null;
-        // Get the post id
-        $post_id = $post;
-        if (is_object($post)) {
-            if (property_exists($post, 'ID')) {
-                $post_id = $post->ID;
-            } elseif (property_exists($post, 'post_id')) {
-                $post_id = $post->post_id;
-            }
-        } elseif (is_array($post)) {
-            if (isset($post['ID'])) {
-                $post_id = $post['ID'];
-            } elseif (isset($post['post_id'])) {
-                $post_id = $post['post_id'];
+        $retval = FALSE;
+        // Get the image
+        if (is_object($imageId)) {
+            $image = $imageId;
+            $imageId = $image->pid;
+        }
+        // Try to find an attachment for the given image_id
+        if ($imageId) {
+            $query = new WP_Query(array('post_type' => 'attachment', 'meta_key' => '_ngg_image_id', 'meta_value_num' => $imageId));
+            foreach ($query->get_posts() as $post) {
+                $retval = $post->ID;
             }
         }
-        // Get the image object
+        return $retval;
+    }
+    /**
+     * Copies a NGG image to the media library and returns the attachment_id
+     * @param C_Image $image
+     * @retval FALSE|int attachment_id
+     */
+    function copy_to_media_library($image)
+    {
+        $retval = FALSE;
+        // Get the image
         if (is_int($image)) {
-            $image = C_Image_Mapper::get_instance()->find($image);
+            $imageId = $image;
+            $mapper = C_Image_Mapper::get_instance();
+            $image = $mapper->find($imageId);
         }
-        // Do we have what we need?
-        if ($image && is_int($post_id)) {
-            $args = array('post_type' => 'attachment', 'meta_key' => '_ngg_image_id', 'meta_compare' => '==', 'meta_value' => $image->{$image->id_field});
-            $upload_dir = wp_upload_dir();
-            $basedir = $upload_dir['basedir'];
-            $thumbs_dir = implode(DIRECTORY_SEPARATOR, array($basedir, 'ngg_featured'));
-            $gallery_abspath = $this->object->get_gallery_abspath($image->galleryid);
-            $image_abspath = $this->object->get_full_abspath($image);
-            $target_path = null;
-            $copy_image = TRUE;
-            // Have we previously set the post thumbnail?
-            if ($posts = get_posts($args)) {
-                $attachment_id = $posts[0]->ID;
-                $attachment_file = get_attached_file($attachment_id);
-                $target_path = $attachment_file;
-                if (filemtime($image_abspath) > filemtime($target_path)) {
-                    $copy_image = TRUE;
-                }
-            } else {
-                $url = $this->object->get_full_url($image);
-                $target_relpath = null;
-                $target_basename = M_I18n::mb_basename($image_abspath);
-                if (strpos($image_abspath, $gallery_abspath) === 0) {
-                    $target_relpath = substr($image_abspath, strlen($gallery_abspath));
-                } else {
-                    if ($image->galleryid) {
-                        $target_relpath = path_join(strval($image->galleryid), $target_basename);
-                    } else {
-                        $target_relpath = $target_basename;
-                    }
-                }
-                $target_relpath = trim($target_relpath, '\\/');
-                $target_path = path_join($thumbs_dir, $target_relpath);
-                $max_count = 100;
-                $count = 0;
-                while (@file_exists($target_path) && $count <= $max_count) {
-                    $count++;
-                    $pathinfo = M_I18n::mb_pathinfo($target_path);
-                    $dirname = $pathinfo['dirname'];
-                    $filename = $pathinfo['filename'];
-                    $extension = $pathinfo['extension'];
-                    $rand = mt_rand(1, 9999);
-                    $basename = $filename . '_' . sprintf('%04d', $rand) . '.' . $extension;
-                    $target_path = path_join($dirname, $basename);
-                }
-                if (@file_exists($target_path)) {
-                    // XXX handle very rare case in which $max_count wasn't enough?
-                }
-                $target_dir = dirname($target_path);
-                wp_mkdir_p($target_dir);
+        if ($image) {
+            $wordpress_upload_dir = wp_upload_dir();
+            // $wordpress_upload_dir['path'] is the full server path to wp-content/uploads/2017/05, for multisite works good as well
+            // $wordpress_upload_dir['url'] the absolute URL to the same folder, actually we do not need it, just to show the link to file
+            $i = 1;
+            // number of tries when the file with the same name is already exists
+            $image_abspath = C_Gallery_Storage::get_instance()->get_image_abspath($image, "full");
+            $new_file_path = $wordpress_upload_dir['path'] . '/' . $image->filename;
+            $new_file_mime = mime_content_type($image_abspath);
+            while (file_exists($new_file_path)) {
+                $i++;
+                $new_file_path = $wordpress_upload_dir['path'] . '/' . $i . '_' . $image->filename;
             }
-            if ($copy_image) {
-                @copy($image_abspath, $target_path);
-                if (!$attachment_id) {
-                    $size = @getimagesize($target_path);
-                    $image_type = $size ? $size['mime'] : 'image/jpeg';
-                    $title = sanitize_file_name($image->alttext);
-                    $caption = sanitize_file_name($image->description);
-                    $attachment = array('post_title' => $title, 'post_content' => $caption, 'post_status' => 'attachment', 'post_parent' => 0, 'post_mime_type' => $image_type, 'guid' => $url);
-                    $attachment_id = wp_insert_attachment($attachment, $target_path);
-                }
-                update_post_meta($attachment_id, '_ngg_image_id', $image->{$image->id_field});
-                wp_update_attachment_metadata($attachment_id, wp_generate_attachment_metadata($attachment_id, $target_path));
+            if (@copy($image_abspath, $new_file_path)) {
+                $upload_id = wp_insert_attachment(array('guid' => $new_file_path, 'post_mime_type' => $new_file_mime, 'post_title' => preg_replace('/\\.[^.]+$/', '', $image->alttext), 'post_content' => '', 'post_status' => 'inherit'), $new_file_path);
+                update_post_meta($upload_id, '_ngg_image_id', intval($image->pid));
+                // wp_generate_attachment_metadata() won't work if you do not include this file
+                require_once ABSPATH . 'wp-admin/includes/image.php';
+                $image_meta = wp_generate_attachment_metadata($upload_id, $new_file_path);
+                // Generate and save the attachment metas into the database
+                wp_update_attachment_metadata($upload_id, $image_meta);
+                $retval = $upload_id;
             }
         }
-        return $attachment_id;
+        return $retval;
+    }
+    /**
+     * Sets a NGG image as a post thumbnail for the given post
+     */
+    function set_post_thumbnail($postId, $image, $only_create_attachment = FALSE)
+    {
+        $retval = FALSE;
+        // attachment_id or FALSE
+        // Get the post ID
+        if (is_object($postId)) {
+            $post = $postId;
+            $postId = isset($post->ID) ? $post->ID : $post->post_id;
+        }
+        // Get the image
+        if (is_int($image)) {
+            $imageId = $image;
+            $mapper = C_Image_Mapper::get_instance();
+            $image = $mapper->find($imageId);
+        }
+        if ($image && $postId) {
+            $attachment_id = $this->object->is_in_media_library($image->pid);
+            if ($attachment_id === FALSE) {
+                $attachment_id = $this->object->copy_to_media_library($image);
+            }
+            if ($attachment_id) {
+                if (!$only_create_attachment) {
+                    set_post_thumbnail($postId, $attachment_id);
+                }
+                $retval = $attachment_id;
+            }
+        }
+        return $retval;
+    }
+    /**
+     * Delete the given NGG image from the media library
+     */
+    function delete_from_media_library($imageId)
+    {
+        // Get the image
+        if (!is_int($imageId)) {
+            $image = $imageId;
+            $imageId = $image->pid;
+        }
+        if ($postId = $this->object->is_in_media_library($imageId)) {
+            wp_delete_post($postId);
+        }
     }
     /**
      * Copies (or moves) images into another gallery
@@ -4023,7 +4059,12 @@ class Mixin_NggLegacy_GalleryStorage_Driver extends Mixin
         $title = '<a href="' . admin_url() . 'admin.php?page=nggallery-manage-gallery&mode=edit&gid=' . $gallery_id . '" >';
         $title .= $gallery->title;
         $title .= '</a>';
-        echo '<div class="updated fade " id="message"><p>' . sprintf(__('Copied %1$s picture(s) to gallery %2$s .', 'nggallery'), count($new_image_pids), $title) . '</p></div>';
+        if ($move) {
+            $message = sprintf(__('Moved %1$s picture(s) to gallery %2$s .', 'nggallery'), count($new_image_pids), $title);
+        } else {
+            $message = sprintf(__('Copied %1$s picture(s) to gallery %2$s .', 'nggallery'), count($new_image_pids), $title);
+        }
+        echo '<div class="updated fade" id="message"><p>' . $message . '</p></div>';
         // echo '<hr/>' . sprintf(__('Copied %1$s picture(s) to gallery %2$s .', 'nggallery'), count($new_image_pids), $title);
         return $new_image_pids;
     }

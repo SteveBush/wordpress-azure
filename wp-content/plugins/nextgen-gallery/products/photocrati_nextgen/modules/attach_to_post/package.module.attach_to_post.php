@@ -437,9 +437,6 @@ class Mixin_Attach_To_Post extends Mixin
         wp_enqueue_script('backbone');
         // provided by WP
         $this->object->mark_script('backbone');
-        // Ensure underscore sting, a helper utility
-        wp_enqueue_script('underscore.string', $this->get_static_url('photocrati-attach_to_post#underscore.string.js'), array('underscore'), NGG_SCRIPT_VERSION);
-        $this->object->mark_script('underscore.string');
         // Enqueue the backbone app for the display tab
         // Get all entities used by the display tab
         $context = 'attach_to_post';
@@ -470,7 +467,7 @@ class Mixin_Attach_To_Post extends Mixin
             $display_types[] = $display_type;
         }
         usort($display_types, array($this->object, '_display_type_list_sort'));
-        wp_enqueue_script('ngg_display_tab', $this->get_static_url('photocrati-attach_to_post#display_tab.js'), array('jquery', 'backbone', 'underscore.string', 'photocrati_ajax'), NGG_SCRIPT_VERSION);
+        wp_enqueue_script('ngg_display_tab', $this->get_static_url('photocrati-attach_to_post#display_tab.js'), array('jquery', 'backbone', 'photocrati_ajax'), NGG_SCRIPT_VERSION);
         $this->object->mark_script('ngg_display_tab');
         wp_localize_script('ngg_display_tab', 'igw_data', array('displayed_gallery_preview_url' => $settings->gallery_preview_url, 'displayed_gallery' => $this->object->_displayed_gallery->get_entity(), 'sources' => $sources->get_all(), 'gallery_primary_key' => $gallery_mapper->get_primary_key_column(), 'galleries' => $gallery_mapper->find_all(), 'albums' => $album_mapper->find_all(), 'tags' => $tags, 'display_types' => $display_types, 'sec_token' => $security->get_request_token('nextgen_edit_displayed_gallery')->get_json(), 'image_primary_key' => $image_mapper->get_primary_key_column(), 'display_type_priority_base' => NGG_DISPLAY_PRIORITY_BASE, 'display_type_priority_step' => NGG_DISPLAY_PRIORITY_STEP, 'shortcode_ref' => isset($_REQUEST['ref']) ? floatval($_REQUEST['ref']) : null, 'shortcode_defaults' => array('order_by' => $settings->galSort, 'order_direction' => $settings->galSortDir, 'returns' => 'included', 'maximum_entity_count' => $settings->maximum_entity_count), 'shortcode_attr_replacements' => array('source' => 'src', 'container_ids' => 'ids', 'display_type' => 'display'), 'i18n' => array('sources' => __('Are you inserting a Gallery (default), an Album, or images based on Tags?', 'nggallery'), 'optional' => __('(optional)', 'nggallery'), 'slug_tooltip' => __('Sets an SEO-friendly name to this gallery for URLs. Currently only in use by the Pro Lightbox', 'nggallery'), 'slug_label' => __('Slug', 'nggallery'), 'no_entities' => __('No entities to display for this source', 'nggallery'), 'exclude_question' => __('Exclude?', 'nggallery'), 'select_gallery' => __('Select a Gallery', 'nggallery'), 'galleries' => __('Select one or more galleries (click in box to see available galleries).', 'nggallery'), 'albums' => __('Select one album (click in box to see available albums).', 'nggallery'))));
     }

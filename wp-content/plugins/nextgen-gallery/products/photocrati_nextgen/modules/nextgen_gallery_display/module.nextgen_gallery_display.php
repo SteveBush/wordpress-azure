@@ -23,7 +23,7 @@ class M_Gallery_Display extends C_Base_Module
 			'photocrati-nextgen_gallery_display',
 			'Gallery Display',
 			'Provides the ability to display gallery of images',
-			'3.1.0.0',
+			'3.1.4.2',
 			'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
       'Imagely',
       'https://www.imagely.com'
@@ -78,8 +78,6 @@ class M_Gallery_Display extends C_Base_Module
 		$this->get_registry()->add_adapter(
 			'I_Component_Factory', 'A_Gallery_Display_Factory'
 		);
-
-		$this->get_registry()->add_adapter('I_Displayed_Gallery_Renderer', 'A_Displayed_Gallery_Renderer_Random');
 
         if (is_admin()) {
             $this->get_registry()->add_adapter(
@@ -461,7 +459,6 @@ class M_Gallery_Display extends C_Base_Module
         return array(
             'A_Display_Settings_Controller'         => 'adapter.display_settings_controller.php',
             'A_Display_Settings_Page'               => 'adapter.display_settings_page.php',
-            'A_Displayed_Gallery_Renderer_Random'   => 'adapter.displayed_gallery_renderer_random.php',
             'A_Displayed_Gallery_Trigger_Element'   => 'adapter.displayed_gallery_trigger_element.php',
             'A_Displayed_Gallery_Trigger_Resources' => 'adapter.displayed_gallery_trigger_resources.php',
             'A_Gallery_Display_Factory'             => 'adapter.gallery_display_factory.php',

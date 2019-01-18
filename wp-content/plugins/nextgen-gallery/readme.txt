@@ -2,11 +2,11 @@
 Contributors: photocrati, imagely
 Tags: wordpress gallery plugin, gallery, nextgen, nextgen gallery, photo gallery, image gallery, photography, slideshow, images, photo, photo album, watermark
 Requires at least: 4.0.0
-Stable tag: 3.1.4
+Stable tag: 3.1.6
 Tested up to: 5.0.2
 License: GPLv2
 
-The most popular WordPress gallery plugin and one of the most popular plugins of all time with over 23 million downloads.
+The most popular WordPress gallery plugin and one of the most popular plugins of all time with over 24 million downloads.
 
 == Description ==
 
@@ -61,7 +61,7 @@ Learn more or connect with us:<br>
 == Credits ==
 
 Copyright:<br>
-Imagely 2016-2018
+Imagely 2016-2019
 Photocrati Media 2012-2016<br>
 Alex Rabe 2007-2011
 
@@ -183,8 +183,28 @@ For more information, feel free to visit the official website for the NextGEN Ga
 
 == Changelog ==
 
+= V3.1.6 - 01.16.2019 =
+* NEW:     Option to control caching duration of random widget galleries
+* Secured: DB record serialization
+* Fixed:   Compatibility with plugins that extend Gutenberg / Block Editor
+* Fixed:   Invalid regex causing warnings when viewing /ngg_tags/ pages
+* Fixed:   Misc grammatical and spelling mistakes
+
+= V3.1.5 - 01.08.2019 =
+* NEW:     Added constant NGG_DISABLE_SHUTDOWN_EXCEPTION_HANDLER
+* Secured: DB record serialization
+* Changed: Added 185 character limit to filenames to prevent filesystem issues
+* Changed: Removed caching of 'random' galleries; now only random widgets will be cached
+* Changed: Removed dependency on underscore.string.js
+* Changed: Updated base64.js library in attach-to-post module
+* Changed: Updated jquery.waitforimages.js
+* Fixed:   Uploading of non-JPEG images and uploading of JPEG with invalid EXIF data
+
 = V3.1.4 - 12.21.2018 =
 * Fixed:   Visual shortcode not displaying in WP 5.0.2
+
+= V3.1.3 - 01.08.2018 =
+* Fixed:   Post thumbnail support for NextGEN Gallery when using Block Editor
 
 = V3.1.2 - 12.18.2018 =
 * Fixed:   Variable mismatch error when using central gallery management pages

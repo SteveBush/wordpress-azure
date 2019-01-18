@@ -268,7 +268,6 @@ function genesis_attr( $context, $attributes = array(), $args = array() ) {
 		} else {
 			$output .= sprintf( '%s="%s" ', esc_html( $key ), esc_attr( $value ) );
 		}
-
 	}
 
 	$output = apply_filters( "genesis_attr_{$context}_output", $output, $attributes, $context, $args );
@@ -524,7 +523,7 @@ add_filter( 'genesis_attr_breadcrumb-link', 'genesis_attributes_breadcrumb_link'
  *
  * @since 2.7.0
  *
- * @param array $attributes Existing attributes for breadcrumb link element.
+ * @param array  $attributes Existing attributes for breadcrumb link element.
  * @param string $context   Not used. Markup context (ie. `footer-widget-area`).
  * @param array  $args      Markup arguments.
  * @return array Amended attributes for breadcrumb link element.
@@ -1559,8 +1558,8 @@ add_filter( 'genesis_attr_pagination-previous', 'genesis_adjacent_entry_attr_pre
  *
  * @since 2.7.0
  *
- * @param $attributes array Existing attributes for the previous post element.
- * @return            array Amended attributes for the previous post element.
+ * @param array $attributes Existing attributes for the previous post element.
+ * @return array Amended attributes for the previous post element.
  */
 function genesis_adjacent_entry_attr_previous_post( $attributes ) {
 	$attributes['class'] .= ' alignleft';
@@ -1574,8 +1573,8 @@ add_filter( 'genesis_attr_pagination-next', 'genesis_adjacent_entry_attr_next_po
  *
  * @since 2.7.0
  *
- * @param $attributes array Existing attributes for the next post element.
- * @return            array Amended attributes for the next post element.
+ * @param array $attributes Existing attributes for the next post element.
+ * @return array Amended attributes for the next post element.
  */
 function genesis_adjacent_entry_attr_next_post( $attributes ) {
 	$attributes['class'] .= ' alignright';

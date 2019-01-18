@@ -16,7 +16,7 @@ class M_Third_Party_Compat extends C_Base_Module
             'photocrati-third_party_compat',
             'Third Party Compatibility',
             "Adds Third party compatibility hacks, adjustments, and modifications",
-            '3.1.0',
+            '3.1.4.2',
             'https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/',
             'Imagely',
             'https://www.imagely.com'
@@ -137,11 +137,6 @@ class M_Third_Party_Compat extends C_Base_Module
 
         // TODO: Only needed for NGG Pro 1.0.10 and lower
         add_action('the_post', array(&$this, 'add_ngg_pro_page_parameter'));
-
-        // Because WPEngine converts "ORDER BY RAND()" to "ORDER BY 1"
-        if (function_exists('is_wpe') && is_wpe() && !defined('NGG_DISABLE_ORDER_BY_RAND')) {
-            define('ngg_disable_order_by_rand', 'true');
-        }
     }
 
     function is_ngg_page()

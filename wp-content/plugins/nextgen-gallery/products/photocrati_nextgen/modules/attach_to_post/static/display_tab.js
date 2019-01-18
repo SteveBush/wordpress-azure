@@ -683,7 +683,11 @@ jQuery(function($){
 
             var selected = this.sources.selected();
             if (selected.length) {
-                var view_name = _.str.capitalize(selected.pop().id)+"Source";
+                function capitalizeFirstLetter(text) {
+                    text = String(text);
+                    return text.charAt(0).toUpperCase() + text.slice(1);
+                }
+                var view_name = capitalizeFirstLetter(selected.pop().id) + "Source";
                 if (typeof(Ngg.DisplayTab.Views[view_name]) != 'undefined') {
                     var selected_view = new Ngg.DisplayTab.Views[view_name];
                     this.$el.append(selected_view.render().el);

@@ -158,7 +158,7 @@ if ($thumbnail_crop_frame != null)
 <table align="center">
 	<tr>
 		<td rowspan="3" valign="middle" align="center" id="ngg-overlay-dialog-main">
-			<small><?php esc_html_e('Select the area for the thumbnail from the picture on below.', 'nggallery'); ?></small>
+			<small><?php esc_html_e('Select the area for the thumbnail from the picture below.', 'nggallery'); ?></small>
 			<img src="<?php echo nextgen_esc_url( $preview_image ); ?>" alt="" id="imageToEdit" />	
 		</td>
 		<td style="display:none;">

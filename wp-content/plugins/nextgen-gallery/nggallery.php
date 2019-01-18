@@ -3,8 +3,8 @@ if(preg_match('#' . basename(__FILE__) . '#', $_SERVER['PHP_SELF'])) { die('You 
 
 /**
  * Plugin Name: NextGEN Gallery
- * Description: The most popular gallery plugin for WordPress and one of the most popular plugins of all time with over 23 million downloads.
- * Version: 3.1.4
+ * Description: The most popular gallery plugin for WordPress and one of the most popular plugins of all time with over 24 million downloads.
+ * Version: 3.1.6
  * Author: Imagely
  * Plugin URI: https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/
  * Author URI: https://www.imagely.com
@@ -159,7 +159,8 @@ class C_NextGEN_Bootstrap
 
 	function __construct()
 	{
-		set_exception_handler(__CLASS__.'::shutdown');
+	    if (!defined('NGG_DISABLE_SHUTDOWN_EXCEPTION_HANDLER') || !NGG_DISABLE_SHUTDOWN_EXCEPTION_HANDLER)
+		    set_exception_handler(__CLASS__.'::shutdown');
 
 		// We only load the plugin if we're outside of the activation request, loaded in an iframe
 		// by WordPress. Reason being, if WP_DEBUG is enabled, and another Pope-based plugin (such as
@@ -196,6 +197,7 @@ class C_NextGEN_Bootstrap
 	{
 		// Load caching component
 		include_once('non_pope/class.photocrati_transient_manager.php');
+		include_once('non_pope/class.nextgen_serializable.php');
 
 		if (isset($_REQUEST['ngg_flush']))
 		{
@@ -674,7 +676,7 @@ class C_NextGEN_Bootstrap
 		define('NGG_PRODUCT_URL', path_join(str_replace("\\" , '/', NGG_PLUGIN_URL), 'products'));
 		define('NGG_MODULE_URL', path_join(str_replace("\\", '/', NGG_PRODUCT_URL), 'photocrati_nextgen/modules'));
 		define('NGG_PLUGIN_STARTED_AT', microtime());
-		define('NGG_PLUGIN_VERSION', '3.1.4');
+		define('NGG_PLUGIN_VERSION', '3.1.6');
 
 		if (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG)
 			define('NGG_SCRIPT_VERSION', (string)mt_rand(0, mt_getrandmax()));
